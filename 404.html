@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404</title>
+  </head>
+  <body>
+    <script>
+      const path = location.pathname;
+      if (path === "/") {
+        location.replace("/ExoGenesis/");
+      }
+      location.replace("/ExoGenesis" + path);
+    </script>
+  </body>
+</html>
