@@ -1,0 +1,28 @@
+/* Container for the progress bar */
+.progress-bar-container {
+    width: 100%;
+    height: 20px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  /* The inner bar that will animate */
+  .inner-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #3b82f6;
+    border-radius: 10px;
+    animation: none;
+  }
+  
+  /* Keyframes for the progress bar animation */
+  @keyframes progressBar {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  
