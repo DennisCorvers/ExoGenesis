@@ -4,8 +4,8 @@ import { ResourceNode } from '../../game/core/ResourceNode';
 import { MineralHarvesting } from '../../game/skills/MineralHarvesting';
 import { MineralHarvestingActionEvent } from '../../game/events/MineralHarvestingEvent';
 import { EventBus } from '../../game/events/EventBus';
-import ProgressBar from '../ProgressBar';
-import ResourceNodeCard from '../ResourceNodeCard';
+import ProgressBar from '../common/ProgressBar';
+import ResourceNodeCard from '../common/ResourceNodeCard';
 
 interface MineralHarvestingUIProps {
     gameContext: GameContext;

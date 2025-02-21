@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import GameScreen from './components/GameScreen';
+import GameScreen from './modules/GameScreen'
 import GameLoop from './game/core/GameLoop';
 import { GameContext } from './game/core/GameContext';
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { ResourceNode } from '../game/core/ResourceNode';
-import '../assets/css/ResourceNodeCard.css';
+import { ResourceNode } from '../../game/core/ResourceNode';
+import './ResourceNodeCard.css';
 
 interface ResourceNodeCardProps {
   node: ResourceNode;

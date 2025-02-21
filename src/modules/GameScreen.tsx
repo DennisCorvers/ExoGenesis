@@ -1,6 +1,6 @@
 import React from 'react';
 import { GameContext } from '../game/core/GameContext';
-import MineralHarvestingUI from './skillUI/MineralHarvestingUI';
+import MineralHarvestingUI from './mineralharvesting/MineralHarvestingUI';
 
 interface GameScreenProps {
   gameContext: GameContext;
