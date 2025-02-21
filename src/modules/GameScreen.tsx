@@ -1,6 +1,7 @@
-import React from 'react';
-import { GameContext } from '../game/core/GameContext';
-import MineralHarvestingUI from './mineralharvesting/MineralHarvestingUI';
+import React from "react";
+import { Routes, Route, Link } from "react-router-dom";
+import { GameContext } from "../game/core/GameContext";
+import MineralHarvestingUI from "../modules/mineralharvesting/MineralHarvestingUI"
 
 interface GameScreenProps {
   gameContext: GameContext;
@@ -8,14 +9,13 @@ interface GameScreenProps {
 
 const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
   return (
-    <div className="game-screen">
-      <h1>Game Screen</h1>
-      <div className="game-ui">
-        {/* Rendering MiningUI as part of the screen */}
-        <MineralHarvestingUI gameContext={gameContext} />
-        
-        {/* Add other components here as you expand the game */}
-      </div>
+    <div>
+      <h2>Game Screen</h2>
+      {/* Switch to handle routing */}
+      <Routes>
+        <Route path="/mineralharvesting" element={<MineralHarvestingUI gameContext={gameContext} />} />
+        {/* Add more routes for other sections */}
+      </Routes>
     </div>
   );
 };

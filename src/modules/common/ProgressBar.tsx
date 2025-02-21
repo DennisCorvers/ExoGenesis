@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import '../assets/css/ProgressBar.css'
+import './ProgressBar.css'
 
 interface ProgressBarProps {
   elapsedTime: number;
