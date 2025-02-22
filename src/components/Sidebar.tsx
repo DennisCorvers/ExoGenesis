@@ -4,12 +4,14 @@ import "./Sidebar.css";
 import ChevronDown from "../assets/icons/chevron-down.svg";
 import ChevronRight from "../assets/icons/chevron-right.svg";
 
+
 interface SidebarCategory {
     name: string;
     subItems: SidebarItem[];
 }
 
 interface SidebarItem {
+    icon: string;
     name: string;
     route: string;
 }
@@ -23,8 +25,8 @@ function BuildSidebar(): SidebarCategory[] {
     const skillBar: SidebarCategory = {
         name: "Skills",
         subItems: [
-            { name: "Mineral Harvesting", route: "/mineralharvesting" },
-            { name: "Unnamed Skill", route: "/" }
+            { icon: "/assets/images/skills/mineralharvesting/mineralharvesting.png", name: "Mineral Harvesting", route: "/mineralharvesting" },
+            { icon: "", name: "Unnamed Skill", route: "/" }
         ]
     };
 
@@ -61,12 +63,14 @@ const Sidebar: React.FC = () => {
                         </div>{expanded[item.name] && (
                             <ul className="sidebar-nav">
                                 {item.subItems.map((sub) => (
-                                    <div className="sidebar-nav-item"
+                                    <div className="sidebar-nav-item" key={sub.name}
                                         onClick={() => navigate(sub.route)}>
                                         <div className="sidebar-nav-item-content">
-                                            <span className="sidebar-nav-item-image"></span>
+                                            <span className="sidebar-nav-item-image">
+                                                <img src={sub.icon}/>
+                                            </span>
                                             <span className="sidebar-nav-item-text">{sub.name}</span>
-                                            <span className="sidebar-nav-item-info"></span>
+                                            <span className="sidebar-nav-item-info">Lv 100</span>
                                         </div>
                                     </div>
                                 ))}
