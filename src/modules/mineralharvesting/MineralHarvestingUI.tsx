@@ -36,7 +36,7 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
         return () => {
             EventBus.instance.unsubscribe(MineralHarvestingActionEvent, handleMiningProgress);
         };
-    }, [gameContext]);
+    });
 
     const handleNodeClick = (node: ResourceNode) => {
         if (skill.isActive()) {
