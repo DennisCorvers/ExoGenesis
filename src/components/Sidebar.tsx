@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useActiveView } from "../modules/common/ActiveViewProvider"; 
 import "./Sidebar.css";
 import ChevronDown from "../assets/icons/chevron-down.svg";
 import ChevronRight from "../assets/icons/chevron-right.svg";
@@ -25,7 +25,7 @@ function BuildSidebar(): SidebarCategory[] {
     const skillBar: SidebarCategory = {
         name: "Skills",
         subItems: [
-            { icon: "/assets/images/skills/mineralharvesting/mineralharvesting.svg", name: "Mineral Harvesting", route: "/mineralharvesting" },
+            { icon: "/assets/images/skills/mineralharvesting/mineralharvesting.svg", name: "Mineral Harvesting", route: "mineralharvestingskill" },
             { icon: "", name: "Unnamed Skill", route: "/" }
         ]
     };
@@ -42,7 +42,7 @@ const Sidebar: React.FC = () => {
     };
 
     const menuItems = BuildSidebar();
-    const navigate = useNavigate();
+    const { setActiveView } = useActiveView();
 
     return (
         <div className="sidebar">
@@ -64,7 +64,7 @@ const Sidebar: React.FC = () => {
                             <ul className="sidebar-nav">
                                 {item.subItems.map((sub) => (
                                     <div className="sidebar-nav-item" key={sub.name}
-                                        onClick={() => navigate(sub.route)}>
+                                        onClick={() => setActiveView(sub.route)}>
                                         <div className="sidebar-nav-item-content">
                                             <span className="sidebar-nav-item-image">
                                                 <img src={sub.icon}/>

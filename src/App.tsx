@@ -5,6 +5,7 @@ import Sidebar from "./components/Sidebar";
 import GameScreen from "./modules/GameScreen";
 import GameLoop from "./game/core/GameLoop";
 import "./App.css"
+import { ActiveViewProvider } from "./modules/common/ActiveViewProvider";
 
 const App: React.FC = () => {
   const [gameContext, setGameContext] = useState<GameContext | null>(null);
@@ -15,7 +16,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <Router>
+    <ActiveViewProvider>
       <div>
         <Sidebar />
         <div className="main-content">
@@ -29,7 +30,7 @@ const App: React.FC = () => {
           )}
         </div>
       </div>
-    </Router>
+    </ActiveViewProvider>
   );
 };
 

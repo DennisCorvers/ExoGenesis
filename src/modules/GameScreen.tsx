@@ -1,21 +1,31 @@
-import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import React, { Suspense } from "react";
+import { useActiveView } from "./common/ActiveViewProvider";
 import { GameContext } from "../game/core/GameContext";
-import MineralHarvestingUI from "../modules/mineralharvesting/MineralHarvestingUI"
+
+const MineralHarvestingUI = React.lazy(() => import("../modules/mineralharvesting/MineralHarvestingUI"))
 
 interface GameScreenProps {
   gameContext: GameContext;
 }
 
 const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
+  const { activeView } = useActiveView();
+
+  const viewComponents: { [key: string]: React.LazyExoticComponent<React.FC<any>> } = {
+    mineralharvestingskill: MineralHarvestingUI,
+  };
+
+  const ActiveViewComponent = viewComponents[activeView as keyof typeof viewComponents];
+
+
+  //TODO: Maybe remove the loading / unloading of components for a smoother experience?
+  // Will have to see about the performance of things.
   return (
     <div>
       <h2>Game Screen</h2>
-      {/* Switch to handle routing */}
-      <Routes>
-        <Route path="/mineralharvesting" element={<MineralHarvestingUI gameContext={gameContext} />} />
-        {/* Add more routes for other sections */}
-      </Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        {ActiveViewComponent ? <ActiveViewComponent gameContext={gameContext} /> : null}
+      </Suspense>
     </div>
   );
 };
