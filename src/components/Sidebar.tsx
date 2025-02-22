@@ -25,7 +25,7 @@ function BuildSidebar(): SidebarCategory[] {
     const skillBar: SidebarCategory = {
         name: "Skills",
         subItems: [
-            { icon: "/assets/images/skills/mineralharvesting/mineralharvesting.png", name: "Mineral Harvesting", route: "/mineralharvesting" },
+            { icon: "/assets/images/skills/mineralharvesting/mineralharvesting.svg", name: "Mineral Harvesting", route: "/mineralharvesting" },
             { icon: "", name: "Unnamed Skill", route: "/" }
         ]
     };
