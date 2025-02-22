@@ -13,7 +13,7 @@ const ResourceNodeCard: React.FC<ResourceNodeCardProps> = ({ node, onClick }) =>
       <h3>{node.name}</h3>
       <p>Experience Reward: {node.experienceReward}</p>
       <p>Level Requirement: {node.levelRequirement}</p>
-      <p>Harvesting Time: {node.harvestingTime / 1000} seconds</p>
+      <p>Harvesting Time: {node.harvestingTime} seconds</p>
     </div>
   );
 };

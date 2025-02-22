@@ -55,10 +55,9 @@ export abstract class ResourceCollectionSkill<T extends ResourceNode> extends Sk
         this.m_progress = 0;
     }
 
-    public stopHarvesting(node: T): void {
+    public stopHarvesting(node: T | null): void {
         this.m_activeNode = null;
         this.m_progress = 0;
-
     }
 
     public registerNode(node: T): void {

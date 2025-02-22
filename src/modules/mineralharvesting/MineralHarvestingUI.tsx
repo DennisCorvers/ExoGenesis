@@ -20,12 +20,6 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
 
     useEffect(() => {
         const handleMiningProgress = (event: MineralHarvestingActionEvent) => {
-
-            // Harvesting action finished, check if the next action is in progress
-            if (!skill) {
-                return;
-            }
-
             setProgress(skill.progress);
 
             if (skill.isActive()) {
@@ -34,6 +28,10 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
         };
 
         EventBus.instance.subscribe(MineralHarvestingActionEvent, handleMiningProgress);
+
+        // Set the progress of the node, in case we are already harvesting
+        if (skill.isActive())
+            updateHarvestProgress(skill.activeNode!);
 
         return () => {
             EventBus.instance.unsubscribe(MineralHarvestingActionEvent, handleMiningProgress);
@@ -44,25 +42,25 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
         if (skill.isActive()) {
             if (skill.activeNode === node) {
                 skill.stopHarvesting(node);
-                setCurrentNode(null);
-                setProgress(0);
-                setActionTime(0);
             }
             else {
                 skill.stopHarvesting(skill.activeNode!);
                 skill.startHarvesting(node);
-                setCurrentNode(node);
-                setProgress(0);
-                setActionTime(node.harvestingTime);
             }
         }
         else {
             skill.startHarvesting(node);
-            setCurrentNode(node);
-            setProgress(0);
-            setActionTime(node.harvestingTime);
         }
+
+        updateHarvestProgress(node);
     };
+
+    const updateHarvestProgress = (node: ResourceNode) => {
+        const nodeTime = skill.isActive() ? node.harvestingTime : 0;
+        setCurrentNode(skill.activeNode);
+        setProgress(skill.progress)
+        setActionTime(nodeTime);
+    }
 
     return (
         <div className="mining-ui">
