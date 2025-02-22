@@ -13,21 +13,6 @@ export class MineralHarvesting extends ResourceCollectionSkill<MineralNode> {
     super.registerNode(new MineralNode("Gold", 5, 1, 1.500, ["Gold Ore"]));
   }
 
-  public completeAction(): void {
-    if (this.m_activeNode) {
-      this.postCompleteAction();
-      this.completeHarvesting(this.m_activeNode!);
-
-      console.log(this.m_activeNode);
-    }
-  }
-
-  public postCompleteAction(): void {
-    if (this.m_activeNode) {
-      this.m_rewards.push(`Collected resource from ${this.m_activeNode.name}`);
-    }
-  }
-
   public completeHarvesting(node: MineralNode) {
     const event = new MineralHarvestingActionEvent(node);
     EventBus.instance.publish(event);

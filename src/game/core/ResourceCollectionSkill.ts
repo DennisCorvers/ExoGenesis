@@ -63,4 +63,20 @@ export abstract class ResourceCollectionSkill<T extends ResourceNode> extends Sk
     public registerNode(node: T): void {
         this.m_nodes.push(node);
     }
+
+    public completeAction(): void {
+        if (this.m_activeNode) {
+            this.completeHarvesting(this.m_activeNode!);
+
+            console.log(this.m_activeNode);
+        }
+    }
+
+    public postCompleteAction(): void {
+        if (this.m_activeNode) {
+
+        }
+    }
+
+    abstract completeHarvesting(node: T): void;
 }

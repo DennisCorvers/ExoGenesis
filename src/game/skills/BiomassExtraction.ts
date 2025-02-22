@@ -12,21 +12,6 @@ export class BiomassExtraction extends ResourceCollectionSkill<BiomassNode> {
     super.registerNode(new BiomassNode("Plant", 5, 1, 2.500, ["Plant Fibre"]));
   }
 
-  public completeAction(): void {
-    if (this.m_activeNode) {
-      this.postCompleteAction();
-      this.completeHarvesting(this.m_activeNode!);
-
-      console.log(this.m_activeNode);
-    }
-  }
-
-  public postCompleteAction(): void {
-    if (this.m_activeNode) {
-      this.m_rewards.push(`Collected resource from ${this.m_activeNode.name}`);
-    }
-  }
-
   public completeHarvesting(node: BiomassNode) {
     const event = new BiomassExtractionEvent(node);
     EventBus.instance.publish(event);
