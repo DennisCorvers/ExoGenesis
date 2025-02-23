@@ -1,5 +1,5 @@
 import { MineralHarvesting } from "../skills/MineralHarvesting";
-import { Skill } from "./Skill";
+import { Skill } from "../skills/Skill";
 
 export class GameContext {
     // Use a Map where the key is the skill ID and value is the skill instance
@@ -42,9 +42,8 @@ export class GameContext {
         throw new Error(`Skill of type ${type.name} not found.`);
     }
 
-
     private registerSkill(skill: Skill) {
-        this.m_skills.set(skill.name, skill);
+        this.m_skills.set(skill.id, skill);
     }
 
     get skills(): Skill[] {

@@ -1,4 +1,4 @@
-import { ResourceCollectionSkill } from "../core/ResourceCollectionSkill";
+import { ResourceCollectionSkill } from "./ResourceCollectionSkill";
 import { EventBus } from "../events/EventBus";
 import { BiomassExtractionEvent } from "../events/BiomassExtractionEvent";
 import { BiomassNode } from "./BiomassNode"

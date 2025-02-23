@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GameContext } from '../../game/core/GameContext';
-import { ResourceNode } from '../../game/core/ResourceNode';
+import { ResourceNode } from '../../game/skills/ResourceNode';
 import { MineralHarvesting } from '../../game/skills/MineralHarvesting';
 import { MineralHarvestingActionEvent } from '../../game/events/MineralHarvestingEvent';
 import { EventBus } from '../../game/events/EventBus';

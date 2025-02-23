@@ -1,4 +1,4 @@
-import { ResourceNode } from "../core/ResourceNode"
+import { ResourceNode } from "./ResourceNode"
 
 export class MineralNode extends ResourceNode {
     constructor(

@@ -1,4 +1,4 @@
-import { ResourceCollectionSkill } from "../core/ResourceCollectionSkill";
+import { ResourceCollectionSkill } from "./ResourceCollectionSkill";
 import { EventBus } from "../events/EventBus";
 import { MineralHarvestingActionEvent } from "../events/MineralHarvestingEvent";
 import { MineralNode } from "./MineralNode"

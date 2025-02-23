@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResourceNode } from '../../game/core/ResourceNode';
+import { ResourceNode } from '../../game/skills/ResourceNode';
 import './ResourceNodeCard.css';
 
 interface ResourceNodeCardProps {
