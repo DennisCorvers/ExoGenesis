@@ -1,45 +1,52 @@
 import { BaseEvent } from "./BaseEvent";
 
-type EventCallback<T extends BaseEvent> = (event: T) => void;
+export type SkillEventHandler<T extends BaseEvent = BaseEvent> = (payload: T) => void;
+type SkillEventHandlerList<T extends BaseEvent = BaseEvent> = Array<SkillEventHandler<T>>;
 
 export class EventBus {
-  private static _instance: EventBus;
-  private subscribers: Record<string, EventCallback<any>[]> = {};
+  private static m_instance: EventBus;
+  private events: Map<string, SkillEventHandlerList> = new Map();
 
-  private constructor() {}
+  private constructor() { }
 
   public static get instance(): EventBus {
-    if (!EventBus._instance) {
-      EventBus._instance = new EventBus();
+    if (!EventBus.m_instance) {
+      EventBus.m_instance = new EventBus();
     }
-    return EventBus._instance;
+    return EventBus.m_instance;
   }
 
-  public subscribe<T extends BaseEvent>(eventClass: new (...args: any[]) => T, callback: EventCallback<T>): void {
-    const eventType = eventClass.name;
-
-    if (!this.subscribers[eventType]) {
-      this.subscribers[eventType] = [];
+  public subscribe<T extends BaseEvent>(eventType: string, handler: SkillEventHandler<T>): void {
+    if (!this.events.has(eventType)) {
+      this.events.set(eventType, []);
     }
-
-    this.subscribers[eventType].push(callback);
+    (this.events.get(eventType) as SkillEventHandlerList<T>).push(handler);
   }
 
-  public unsubscribe<T extends BaseEvent>(eventClass: new (...args: any[]) => T, callback: EventCallback<T>): void {
-    const eventType = eventClass.name;
+  public unsubscribe<T extends BaseEvent>(eventType: string, handler?: SkillEventHandler<T>): void {
+    if (!this.events.has(eventType))
+      return;
 
-    if (!this.subscribers[eventType]) return;
+    if (!handler) {
+      this.events.delete(eventType);
+    } else {
+      const handlers = this.events.get(eventType) as SkillEventHandlerList<T>;
+      const index = handlers.indexOf(handler);
 
-    this.subscribers[eventType] = this.subscribers[eventType].filter(
-      (cb) => cb !== callback
-    );
+      if (index !== -1) {
+        handlers.splice(index, 1);
+      }
+
+      if (handlers.length === 0) {
+        this.events.delete(eventType);
+      }
+    }
   }
 
-  public publish<T extends BaseEvent>(event: T): void {
-    const eventType = event.constructor.name;
-
-    if (!this.subscribers[eventType]) return;
-
-    this.subscribers[eventType].forEach((callback) => callback(event));
+  public publish<T extends BaseEvent>(eventType: string, payload: T): void {
+    const handlers = this.events.get(eventType);
+    if (handlers) {
+      handlers.slice().forEach(handler => handler(payload));
+    }
   }
 }

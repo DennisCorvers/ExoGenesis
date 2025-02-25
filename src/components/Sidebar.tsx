@@ -26,7 +26,7 @@ function BuildSidebar(): SidebarCategory[] {
         name: "Skills",
         subItems: [
             { icon: "/assets/images/skills/mineralharvesting/mineralharvesting.svg", name: "Mineral Harvesting", route: "mineralharvestingskill" },
-            { icon: "", name: "Unnamed Skill", route: "/" }
+            { icon: "", name: "Biomass Extraction", route: "/" }
         ]
     };
 
