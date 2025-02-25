@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { GameContext } from '../../game/core/GameContext';
-import { MineralHarvesting } from '../../game/skills/MineralHarvesting';
-import { MineralHarvestingActionEvent } from '../../game/events/MineralHarvestingEvent';
 import { EventBus } from '../../game/events/EventBus';
 import ProgressBar from '../common/ProgressBar';
 import ResourceNodeCard from '../common/ResourceNodeCard';
 import { BaseRecipe } from '../../game/skills/requirements/BaseRecipe';
 import { SingleResourceRecipe } from '../../game/skills/requirements/SingleResourceRecipe';
 import { MineralHarvestingState } from '../../game/state/MineralHarvestingState';
+import { ActionEvent } from '../../game/events/skill/ActionEvent';
 
 interface MineralHarvestingUIProps {
     gameContext: GameContext;
@@ -22,36 +21,31 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
     const player = gameContext.player;
     const skillState = player.skillManager.getSkill(skill) as MineralHarvestingState;
     const skillManager = player.skillManager;
-    
+
     useEffect(() => {
-        const handleMiningProgress = (event: MineralHarvestingActionEvent) => {
+        const onAction = (event: ActionEvent) => {
             setProgress(skillState.progress);
 
             if (skillState.isActive) {
-                setActionTime(event.mineralNode.actionTime);
+                setActionTime(event.action.actionTime);
             }
         };
 
-        EventBus.instance.subscribe(MineralHarvestingActionEvent, handleMiningProgress);
+        EventBus.instance.subscribe("mineralharvesting.action", onAction);
 
         // Set the progress of the node, in case we are already harvesting
         if (skillState.isActive)
             updateHarvestProgress(skillState.activeAction!);
 
         return () => {
-            EventBus.instance.unsubscribe(MineralHarvestingActionEvent, handleMiningProgress);
+            EventBus.instance.unsubscribe("mineralharvesting.action", onAction);
         };
     });
 
     const handleNodeClick = (node: SingleResourceRecipe) => {
-        if (skillState.isActive) {
-            if (skillState.activeAction === node) {
-                skillManager.stopPlayerAction(skill, node);
-            }
-            else {
-                skillManager.stopPlayerAction(skill, node);
-                skillManager.startPlayerAction(skill, node);
-            }
+        // If the chosen action is running, stop the action, otherwise switch / start
+        if (skillState.isRunningAction(node)) {
+            skillManager.stopPlayerAction(skill, node);
         }
         else {
             skillManager.startPlayerAction(skill, node);
