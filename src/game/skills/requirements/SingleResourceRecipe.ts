@@ -20,9 +20,4 @@ export class SingleResourceRecipe extends ResourceRecipe {
         this.m_item = item;
         this.m_amount = amount;
     }
-
-    public playerCanStart(player: Player): boolean {
-        // TODO: Verify if player can do this action
-        return true;
-    }
 }

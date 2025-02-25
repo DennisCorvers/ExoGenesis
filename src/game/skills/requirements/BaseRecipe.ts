@@ -24,6 +24,4 @@ export abstract class BaseRecipe extends NamedObject {
         this.m_levelRequirement = levelRequirement
         this.m_actionTime = actionTime
     }
-
-    abstract playerCanStart(player: Player): boolean;
 }

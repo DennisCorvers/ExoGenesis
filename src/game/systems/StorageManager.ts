@@ -1,7 +1,18 @@
 import { IGameContext } from "../core/IGameContext";
 import { Item } from "../entities/Item";
+import { IItemQuantity } from "./IItemQuantity";
 
-export class StorageManager {
+export interface IStorageManager {
+    addItem(item: Item, amount: number): boolean;
+
+    hasItem(item: Item): boolean;
+
+    hasItemAmount(item: Item, amount: number): boolean;
+
+    removeItem(item: Item, requestedAmount: number): number;
+}
+
+export class StorageManager implements IStorageManager {
     private m_items: Map<number, StorageSlot>;
     private m_storageSize: number;
 
@@ -9,7 +20,7 @@ export class StorageManager {
         return Array.from(this.m_items.values());
     }
 
-    constructor(gameContext : IGameContext) {
+    constructor(gameContext: IGameContext) {
         this.m_items = new Map<number, StorageSlot>();
         this.m_storageSize = 100;
     }
@@ -19,7 +30,7 @@ export class StorageManager {
             throw new Error("Amount cannot be negative");
         }
 
-        let slot = this.getItem(item);
+        let slot = this.getStorageSlot(item);
         if (slot) {
             slot.amount += amount;
             return true;
@@ -34,18 +45,27 @@ export class StorageManager {
         return true;
     }
 
-    public getItem(item: Item): StorageSlot | null {
+    public getItem(item: Item): IItemQuantity | null {
         return this.m_items.get(item.uid) || null;
     }
 
-    public removeAllItem(item: Item): number {
+    public hasItem(item: Item): boolean {
+        return this.m_items.get(item.uid) != null;
+    }
+
+    public hasItemAmount(item: Item, amount: number): boolean {
         const slot = this.m_items.get(item.uid);
+        return (slot != null && slot.amount >= amount);
+    }
+
+    public removeAllItem(item: Item): number {
+        const slot = this.getStorageSlot(item);
         if (!slot) {
             throw new Error(`Item ${item.id} does not exist in inventory.`);
         }
 
         const amount = slot.amount;
-        
+
         // Don't remove the entire entry, just zero it.
         if (slot.isLocked) {
             slot.amount = 0;
@@ -58,7 +78,7 @@ export class StorageManager {
     }
 
     public removeItem(item: Item, requestedAmount: number): number {
-        const slot = this.getItem(item);
+        const slot = this.getStorageSlot(item);
         if (!slot) {
             throw new Error(`Item ${item.id} does not exist in inventory.`);
         }
@@ -78,16 +98,20 @@ export class StorageManager {
     }
 
     public togggleItemLock(item: Item): void {
-        const slot = this.getItem(item);
+        const slot = this.getStorageSlot(item);
         if (!slot) {
             throw new Error("Item ${item.id} does not exist in inventory.");
         }
 
         slot.isLocked = !slot.isLocked
     }
+
+    private getStorageSlot(item: Item): StorageSlot | null {
+        return this.m_items.get(item.uid) || null;
+    }
 }
 
-export class StorageSlot {
+export class StorageSlot implements IItemQuantity {
     private m_item: Item;
     private m_amount: number;
     private m_isLocked: boolean;

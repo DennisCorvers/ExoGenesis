@@ -20,7 +20,8 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
 
     const skill = gameContext.skills.mineralHarvesting;
     const player = gameContext.player;
-    const skillState = player.getSkillState<MineralHarvestingState>(skill.id);
+    const skillState = player.skillManager.getSkill(skill) as MineralHarvestingState;
+    const skillManager = player.skillManager;
     
     useEffect(() => {
         const handleMiningProgress = (event: MineralHarvestingActionEvent) => {
@@ -45,15 +46,15 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
     const handleNodeClick = (node: SingleResourceRecipe) => {
         if (skillState.isActive) {
             if (skillState.activeAction === node) {
-                player.stopSkillAction(skill, node);
+                skillManager.stopPlayerAction(skill, node);
             }
             else {
-                player.stopSkillAction(skill, node);
-                player.startSkillAction(skill, node);
+                skillManager.stopPlayerAction(skill, node);
+                skillManager.startPlayerAction(skill, node);
             }
         }
         else {
-            player.startSkillAction(skill, node);
+            skillManager.startPlayerAction(skill, node);
         }
 
         updateHarvestProgress(node);

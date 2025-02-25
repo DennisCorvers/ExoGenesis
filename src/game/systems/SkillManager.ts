@@ -1,13 +1,17 @@
 import { IUpdatable } from "../core/IUpdatable";
-import { ISkillState } from "../state/SkillState";
 import { MineralHarvestingState } from "../state";
 import { IGameContext } from "../core/IGameContext";
 import { Skill } from "../skills/Skill";
 import { BaseRecipe } from "../skills/requirements/BaseRecipe";
+import { IPlayerContext } from "./IPlayerContext";
+import { ISkillState } from "../state/ISkillState";
+import { ISkillManager } from "./ISkillManager";
 
-export class SkillManager implements IUpdatable {
+
+
+export class SkillManager implements ISkillManager, IUpdatable {
     // The skill the player itself can do (only 1 skill at a time).
-    private m_playerActiveSkill: ISkillState | null;
+    private m_playerSelectedSkill: ISkillState | null;
     // Passive skills
     private m_activeSkills: Map<string, ISkillState>;
     private m_skills: Map<string, ISkillState>;
@@ -20,28 +24,32 @@ export class SkillManager implements IUpdatable {
         return [...this.m_skills.values()];
     }
 
-    public get isPlayerBusy(): boolean {
-        return this.m_playerActiveSkill != null;
+    public get playerSelectedSkill(): ISkillState | null {
+        return this.m_playerSelectedSkill;
     }
 
-    constructor(gameContext: IGameContext) {
-        this.m_playerActiveSkill = null;
+    public get isPlayerBusy(): boolean {
+        return this.m_playerSelectedSkill != null && this.m_playerSelectedSkill.isActive;
+    }
+
+    constructor(gameContext: IGameContext, playerContext: IPlayerContext) {
+        this.m_playerSelectedSkill = null;
         this.m_activeSkills = new Map<string, ISkillState>();
         this.m_skills = new Map<string, ISkillState>();
 
-        const skillStateMapping = new Map<Skill, new (skill: Skill) => ISkillState>([
+        const skillStateMapping = new Map<Skill, new (skill: Skill, playerContext : IPlayerContext) => ISkillState>([
             [gameContext.skills.mineralHarvesting, MineralHarvestingState],
         ]);
 
 
         for (const [skill, StateClass] of skillStateMapping) {
-            this.m_skills.set(skill.id, new StateClass(skill));
+            this.m_skills.set(skill.id, new StateClass(skill, playerContext));
         }
     }
 
     public update(deltaTime: number): void {
-        if (this.m_playerActiveSkill != null) {
-            this.m_playerActiveSkill.update(deltaTime);
+        if (this.isPlayerBusy) {
+            this.m_playerSelectedSkill!.update(deltaTime);
         }
 
         if (this.m_activeSkills.size > 0) {
@@ -51,10 +59,10 @@ export class SkillManager implements IUpdatable {
         }
     }
 
-    public getSkillState(id: string): ISkillState {
-        const state = this.m_skills.get(id);
+    public getSkill(skill: Skill): ISkillState {
+        const state = this.m_skills.get(skill.id);
         if (state == null) {
-            throw new Error(`Skill with id ${id} does not exist.`);
+            throw new Error(`Skill with id ${skill.id} does not exist.`);
         }
 
         return state;
@@ -62,45 +70,39 @@ export class SkillManager implements IUpdatable {
 
     public startPlayerAction(skill: Skill, action: BaseRecipe, toggle: boolean = false) {
         // Nothing busy, just start a new action.
-        if (this.m_playerActiveSkill == null) {
-            this.m_playerActiveSkill = this.getSkillState(skill.id);
-            this.m_playerActiveSkill.startAction(action);
+        if (!this.isPlayerBusy) {
+            this.m_playerSelectedSkill = this.getSkill(skill);
+            this.m_playerSelectedSkill.startAction(action);
 
             return;
         }
 
-        if (this.m_playerActiveSkill.skill === skill) {
+        if (this.m_playerSelectedSkill!.skill === skill) {
             // Same skill, action is already running.
-            if (!this.m_playerActiveSkill.isRunningAction(action)) {
-                this.m_playerActiveSkill.startAction(action);
+            if (!this.m_playerSelectedSkill!.isRunningAction(action)) {
+                this.m_playerSelectedSkill!.startAction(action);
             }
             else if (toggle) {
-                this.m_playerActiveSkill.stopAction(action);
+                this.m_playerSelectedSkill!.stopAction(action);
             }
 
             return;
         }
 
-        this.m_playerActiveSkill.stopAllActions();
-        this.m_playerActiveSkill = this.getSkillState(skill.id);
-        this.m_playerActiveSkill.startAction(action);
+        this.m_playerSelectedSkill!.stopAllActions();
+        this.m_playerSelectedSkill = this.getSkill(skill);
+        this.m_playerSelectedSkill.startAction(action);
     }
 
     public stopPlayerAction(skill: Skill, action: BaseRecipe) {
         // If no skill is active, do nothing.
-        if (this.m_playerActiveSkill == null) {
+        if (!this.isPlayerBusy) {
             return;
         }
 
         // If the same skill is active, stop the target action.
-        if (this.m_playerActiveSkill.skill === skill) {
-            this.m_playerActiveSkill.stopAction(action);
-
-            // If stopping the action above made the skill inactive,
-            // remove it from the active skill property.
-            if (!this.m_playerActiveSkill.isActive) {
-                this.m_playerActiveSkill = null;
-            }
+        if (this.m_playerSelectedSkill!.skill === skill) {
+            this.m_playerSelectedSkill!.stopAction(action);
         }
     }
 }

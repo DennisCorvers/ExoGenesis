@@ -1,26 +1,12 @@
 import { Skill } from "../skills/Skill";
 import { BaseRecipe } from "../skills/requirements/BaseRecipe";
-
-export interface ISkillState {
-    skill: Skill;
-    level: number;
-    experience: number;
-    isActive: boolean;
-    progress: number;
-
-    addExperience(value: number): void;
-    update(deltaTime: number): void;
-    canUpdate(): boolean;
-
-    isRunningAction(recipe: BaseRecipe): boolean;
-    startAction(recipe: BaseRecipe): void;
-    stopAction(recipe: BaseRecipe): void;
-    stopAllActions(): void;
-}
+import { IPlayerContext } from "../systems/IPlayerContext";
+import { ISkillState } from "./ISkillState";
 
 export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
-    protected m_skill: Skill;
-    protected m_level: number;
+    private m_playerContext: IPlayerContext;
+    private m_skill: Skill;
+    private m_level: number;
     protected m_experience: number;
     protected m_activeAction: T | null;
     protected m_progress: number;
@@ -56,7 +42,12 @@ export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
         return this.m_activeAction;
     }
 
-    constructor(skill: Skill) {
+    protected get player(): IPlayerContext {
+        return this.m_playerContext;
+    }
+
+    constructor(skill: Skill, playerContext: IPlayerContext) {
+        this.m_playerContext = playerContext;
         this.m_skill = skill;
         this.m_experience = 0;
         this.m_level = 0;
@@ -71,20 +62,23 @@ export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
     }
 
     public update(deltaTime: number): void {
-        if (this.canUpdate()) {
+        if (this.isActive) {
+            const action = this.m_activeAction!;
             this.m_progress += deltaTime;
 
-            if (this.m_progress >= this.m_activeAction!.actionTime) {
-                // Reset progress first before we set oncompletion.
-                this.m_progress -= this.m_activeAction!.actionTime;
-                this.completeAction(this.m_activeAction!);
-                this.postCompleteAction(this.m_activeAction!);
+            while (this.m_progress >= action.actionTime) {
+                this.m_progress -= action.actionTime;
+
+                this.onActionComplete(action);
+                this.onPostActionComplete(action);
+
+                if (!this.canStartAction(action)) {
+                    this.stopAction(action);
+                    break;
+                }
+
             }
         }
-    }
-
-    public canUpdate(): boolean {
-        return this.m_activeAction != null;
     }
 
     public isRunningAction(recipe: BaseRecipe): boolean {
@@ -92,12 +86,13 @@ export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
     }
 
     public startAction(recipe: BaseRecipe) {
-        // TODO: Check if we can start.
+        // TODO: Support concurrent actions.
         this.m_progress = 0;
         this.m_activeAction = <T>recipe;
     }
 
     public stopAction(recipe: BaseRecipe) {
+        // TODO: Support concurrent actions.
         const action = <T>recipe;
         if (this.m_activeAction === action) {
             this.m_progress = 0;
@@ -110,6 +105,9 @@ export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
         this.m_progress = 0;
     }
 
-    protected abstract completeAction(completedAction: T): void;
-    protected abstract postCompleteAction(completedAction: T): void;
+    public abstract canStartAction(action: T): boolean
+    protected abstract onActionComplete(completedAction: T): void;
+    protected abstract onPostActionComplete(completedAction: T): void;
+    protected abstract onActionStopped(stoppedAction: T): void;
+    protected abstract onActionStarted(startedAction: T): void;
 }
