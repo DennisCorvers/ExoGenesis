@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { GameContext } from "./game/core/GameContext";
 import Sidebar from "./components/Sidebar";
 import GameScreen from "./modules/GameScreen";
-import GameLoop from "./game/core/GameLoop";
+import Ticker from "./game/core/Ticker";
 import "./App.css"
 import { ActiveViewProvider } from "./modules/common/ActiveViewProvider";
 
@@ -12,6 +12,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const context = new GameContext();
+    // TODO: Save and load player data
     setGameContext(context);
   }, []);
 
@@ -23,7 +24,7 @@ const App: React.FC = () => {
           {gameContext ? (
             <>
               <GameScreen gameContext={gameContext} />
-              <GameLoop gameContext={gameContext} />
+              <Ticker gameContext={gameContext} />
             </>
           ) : (
             <div>Loading Game...</div>

@@ -24,7 +24,7 @@ export class NamedObject {
         return this.m_id;
     }
 
-    get localID(): string {
+    get name(): string {
         return this.m_localID;
     }
 

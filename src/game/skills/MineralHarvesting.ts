@@ -1,20 +1,19 @@
+import { Item } from "../entities/Item";
 import { ResourceCollectionSkill } from "./ResourceCollectionSkill";
-import { EventBus } from "../events/EventBus";
-import { MineralHarvestingActionEvent } from "../events/MineralHarvestingEvent";
-import { MineralNode } from "./MineralNode"
+import { BaseRecipe } from "./requirements/BaseRecipe";
+import { SingleResourceRecipe } from "./requirements/SingleResourceRecipe";
 
-export class MineralHarvesting extends ResourceCollectionSkill<MineralNode> {
+export class MineralHarvesting extends ResourceCollectionSkill<SingleResourceRecipe> {
+
+  static Name: string = "MineralHarvesting";
 
   constructor() {
-    super("Mineral Harvesting");
-
-    super.registerNode(new MineralNode("Magnetite", 10, 5, 3.000, ["Magnetite Ore"]));
-    super.registerNode(new MineralNode("Malachite", 5, 1, 2.500, ["Malachite Ore"]));
-    super.registerNode(new MineralNode("Gold", 5, 1, 1.500, ["Gold Ore"]));
-  }
-
-  public completeHarvesting(node: MineralNode) {
-    const event = new MineralHarvestingActionEvent(node);
-    EventBus.instance.publish(event);
+    super(MineralHarvesting.Name);
+    const item1 = new Item("Magnetite Ore");
+    const item2 = new Item("Malachite Ore");
+    const item3 = new Item("Gold Ore");
+    super.registerRecipe(new SingleResourceRecipe("Magnetite Ore", item1, 1, 5, 1, 3));
+    super.registerRecipe(new SingleResourceRecipe("Malachite Ore", item2, 1, 10, 3, 2));
+    super.registerRecipe(new SingleResourceRecipe("Gold Ore", item3, 2, 15, 5, 1.5));
   }
 }

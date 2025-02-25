@@ -3,7 +3,7 @@ import { GameContext } from "./GameContext";
 
 const TICK_RATE = 1000 / 60;
 
-export default function GameLoop({ gameContext }: { gameContext: GameContext }) {
+export default function Ticker({ gameContext }: { gameContext: GameContext }) {
   const requestRef = useRef<number | null>(null);
   const gameContextRef = useRef(gameContext);
   const previousTimeRef = useRef(performance.now());

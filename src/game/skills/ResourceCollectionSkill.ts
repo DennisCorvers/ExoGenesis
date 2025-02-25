@@ -1,82 +1,29 @@
-import { ResourceNode } from "./ResourceNode";
+import { BaseRecipe } from "./requirements/BaseRecipe";
+import { ResourceRecipe } from "./requirements/ResourceRecipe";
 import { Skill } from "./Skill";
 
-export abstract class ResourceCollectionSkill<T extends ResourceNode> extends Skill {
+export abstract class ResourceCollectionSkill<T extends ResourceRecipe> extends Skill {
     protected m_maximumConcurrentNodes;
-    protected m_progress: number;
-    protected m_rewards: string[];
-    protected m_nodes: T[];
-    protected m_activeNode: T | null;
+    protected m_nodes: Map<string, T>;
 
     constructor(id: string) {
         super(id);
         this.m_maximumConcurrentNodes = 1;
-        this.m_progress = 0;
-        this.m_rewards = [];
-        this.m_nodes = [];
-        this.m_activeNode = null;
-    }
-
-    public get progress(): number {
-        return this.m_progress;
+        this.m_nodes = new Map<string, T>();
     }
 
     public get registeredNodes(): T[] {
-        return this.m_nodes;
+        return [...this.m_nodes.values()];
     }
 
-    public get activeNode(): T | null {
-        return this.m_activeNode;
+    public registerRecipe(node: T): void {
+        this.m_nodes.set(node.id, node);
     }
 
-    public update(deltaTime: number) {
-        if (this.canUpdate()) {
-            this.m_progress += deltaTime;
-
-            if (this.m_progress >= this.m_activeNode!.harvestingTime) {
-                // Reset progress first before we set oncompletion.
-                this.m_progress -= this.m_activeNode!.harvestingTime;
-                this.completeAction();
-                this.postCompleteAction();
-            }
-        }
+    // We just check if any of the resourcenodes is the provided recipe.
+    // That's good enough, right?
+    public isValidRecipe(recipe: BaseRecipe): boolean {
+        const node = this.m_nodes.get(recipe.id);
+        return node != null;
     }
-
-    public canUpdate(): boolean {
-        return this.m_activeNode !== null;
-    }
-
-    public isActive(): boolean {
-        return this.m_activeNode !== null;
-    }
-
-    public startHarvesting(node: T): void {
-        this.m_activeNode = node;
-        this.m_progress = 0;
-    }
-
-    public stopHarvesting(node: T | null): void {
-        this.m_activeNode = null;
-        this.m_progress = 0;
-    }
-
-    public registerNode(node: T): void {
-        this.m_nodes.push(node);
-    }
-
-    public completeAction(): void {
-        if (this.m_activeNode) {
-            this.completeHarvesting(this.m_activeNode!);
-
-            console.log(this.m_activeNode);
-        }
-    }
-
-    public postCompleteAction(): void {
-        if (this.m_activeNode) {
-
-        }
-    }
-
-    abstract completeHarvesting(node: T): void;
 }

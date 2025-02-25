@@ -1,52 +1,58 @@
-import { MineralHarvesting } from "../skills/MineralHarvesting";
+import { ISerializable } from "../data/ISerializable";
+import { Item } from "../entities/Item"
+import { Player } from "../entities/Player";
 import { Skill } from "../skills/Skill";
+import { IGameContext } from "./IGameContext";
+import { IUpdatable } from "./IUpdatable";
+import { ObjectRegistry } from "./ObjectRegistry";
+import { SkillRegistry } from "./SkillRegistry";
 
-export class GameContext {
-    // Use a Map where the key is the skill ID and value is the skill instance
-    private readonly m_skills: Map<string, Skill>;
-    private readonly m_isPaused: boolean;
+export class GameContext implements IGameContext, ISerializable, IUpdatable {
+    private static m_instance: GameContext;
 
-    constructor() {
-        this.m_skills = new Map();
+    private m_player: Player;
+    private m_isPaused: boolean;
+
+    private readonly m_skillRegistry: SkillRegistry;
+    private readonly m_itemRegistry: ObjectRegistry<Item>;
+
+    public get isPaused(): boolean {
+        return this.m_isPaused;
+    }
+
+    public get player(): Player {
+        return this.m_player;
+    }
+
+    public get skillList(): Skill[] {
+        return this.m_skillRegistry.objects;
+    }
+
+    public get skills(): SkillRegistry {
+        return this.m_skillRegistry;
+    }
+
+    public get items(): Item[] {
+        return this.m_itemRegistry.objects;
+    }
+
+    public get itemRegistry(): ObjectRegistry<Item> {
+        return this.m_itemRegistry;
+    }
+
+    public constructor() {
+        this.m_skillRegistry = new SkillRegistry();
+        this.m_itemRegistry = new ObjectRegistry<Item>();
         this.m_isPaused = false;
 
-        this.registerSkills();
+
+        // This should be one of the last steps, as data needs to be loaded to create a (blank) player.
+        this.m_player = new Player(this);
     }
 
     public update(deltaTime: number) {
         if (this.m_isPaused) return;
 
-        this.m_skills.forEach(skill => {
-            skill.update(deltaTime);
-        });
-    }
-
-    private registerSkills() {
-        this.registerSkill(new MineralHarvesting());
-    }
-
-    public getSkill(id: string): Skill {
-        const skill = this.m_skills.get(id);
-        if (!skill) {
-            throw new Error(`Skill with ID ${id} not found.`);
-        }
-        return skill;
-    }
-
-    public getSkillByType<T extends Skill>(type: { new(): T }): T {
-        for (const skill of this.m_skills.values()) {
-            if (skill instanceof type) {
-                return skill as T;
-            }
-        }
-        throw new Error(`Skill of type ${type.name} not found.`);
-    }
-
-    private registerSkill(skill: Skill) {
-        this.m_skills.set(skill.id, skill);
-    }
-
-    get skills(): Skill[] {
-        return Array.from(this.m_skills.values());
+        this.m_player.update(deltaTime);
     }
 }

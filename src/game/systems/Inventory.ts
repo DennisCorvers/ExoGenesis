@@ -4,7 +4,7 @@ export class InventoryManager {
     private m_items: Map<number, StorageSlot>;
     private m_inventorySize: number;
 
-    public get ItemsList(): StorageSlot[] {
+    public get itemsList(): StorageSlot[] {
         return Array.from(this.m_items.values());
     }
 
@@ -13,14 +13,14 @@ export class InventoryManager {
         this.m_inventorySize = 100;
     }
 
-    public AddItem(item: Item, amount: number): boolean {
+    public addItem(item: Item, amount: number): boolean {
         if (amount < 0) {
             throw new Error("Amount cannot be negative");
         }
 
-        let slot = this.GetItem(item);
+        let slot = this.getItem(item);
         if (slot) {
-            slot.Amount += amount;
+            slot.amount += amount;
             return true;
         }
 
@@ -33,21 +33,21 @@ export class InventoryManager {
         return true;
     }
 
-    public GetItem(item: Item): StorageSlot | null {
+    public getItem(item: Item): StorageSlot | null {
         return this.m_items.get(item.uid) || null;
     }
 
-    public RemoveAllItem(item: Item): number {
+    public removeAllItem(item: Item): number {
         const slot = this.m_items.get(item.uid);
         if (!slot) {
             throw new Error(`Item ${item.id} does not exist in inventory.`);
         }
 
-        const amount = slot.Amount;
+        const amount = slot.amount;
         
         // Don't remove the entire entry, just zero it.
-        if (slot.IsLocked) {
-            slot.Amount = 0;
+        if (slot.isLocked) {
+            slot.amount = 0;
         }
         else {
             this.m_items.delete(item.uid);
@@ -56,33 +56,33 @@ export class InventoryManager {
         return amount;
     }
 
-    public RemoveItem(item: Item, requestedAmount: number): number {
-        const slot = this.GetItem(item);
+    public removeItem(item: Item, requestedAmount: number): number {
+        const slot = this.getItem(item);
         if (!slot) {
             throw new Error(`Item ${item.id} does not exist in inventory.`);
         }
 
-        if (slot.Amount <= requestedAmount) {
+        if (slot.amount <= requestedAmount) {
             this.m_items.delete(item.uid);
-            return slot.Amount;
+            return slot.amount;
         }
         else {
-            slot.Amount -= requestedAmount;
+            slot.amount -= requestedAmount;
             return requestedAmount;
         }
     }
 
-    public DeleteItem(item: Item): boolean {
+    public deleteItem(item: Item): boolean {
         return this.m_items.delete(item.uid);
     }
 
-    public TogggleItemLock(item: Item): void {
-        const slot = this.GetItem(item);
+    public togggleItemLock(item: Item): void {
+        const slot = this.getItem(item);
         if (!slot) {
             throw new Error("Item ${item.id} does not exist in inventory.");
         }
 
-        slot.IsLocked = !slot.IsLocked
+        slot.isLocked = !slot.isLocked
     }
 }
 
@@ -97,23 +97,23 @@ export class StorageSlot {
         this.m_isLocked = false;
     }
 
-    public get Item(): Item {
+    public get item(): Item {
         return this.m_item;
     }
 
-    public get Amount(): number {
+    public get amount(): number {
         return this.m_amount;
     }
 
-    public set Amount(amount: number) {
+    public set amount(amount: number) {
         this.m_amount = amount;
     }
 
-    public get IsLocked(): boolean {
+    public get isLocked(): boolean {
         return this.m_isLocked;
     }
 
-    public set IsLocked(isLocked: boolean) {
+    public set isLocked(isLocked: boolean) {
         this.m_isLocked = isLocked;
     }
 }

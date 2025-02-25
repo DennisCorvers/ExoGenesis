@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { GameContext } from '../../game/core/GameContext';
-import { ResourceNode } from '../../game/skills/ResourceNode';
 import { MineralHarvesting } from '../../game/skills/MineralHarvesting';
 import { MineralHarvestingActionEvent } from '../../game/events/MineralHarvestingEvent';
 import { EventBus } from '../../game/events/EventBus';
 import ProgressBar from '../common/ProgressBar';
 import ResourceNodeCard from '../common/ResourceNodeCard';
+import { BaseRecipe } from '../../game/skills/requirements/BaseRecipe';
+import { SingleResourceRecipe } from '../../game/skills/requirements/SingleResourceRecipe';
+import { MineralHarvestingState } from '../../game/state/MineralHarvestingState';
 
 interface MineralHarvestingUIProps {
     gameContext: GameContext;
@@ -14,60 +16,60 @@ interface MineralHarvestingUIProps {
 const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }) => {
     const [actionTime, setActionTime] = useState(0)
     const [progress, setProgress] = useState(0);
-    const [currentNode, setCurrentNode] = useState<ResourceNode | null>(null);
+    const [currentNode, setCurrentNode] = useState<BaseRecipe | null>(null);
 
-    const skill = gameContext.getSkillByType(MineralHarvesting);
-
+    const skill = gameContext.skills.mineralHarvesting;
+    const player = gameContext.player;
+    const skillState = player.getSkillState<MineralHarvestingState>(skill.id);
+    
     useEffect(() => {
         const handleMiningProgress = (event: MineralHarvestingActionEvent) => {
-            setProgress(skill.progress);
+            setProgress(skillState.progress);
 
-            if (skill.isActive()) {
-                setActionTime(event.mineralNode.harvestingTime);
+            if (skillState.isActive) {
+                setActionTime(event.mineralNode.actionTime);
             }
         };
 
         EventBus.instance.subscribe(MineralHarvestingActionEvent, handleMiningProgress);
 
         // Set the progress of the node, in case we are already harvesting
-        if (skill.isActive())
-            updateHarvestProgress(skill.activeNode!);
+        if (skillState.isActive)
+            updateHarvestProgress(skillState.activeAction!);
 
         return () => {
             EventBus.instance.unsubscribe(MineralHarvestingActionEvent, handleMiningProgress);
         };
     });
 
-    const handleNodeClick = (node: ResourceNode) => {
-        if (skill.isActive()) {
-            if (skill.activeNode === node) {
-                skill.stopHarvesting(node);
+    const handleNodeClick = (node: SingleResourceRecipe) => {
+        if (skillState.isActive) {
+            if (skillState.activeAction === node) {
+                player.stopSkillAction(skill, node);
             }
             else {
-                skill.stopHarvesting(skill.activeNode!);
-                skill.startHarvesting(node);
+                player.stopSkillAction(skill, node);
+                player.startSkillAction(skill, node);
             }
         }
         else {
-            skill.startHarvesting(node);
+            player.startSkillAction(skill, node);
         }
 
         updateHarvestProgress(node);
     };
 
-    const updateHarvestProgress = (node: ResourceNode) => {
-        const nodeTime = skill.isActive() ? node.harvestingTime : 0;
-        setCurrentNode(skill.activeNode);
-        setProgress(skill.progress)
+    const updateHarvestProgress = (action: SingleResourceRecipe) => {
+        const nodeTime = skillState.isActive ? action.actionTime : 0;
+        setCurrentNode(skillState.activeAction);
+        setProgress(skillState.progress)
         setActionTime(nodeTime);
     }
 
     return (
         <div className="mining-ui">
             <div className="node-cards">
-                {gameContext.skills
-                    .filter(skill => skill instanceof MineralHarvesting)
-                    .flatMap(skill => skill.registeredNodes)
+                {skill.registeredNodes
                     .map((node) => (
                         <ResourceNodeCard key={node.name} node={node} onClick={handleNodeClick} />
                     ))}
@@ -77,7 +79,7 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
                 <div className="node-details">
                     <h2>Current Node: {currentNode.name}</h2>
                     <p>Experience: {currentNode.experienceReward}</p>
-                    <p>Harvesting Time: {currentNode.harvestingTime} seconds</p>
+                    <p>Harvesting Time: {currentNode.actionTime} seconds</p>
                     <p>Level Requirement: {currentNode.levelRequirement}</p>
                 </div>
             )}

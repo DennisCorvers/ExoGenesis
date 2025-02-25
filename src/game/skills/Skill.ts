@@ -1,17 +1,10 @@
 import { NamedObject } from "../core/NamedObject";
+import { BaseRecipe } from "./requirements/BaseRecipe";
 
 export abstract class Skill extends NamedObject {
     constructor(name: string) {
         super(name);
     }
 
-    abstract update(deltaTime: number): void;
-
-    abstract canUpdate(): boolean;
-
-    abstract postCompleteAction(): void;
-
-    abstract completeAction(): void;
-
-    abstract isActive(): boolean
+    abstract isValidRecipe(recipe : BaseRecipe) : boolean;
 }
