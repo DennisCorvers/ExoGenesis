@@ -1,10 +1,11 @@
 import { EventBus } from "../events/EventBus";
 import { ActionEvent } from "../events/skill/ActionEvent";
-import { ActionStartedEvent } from "../events/skill/ActionStartedEvent";
 import { ActionStoppedEvent } from "../events/skill/ActionStoppedEvent";
 import { SingleResourceRecipe } from "../skills/requirements/SingleResourceRecipe";
 import { Skill } from "../skills/Skill";
 import { IPlayerContext } from "../systems/IPlayerContext";
+import { ActionStoppedReason } from "./ActionStartReason";
+import { ActionStartResult } from "./ActionStartResult";
 import { SkillState } from "./SkillState";
 
 export class MineralHarvestingState extends SkillState<SingleResourceRecipe> {
@@ -22,22 +23,13 @@ export class MineralHarvestingState extends SkillState<SingleResourceRecipe> {
         EventBus.instance.publish("mineralharvesting.action", event);
     }
 
-    protected onPostActionComplete(completedAction: SingleResourceRecipe) {
-
-    }
-
-    protected onActionStopped(stoppedAction: SingleResourceRecipe): void {
-        const event = new ActionStoppedEvent(this);
+    protected onActionStopped(stoppedAction: SingleResourceRecipe, reason : ActionStoppedReason): void {
+        const event = new ActionStoppedEvent(this, stoppedAction, reason);
         EventBus.instance.publish("mineralharvesting.stop", event);
     }
 
-    protected onActionStarted(startedAction: SingleResourceRecipe): void {
-        const event = new ActionStartedEvent(this);
-        EventBus.instance.publish("mineralharvesting.start", event);
-    }
-
-    public canStartAction(action: SingleResourceRecipe): boolean {
+    public canStartAction(action: SingleResourceRecipe): ActionStartResult {
         // TODO : Check for pickaxe / drill
-        return true;
+        return ActionStartResult.success();
     }
 }
