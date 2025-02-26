@@ -1,6 +1,8 @@
 import { Skill } from "../skills/Skill";
 import { BaseRecipe } from "../skills/requirements/BaseRecipe";
 import { IPlayerContext } from "../systems/IPlayerContext";
+import { IActionStartResult } from "./ActionStartResult";
+import { ActionStoppedReason } from "./ActionStartReason";
 import { ISkillState } from "./ISkillState";
 
 export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
@@ -70,13 +72,12 @@ export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
                 this.m_progress -= action.actionTime;
 
                 this.onActionComplete(action);
-                this.onPostActionComplete(action);
 
-                if (!this.canStartAction(action)) {
-                    this.stopAction(action);
+                const actionStartResult = this.canStartAction(action);
+                if (!actionStartResult.canStart) {
+                    this.onActionStopped(action, actionStartResult.reason!);
                     break;
                 }
-
             }
         }
     }
@@ -97,17 +98,18 @@ export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
         if (this.m_activeAction === action) {
             this.m_progress = 0;
             this.m_activeAction = null;
+            this.onActionStopped(action, ActionStoppedReason.ManualStop);
         }
     }
 
     public stopAllActions(): void {
+        const action = <T>this.m_activeAction;
         this.m_activeAction = null;
         this.m_progress = 0;
+        this.onActionStopped(action, ActionStoppedReason.ManualStop);
     }
 
-    public abstract canStartAction(action: T): boolean
+    public abstract canStartAction(action: T): IActionStartResult
     protected abstract onActionComplete(completedAction: T): void;
-    protected abstract onPostActionComplete(completedAction: T): void;
-    protected abstract onActionStopped(stoppedAction: T): void;
-    protected abstract onActionStarted(startedAction: T): void;
+    protected abstract onActionStopped(abortedAction: T, reason: ActionStoppedReason): void;
 }
