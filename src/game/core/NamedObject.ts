@@ -9,8 +9,8 @@ export class NamedObject {
         NamedObject.lastID = 0;
     }
 
-    constructor(localID: string) {
-        this.m_namespace = "exo";
+    constructor(namespace: string, localID: string) {
+        this.m_namespace = namespace;
         this.m_localID = localID;
         this.m_id = `${this.m_namespace}.${this.m_localID}`
         this.m_uid = NamedObject.lastID++;

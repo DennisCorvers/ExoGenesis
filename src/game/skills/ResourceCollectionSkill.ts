@@ -1,15 +1,19 @@
 import { BaseRecipe } from "./requirements/BaseRecipe";
-import { ResourceRecipe } from "./requirements/ResourceRecipe";
+import { HarvestRecipe } from "./requirements/HarvestRecipe";
 import { Skill } from "./Skill";
 
-export abstract class ResourceCollectionSkill<T extends ResourceRecipe> extends Skill {
+export abstract class ResourceCollectionSkill<T extends HarvestRecipe> extends Skill {
     protected m_maximumConcurrentNodes;
     protected m_nodes: Map<string, T>;
 
-    constructor(id: string) {
-        super(id);
+    constructor(namespace: string, name: string) {
+        super(namespace, name);
         this.m_maximumConcurrentNodes = 1;
         this.m_nodes = new Map<string, T>();
+    }
+
+    public get maximumConcurrentNodes(): number {
+        return this.m_maximumConcurrentNodes;
     }
 
     public get registeredNodes(): T[] {

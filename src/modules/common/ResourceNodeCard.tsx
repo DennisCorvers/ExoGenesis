@@ -1,11 +1,10 @@
 import React from 'react';
-import { SingleResourceRecipe } from '../../game/skills/requirements/SingleResourceRecipe';
+import { SimpleHarvestRecipe } from '../../game/skills/requirements/SimpleHarvestRecipe';
 import './ResourceNodeCard.css';
 
-
 interface ResourceNodeCardProps {
-  node: SingleResourceRecipe;
-  onClick: (node: SingleResourceRecipe) => void;
+  node: SimpleHarvestRecipe;
+  onClick: (node: SimpleHarvestRecipe) => void;
 }
 
 const ResourceNodeCard: React.FC<ResourceNodeCardProps> = ({ node, onClick }) => {
