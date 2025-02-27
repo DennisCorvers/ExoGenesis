@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { GameContext } from '../../game/core/GameContext';
+import { GameContext } from '@game/core/GameContext';
 import ProgressBar from '../common/ProgressBar';
 import ResourceNodeCard from '../common/ResourceNodeCard';
-import { BaseRecipe } from '../../game/skills/requirements/BaseRecipe';
-import { MineralHarvestingState } from '../../game/state/MineralHarvestingState';
-import { ActionEvent } from '../../game/events/skill/ActionEvent';
-import { ActionStoppedEvent } from '../../game/events/skill/ActionStoppedEvent';
+import { BaseRecipe } from '@game/skills/requirements/BaseRecipe';
+import { MineralHarvestingState } from '@game/state/MineralHarvestingState';
+import { ActionEvent } from '@game/events/skill/ActionEvent';
+import { ActionStoppedEvent } from '@game/events/skill/ActionStoppedEvent';
 import { useEventSubscription } from '../../hooks/EventSubscription'
-import { SimpleHarvestRecipe } from '../../game/skills/requirements/SimpleHarvestRecipe';
+import { SimpleHarvestRecipe } from '@game/skills/requirements/SimpleHarvestRecipe';
 
 interface MineralHarvestingUIProps {
     gameContext: GameContext;

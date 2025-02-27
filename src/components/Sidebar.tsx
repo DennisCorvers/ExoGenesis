@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useActiveView } from "../modules/common/ActiveViewProvider"; 
+import { useActiveView } from "@modules/common/ActiveViewProvider"; 
 import "./Sidebar.css";
-import ChevronDown from "../assets/icons/chevron-down.svg";
-import ChevronRight from "../assets/icons/chevron-right.svg";
+import ChevronDown from "@assets/icons/chevron-down.svg";
+import ChevronRight from "@assets/icons/chevron-right.svg";
 
 
 interface SidebarCategory {

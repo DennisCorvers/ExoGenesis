@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { GameContext } from "./game/core/GameContext";
+import { GameContext } from "@game/core/GameContext";
 import Sidebar from "./components/Sidebar";
-import GameScreen from "./modules/GameScreen";
-import Ticker from "./game/core/Ticker";
+import GameScreen from "@modules/GameScreen";
+import Ticker from "@game/core/Ticker";
+import { ActiveViewProvider } from "@modules/common/ActiveViewProvider";
 import "./App.css"
-import { ActiveViewProvider } from "./modules/common/ActiveViewProvider";
+
 
 const App: React.FC = () => {
   const [gameContext, setGameContext] = useState<GameContext | null>(null);

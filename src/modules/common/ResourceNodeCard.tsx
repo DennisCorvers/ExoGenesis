@@ -1,5 +1,5 @@
 import React from 'react';
-import { SimpleHarvestRecipe } from '../../game/skills/requirements/SimpleHarvestRecipe';
+import { SimpleHarvestRecipe } from '@game/skills/requirements/SimpleHarvestRecipe';
 import './ResourceNodeCard.css';
 
 interface ResourceNodeCardProps {
