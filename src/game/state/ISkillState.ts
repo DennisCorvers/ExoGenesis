@@ -9,6 +9,10 @@ export interface ISkillState extends IPlayerSkillData {
     isActive: boolean;
     progress: number;
 
+    get expToNextLevel(): number;
+
+    get progressToNextLevel(): number;
+
     addExperience(value: number): void;
     update(deltaTime: number): void;
 

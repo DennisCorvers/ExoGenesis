@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GameContext } from "@game/core/GameContext";
+import { GameContext } from "../src/game/core/GameContext";
 import Sidebar from "./components/Sidebar";
 import GameScreen from "@modules/GameScreen";
 import Ticker from "@game/core/Ticker";
