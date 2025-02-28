@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import { useActiveView } from "./common/ActiveViewProvider";
-import { GameContext } from "../game/core/GameContext";
+import { GameContext } from "@game/core/GameContext";
 
-const MineralHarvestingUI = React.lazy(() => import("../modules/mineralharvesting/MineralHarvestingUI"))
+const MineralHarvestingUI = React.lazy(() => import("@modules/mineralharvesting/MineralHarvestingUI"))
 
 interface GameScreenProps {
   gameContext: GameContext;

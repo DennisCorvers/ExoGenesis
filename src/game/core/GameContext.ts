@@ -1,20 +1,20 @@
+import { IDataProvider } from "@game/data/IDataProvider";
 import { ISerializable } from "../data/ISerializable";
 import { Item } from "../entities/Item"
 import { Player } from "../entities/Player";
 import { Skill } from "../skills/Skill";
 import { IGameContext } from "./IGameContext";
 import { IUpdatable } from "./IUpdatable";
-import { ObjectRegistry } from "./ObjectRegistry";
-import { SkillRegistry } from "./SkillRegistry";
+import { NamedObjectRegistry } from "./NamedObjectRegistry";
+import { SkillRegistry } from "./Registries/SkillRegistry";
+
 
 export class GameContext implements IGameContext, ISerializable, IUpdatable {
-    private static m_instance: GameContext;
-
     private m_player: Player;
     private m_isPaused: boolean;
 
     private readonly m_skillRegistry: SkillRegistry;
-    private readonly m_itemRegistry: ObjectRegistry<Item>;
+    private readonly m_itemRegistry: NamedObjectRegistry<Item>;
 
     public get isPaused(): boolean {
         return this.m_isPaused;
@@ -36,13 +36,13 @@ export class GameContext implements IGameContext, ISerializable, IUpdatable {
         return this.m_itemRegistry.objects;
     }
 
-    public get itemRegistry(): ObjectRegistry<Item> {
+    public get itemRegistry(): NamedObjectRegistry<Item> {
         return this.m_itemRegistry;
     }
 
-    public constructor() {
-        this.m_skillRegistry = new SkillRegistry();
-        this.m_itemRegistry = new ObjectRegistry<Item>();
+    public constructor(dataProvider: IDataProvider) {
+        this.m_skillRegistry = dataProvider.skills;
+        this.m_itemRegistry = dataProvider.items;
         this.m_isPaused = false;
 
 

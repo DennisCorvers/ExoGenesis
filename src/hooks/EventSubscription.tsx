@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { EventBus } from "../game/events/EventBus";
+import { EventBus } from "@game/events/EventBus";
 
 export const useEventSubscription = (eventType: string, handler: (event: any) => void) => {
     useEffect(() => {

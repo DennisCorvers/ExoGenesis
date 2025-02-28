@@ -40,6 +40,13 @@ export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
         return this.m_progress;
     }
 
+    public get expToNextLevel(): number {
+        throw new Error("Method not implemented.");
+    }
+    public get progressToNextLevel(): number {
+        throw new Error("Method not implemented.");
+    }
+
     public get activeAction(): T | null {
         return this.m_activeAction;
     }

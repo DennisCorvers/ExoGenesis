@@ -1,18 +1,26 @@
 import { NamedObject } from "./NamedObject";
 
-export class ObjectRegistry<T extends NamedObject> {
+export class NamedObjectRegistry<T extends NamedObject> {
     private m_registry: Map<string, T>;
 
     public get objects(): T[] {
         return [...this.m_registry.values()];
     }
 
+    public get count() {
+        return this.m_registry.size;
+    }
+
     constructor() {
         this.m_registry = new Map<string, T>();
     }
 
-    public getObject(id: string): T | null {
-        return this.m_registry.get(id) ?? null;
+    public getObject(id: string): T {
+        const obj = this.m_registry.get(id);
+        if (obj === null)
+            throw new Error(`Object with id ${id} does not exist.`)
+
+        return <T>obj;
     }
 
     public getObjectByType(type: { new(): T }): T {
@@ -24,10 +32,11 @@ export class ObjectRegistry<T extends NamedObject> {
         throw new Error(`Object of type ${type.name} not found.`);
     }
 
-    public registerObject(object: T) {
+    public registerObject(object: T): T {
         if (this.m_registry.has(object.id))
-            throw new Error("Duplicate item ID registered.");
+            throw new Error(`Attempting to register object with duplicate id: ${object.id}.`);
 
-        return this.m_registry.set(object.id, object);
+        this.m_registry.set(object.id, object);
+        return object;
     }
 }

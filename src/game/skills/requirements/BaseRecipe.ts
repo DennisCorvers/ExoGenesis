@@ -1,5 +1,5 @@
+import { Package } from "@game/core/Package";
 import { NamedObject } from "../../core/NamedObject";
-import { Player } from "../../entities/Player";
 
 export abstract class BaseRecipe extends NamedObject {
     private readonly m_experienceReward: number;
@@ -18,8 +18,8 @@ export abstract class BaseRecipe extends NamedObject {
         return this.m_actionTime;
     }
 
-    constructor(localID: string, experienceReward: number, levelRequirement: number, actionTime: number) {
-        super(localID)
+    constructor(pkg: Package, id: string, name: string, experienceReward: number, levelRequirement: number, actionTime: number) {
+        super(pkg, id, name)
         this.m_experienceReward = experienceReward
         this.m_levelRequirement = levelRequirement
         this.m_actionTime = actionTime

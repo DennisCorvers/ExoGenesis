@@ -1,15 +1,21 @@
+import { Package } from "@game/core/Package";
 import { BaseRecipe } from "./requirements/BaseRecipe";
-import { ResourceRecipe } from "./requirements/ResourceRecipe";
+import { HarvestRecipe } from "./requirements/HarvestRecipe";
 import { Skill } from "./Skill";
+import { IDataContext } from "@game/data/IDataContext";
 
-export abstract class ResourceCollectionSkill<T extends ResourceRecipe> extends Skill {
+export abstract class ResourceCollectionSkill<T extends HarvestRecipe> extends Skill {
     protected m_maximumConcurrentNodes;
     protected m_nodes: Map<string, T>;
 
-    constructor(id: string) {
-        super(id);
-        this.m_maximumConcurrentNodes = 1;
+    constructor(pkg : Package, id: string, name: string, media: string) {
+        super(pkg, id, name, media);
+        this.m_maximumConcurrentNodes = 0;
         this.m_nodes = new Map<string, T>();
+    }
+
+    public get maximumConcurrentNodes(): number {
+        return this.m_maximumConcurrentNodes;
     }
 
     public get registeredNodes(): T[] {
@@ -18,6 +24,11 @@ export abstract class ResourceCollectionSkill<T extends ResourceRecipe> extends 
 
     public registerRecipe(node: T): void {
         this.m_nodes.set(node.id, node);
+    }
+
+    public registerData(dataContext: IDataContext) {
+        this.m_maximumConcurrentNodes = dataContext.data.maximumConcurrentNodes ?? this.m_maximumConcurrentNodes;
+        super.registerData(dataContext);
     }
 
     // We just check if any of the resourcenodes is the provided recipe.
