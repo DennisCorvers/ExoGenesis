@@ -1,3 +1,4 @@
+import { Package } from "@game/core/Package";
 import { NamedObject } from "../../core/NamedObject";
 
 export abstract class BaseRecipe extends NamedObject {
@@ -17,8 +18,8 @@ export abstract class BaseRecipe extends NamedObject {
         return this.m_actionTime;
     }
 
-    constructor(namespace : string, name: string, experienceReward: number, levelRequirement: number, actionTime: number) {
-        super(namespace, name)
+    constructor(pkg: Package, id: string, name: string, experienceReward: number, levelRequirement: number, actionTime: number) {
+        super(pkg, id, name)
         this.m_experienceReward = experienceReward
         this.m_levelRequirement = levelRequirement
         this.m_actionTime = actionTime

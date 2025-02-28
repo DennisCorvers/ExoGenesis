@@ -1,13 +1,13 @@
 import { Item } from "../entities/Item";
 import { Player } from "../entities/Player";
 import { Skill } from "../skills";
-import { ObjectRegistry } from "./ObjectRegistry";
-import { SkillRegistry } from "./SkillRegistry";
+import { NamedObjectRegistry } from "./NamedObjectRegistry";
+import { SkillRegistry } from "./Registries/SkillRegistry";
 
 export interface IGameContext {
     get isPaused(): boolean;
     get player(): Player;
     get skillList(): Skill[];
     get skills(): SkillRegistry;
-    get itemRegistry(): ObjectRegistry<Item>;
+    get itemRegistry(): NamedObjectRegistry<Item>;
 }

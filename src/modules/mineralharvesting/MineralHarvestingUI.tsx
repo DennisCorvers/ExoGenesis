@@ -70,7 +70,7 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
 
             {currentNode && (
                 <div className="node-details">
-                    <h2>Current Node: {currentNode.name}</h2>
+                    <h2>Current Node: {currentNode.displayName}</h2>
                     <p>Experience: {currentNode.experienceReward}</p>
                     <p>Harvesting Time: {currentNode.actionTime} seconds</p>
                     <p>Level Requirement: {currentNode.levelRequirement}</p>

@@ -1,5 +1,7 @@
+import { Package } from "@game/core/Package";
 import { Item } from "../../entities/Item";
 import { HarvestRecipe } from "./HarvestRecipe";
+import { IDataProvider } from "@game/data/IDataProvider";
 
 export class SimpleHarvestRecipe extends HarvestRecipe {
     private m_item: Item;
@@ -13,9 +15,9 @@ export class SimpleHarvestRecipe extends HarvestRecipe {
         return this.m_amount;
     }
 
-    constructor(namespace: string, name: string, item: Item, amount: number, experienceReward: number, levelRequirement: number, actionTime: number) {
-        super(namespace, name, experienceReward, levelRequirement, actionTime)
-        this.m_item = item;
-        this.m_amount = amount;
+    constructor(pkg: Package, data: any, dataProvider: IDataProvider) {
+        super(pkg, data.id, data.name, data.experienceReward, data.levelRequirement, data.actionTime)
+        this.m_item = dataProvider.items.getObject(data.item);
+        this.m_amount = data.amount;
     }
 }

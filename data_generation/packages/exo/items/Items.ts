@@ -1,9 +1,27 @@
-import { Item } from "@game/entities/Item";
+import { BaseTemplate } from "data_generation/BaseTemplate";
 
-export type ItemTemplate = Pick<Item, 'name' >;
+export interface ItemTemplate extends BaseTemplate {
+    media: string;
+    description: string;
+}
 
 export const items: ItemTemplate[] = [
-    { name: 'Gold Ore' },
-    { name: 'Magnetite Ore' },
-    { name: 'Malachite Ore' },
+    {
+        id: "goldore",
+        name: 'Gold Ore',
+        media: "",
+        description: "",
+    },
+    {
+        id: "magnetiteore",
+        name: 'Magnetite Ore',
+        media: "",
+        description: "",
+    },
+    {
+        id: "malachiteore",
+        name: 'Malachite Ore',
+        media: "",
+        description: "",
+    },
 ]

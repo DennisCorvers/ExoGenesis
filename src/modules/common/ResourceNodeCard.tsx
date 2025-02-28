@@ -10,7 +10,7 @@ interface ResourceNodeCardProps {
 const ResourceNodeCard: React.FC<ResourceNodeCardProps> = ({ node, onClick }) => {
   return (
     <div className="resource-node-card" onClick={() => onClick(node)}>
-      <h3>{node.name}</h3>
+      <h3>{node.displayName}</h3>
       <p>Experience Reward: {node.experienceReward}</p>
       <p>Level Requirement: {node.levelRequirement}</p>
       <p>Harvesting Time: {node.actionTime} seconds</p>
