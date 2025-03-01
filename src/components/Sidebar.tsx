@@ -1,86 +1,75 @@
-import { useState } from "react";
-import { useActiveView } from "@modules/common/ActiveViewProvider"; 
-import "./Sidebar.css";
+import { useMemo, useState } from "react";
+import { useActiveView } from "@modules/common/ActiveViewProvider";
+import SidebarItem from './Sidebar/SidebarItem'
 import ChevronDown from "@assets/icons/chevron-down.svg";
 import ChevronRight from "@assets/icons/chevron-right.svg";
+import "./Sidebar.css";
+import { GameContext } from "@game/core/GameContext";
+import { ISidebarCategory, ISidebarEntry } from "@game/ui/ISidebarEntry";
 
-
-interface SidebarCategory {
-    name: string;
-    subItems: SidebarItem[];
+interface SidebarUIProps {
+    gameContext: GameContext;
 }
 
-interface SidebarItem {
-    icon: string;
-    name: string;
-    route: string;
-}
-
-function BuildSidebar(): SidebarCategory[] {
-    const sidebar: SidebarCategory[] = [];
-    const combatBar: SidebarCategory = {
-        name: "Combat",
-        subItems: []
-    };
-    const skillBar: SidebarCategory = {
-        name: "Skills",
-        subItems: [
-            { icon: "/assets/images/skills/mineralharvesting/mineralharvesting.svg", name: "Mineral Harvesting", route: "mineralharvestingskill" },
-            { icon: "", name: "Biomass Extraction", route: "/" }
-        ]
-    };
-
-    sidebar.push(combatBar);
-    sidebar.push(skillBar);
-    return sidebar;
-}
-const Sidebar: React.FC = () => {
-    const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-
-    const toggleExpand = (category: string) => {
-        setExpanded((prev) => ({ ...prev, [category]: !prev[category] }));
-    };
-
-    const menuItems = BuildSidebar();
+const Sidebar: React.FC<SidebarUIProps> = ({ gameContext }) => {
+    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
     const { setActiveView } = useActiveView();
+
+    const toggleExpand = (sectionName: string) => {
+        setExpandedSections(prev => ({ ...prev, [sectionName]: !prev[sectionName], }));
+    };
+
+    // TODO: Filter based on planet.
+    const sidebarData: ISidebarCategory[] = useMemo(() => {
+        return gameContext.layout.sidebarLayout.sidebarData;
+    }, []);
+
+    const renderSection = (sectionName: string, items: ISidebarEntry[]) => {
+        if (items.length === 0)
+            return null;
+
+        const isExpanded = expandedSections[sectionName];
+
+        return (
+            <li key={sectionName}>
+                <div className="sidebar-nav-heading" onClick={() => toggleExpand(sectionName)}>
+                    <div className="sidebar-nav-heading-content">
+                        <span className="sidebar-nav-heading-text">{sectionName}</span>
+                        <span className="sidebar-nav-chevron">
+                            {isExpanded ? (
+                                <img src={ChevronDown} alt="Chevron Down" />
+                            ) : (
+                                <img src={ChevronRight} alt="Chevron Right" />
+                            )}
+                        </span>
+                    </div>
+                </div>
+                {isExpanded && (
+                    <ul className="sidebar-nav">
+                        {items.map(item => (
+                            <SidebarItem
+                                key={item.id}
+                                item={item}
+                                gameContext={gameContext}
+                                onClick={setActiveView} />
+                        ))}
+                    </ul>
+                )}
+            </li>
+        );
+    }
 
     return (
         <div className="sidebar">
             <h2 className="text-xl font-bold mb-4">Sidebar</h2>
-            {/*Navigation section.*/}
             <ul className="sidebar-nav">
-                {menuItems.map((item) => (
-                    <li key={item.name}>
-                        <div className="sidebar-nav-heading"
-                            onClick={() => toggleExpand(item.name)}>
-                            <div className="sidebar-nav-heading-content">
-                                <span className="sidebar-nav-heading-text">{item.name}</span>
-                                <span className="sidebar-nav-chevron">
-                                    {expanded[item.name] ?
-                                        <img src={ChevronDown} alt="Chevron Down" /> :
-                                        <img src={ChevronRight} alt="Chevron Right" />}</span>
-                            </div>
-                        </div>{expanded[item.name] && (
-                            <ul className="sidebar-nav">
-                                {item.subItems.map((sub) => (
-                                    <div className="sidebar-nav-item" key={sub.name}
-                                        onClick={() => setActiveView(sub.route)}>
-                                        <div className="sidebar-nav-item-content">
-                                            <span className="sidebar-nav-item-image">
-                                                <img src={sub.icon}/>
-                                            </span>
-                                            <span className="sidebar-nav-item-text">{sub.name}</span>
-                                            <span className="sidebar-nav-item-info">Lv 100</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </ul>
-                        )}
-                    </li>
-                ))}
+                {sidebarData
+                    .filter((category) => category.entries.length > 0)
+                    .map((category) => renderSection(category.name, category.entries))}
             </ul>
         </div>
     );
-};
+}
+
 
 export default Sidebar;

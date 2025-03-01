@@ -7,6 +7,7 @@ import { IGameContext } from "./IGameContext";
 import { IUpdatable } from "./IUpdatable";
 import { NamedObjectRegistry } from "./NamedObjectRegistry";
 import { SkillRegistry } from "./Registries/SkillRegistry";
+import { Layout } from "./Layout";
 
 
 export class GameContext implements IGameContext, ISerializable, IUpdatable {
@@ -15,6 +16,7 @@ export class GameContext implements IGameContext, ISerializable, IUpdatable {
 
     private readonly m_skillRegistry: SkillRegistry;
     private readonly m_itemRegistry: NamedObjectRegistry<Item>;
+    private readonly m_layout: Layout;
 
     public get isPaused(): boolean {
         return this.m_isPaused;
@@ -40,9 +42,14 @@ export class GameContext implements IGameContext, ISerializable, IUpdatable {
         return this.m_itemRegistry;
     }
 
+    public get layout(): Layout {
+        return this.m_layout;
+    }
+
     public constructor(dataProvider: IDataProvider) {
         this.m_skillRegistry = dataProvider.skills;
         this.m_itemRegistry = dataProvider.items;
+        this.m_layout = new Layout(dataProvider);
         this.m_isPaused = false;
 
 

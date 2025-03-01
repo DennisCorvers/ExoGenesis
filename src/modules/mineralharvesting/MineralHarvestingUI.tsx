@@ -20,7 +20,7 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
 
     const skill = gameContext.skills.mineralHarvesting;
     const player = gameContext.player;
-    const skillState = player.skillManager.getSkill(skill) as MineralHarvestingState;
+    const skillState = player.skillManager.getSkillState(skill) as MineralHarvestingState;
     const skillManager = player.skillManager;
 
     const onAction = useCallback((event: ActionEvent) => {
@@ -50,8 +50,8 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
         setActionTime(nodeTime);
     }, []);
 
-    useEventSubscription("mineralharvesting.action", onAction);
-    useEventSubscription("mineralharvesting.stop", onStop);
+    useEventSubscription(`${skill.id}.action`, onAction);
+    useEventSubscription(`${skill.id}.stop`, onStop);
 
     useEffect(() => {
         // Set the progress of the node, in case we are already harvesting

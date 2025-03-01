@@ -6,22 +6,22 @@ import { BaseRecipe } from "../skills/requirements/BaseRecipe";
 import { IPlayerContext } from "./IPlayerContext";
 import { ISkillState } from "../state/ISkillState";
 import { ISkillManager } from "./ISkillManager";
-
-
+import { BiomassExtraction } from "@game/skills";
+import { BiomassExtractionState } from "@game/state/BiomassExtractionState";
 
 export class SkillManager implements ISkillManager, IUpdatable {
     // The skill the player itself can do (only 1 skill at a time).
     private m_playerSelectedSkill: ISkillState | null;
     // Passive skills
     private m_activeSkills: Map<string, ISkillState>;
-    private m_skills: Map<string, ISkillState>;
+    private m_skillStates: Map<string, ISkillState>;
 
     public get activeSkills(): ISkillState[] {
         return [...this.m_activeSkills.values()];
     }
 
     public get skillStates(): ISkillState[] {
-        return [...this.m_skills.values()];
+        return [...this.m_skillStates.values()];
     }
 
     public get playerSelectedSkill(): ISkillState | null {
@@ -35,15 +35,16 @@ export class SkillManager implements ISkillManager, IUpdatable {
     constructor(gameContext: IGameContext, playerContext: IPlayerContext) {
         this.m_playerSelectedSkill = null;
         this.m_activeSkills = new Map<string, ISkillState>();
-        this.m_skills = new Map<string, ISkillState>();
+        this.m_skillStates = new Map<string, ISkillState>();
 
-        const skillStateMapping = new Map<Skill, new (skill: Skill, playerContext : IPlayerContext) => ISkillState>([
+        const skillStateMapping = new Map<Skill, new (skill: Skill, playerContext: IPlayerContext) => ISkillState>([
             [gameContext.skills.mineralHarvesting, MineralHarvestingState],
+            [gameContext.skills.biomassExtraction, BiomassExtractionState],
         ]);
 
 
         for (const [skill, StateClass] of skillStateMapping) {
-            this.m_skills.set(skill.id, new StateClass(skill, playerContext));
+            this.m_skillStates.set(skill.id, new StateClass(skill, playerContext));
         }
     }
 
@@ -59,8 +60,8 @@ export class SkillManager implements ISkillManager, IUpdatable {
         }
     }
 
-    public getSkill(skill: Skill): ISkillState {
-        const state = this.m_skills.get(skill.id);
+    public getSkillState(skill: Skill): ISkillState {
+        const state = this.m_skillStates.get(skill.id);
         if (state == null) {
             throw new Error(`Skill with id ${skill.id} does not exist.`);
         }
@@ -71,7 +72,7 @@ export class SkillManager implements ISkillManager, IUpdatable {
     public startPlayerAction(skill: Skill, action: BaseRecipe, toggle: boolean = false) {
         // Nothing busy, just start a new action.
         if (!this.isPlayerBusy) {
-            this.m_playerSelectedSkill = this.getSkill(skill);
+            this.m_playerSelectedSkill = this.getSkillState(skill);
             this.m_playerSelectedSkill.startAction(action);
 
             return;
@@ -90,7 +91,7 @@ export class SkillManager implements ISkillManager, IUpdatable {
         }
 
         this.m_playerSelectedSkill!.stopAllActions();
-        this.m_playerSelectedSkill = this.getSkill(skill);
+        this.m_playerSelectedSkill = this.getSkillState(skill);
         this.m_playerSelectedSkill.startAction(action);
     }
 
