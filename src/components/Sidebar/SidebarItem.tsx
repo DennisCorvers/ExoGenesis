@@ -39,9 +39,7 @@ const SidebarItem: React.FC<SidebarItemProps> = (props) => {
         <div className="sidebar-nav-item" onClick={() => onClick(item.route)}>
             <div className="sidebar-nav-item-content">
                 {item.icon && (
-                    <span className="sidebar-nav-item-image">
-                        <img src={item.icon} alt={`${item.text} icon`} />
-                    </span>
+                        <img src={item.icon} alt={item.text} className='sidebar-nav-item-image' />
                 )}
                 <span className="sidebar-nav-item-text">{item.text}</span>
                 {info !== undefined && (
