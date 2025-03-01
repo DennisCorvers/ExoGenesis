@@ -2,6 +2,7 @@ import React, { Suspense, useMemo } from "react";
 import { useActiveView } from "./common/ActiveViewProvider";
 import { GameContext } from "@game/core/GameContext";
 import { ISidebarEntry } from "@game/ui/ISidebarEntry";
+import ErrorBoundary from "./common/ErrorBoundary";
 
 interface GameScreenProps {
   gameContext: GameContext;
@@ -37,10 +38,12 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
   // Will have to see about the performance of things.
   return (
     <div>
-      <h2>Game Screen</h2>
-      <Suspense fallback={<div>Loading...</div>}>
-        {ActiveViewComponent ? <ActiveViewComponent gameContext={gameContext} /> : null}
-      </Suspense>
+      <ErrorBoundary fallback={<div>Error loading component.</div>}>
+        <Suspense fallback={<div>Loading...</div>}>
+          <h2>Game Screen</h2>
+          {ActiveViewComponent ? <ActiveViewComponent gameContext={gameContext} /> : null}
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };
