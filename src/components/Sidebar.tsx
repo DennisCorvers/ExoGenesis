@@ -4,11 +4,11 @@ import SidebarItem from './Sidebar/SidebarItem'
 import ChevronDown from "@assets/icons/chevron-down.svg";
 import ChevronRight from "@assets/icons/chevron-right.svg";
 import "./Sidebar.css";
-import { IGameContext } from "@game/core/IGameContext";
-import { ISidebarItem } from "./Sidebar/ISidebarItem";
+import { GameContext } from "@game/core/GameContext";
+import { ISidebarCategory, ISidebarEntry } from "@game/ui/ISidebarEntry";
 
 interface SidebarUIProps {
-    gameContext: IGameContext;
+    gameContext: GameContext;
 }
 
 const Sidebar: React.FC<SidebarUIProps> = ({ gameContext }) => {
@@ -19,21 +19,12 @@ const Sidebar: React.FC<SidebarUIProps> = ({ gameContext }) => {
         setExpandedSections(prev => ({ ...prev, [sectionName]: !prev[sectionName], }));
     };
 
-    const availableSkills: ISidebarItem[] = useMemo(() => {
-        const items = [];
-        const skl = gameContext.skills.getObject('exo.mineralharvesting');
-        const state = gameContext.player.skillManager.getSkillState(skl);
-        items.push({
-            id: skl.id,
-            icon: skl.Media,
-            name: skl.displayName,
-            route: 'mineralharvestingskill',
-            info: `Lv ${state.level}/${skl.LevelCap}`
-        });
-        return items;
+    // TODO: Filter based on planet.
+    const sidebarData: ISidebarCategory[] = useMemo(() => {
+        return gameContext.layout.sidebarLayout.sidebarData;
     }, []);
 
-    const renderSection = (sectionName: string, items: ISidebarItem[]) => {
+    const renderSection = (sectionName: string, items: ISidebarEntry[]) => {
         if (items.length === 0)
             return null;
 
@@ -59,6 +50,7 @@ const Sidebar: React.FC<SidebarUIProps> = ({ gameContext }) => {
                             <SidebarItem
                                 key={item.id}
                                 item={item}
+                                gameContext={gameContext}
                                 onClick={setActiveView} />
                         ))}
                     </ul>
@@ -71,12 +63,9 @@ const Sidebar: React.FC<SidebarUIProps> = ({ gameContext }) => {
         <div className="sidebar">
             <h2 className="text-xl font-bold mb-4">Sidebar</h2>
             <ul className="sidebar-nav">
-                {renderSection('Player', [])};
-                {renderSection('Navigation', [])};
-                {renderSection('Combat', [])};
-                {renderSection('Gathering', availableSkills)};
-                {renderSection('Synthesis', [])};
-                {renderSection('Settings', [])};
+                {sidebarData
+                    .filter((category) => category.entries.length > 0)
+                    .map((category) => renderSection(category.name, category.entries))}
             </ul>
         </div>
     );

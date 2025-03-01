@@ -6,6 +6,8 @@ import { BaseRecipe } from "../skills/requirements/BaseRecipe";
 import { IPlayerContext } from "./IPlayerContext";
 import { ISkillState } from "../state/ISkillState";
 import { ISkillManager } from "./ISkillManager";
+import { BiomassExtraction } from "@game/skills";
+import { BiomassExtractionState } from "@game/state/BiomassExtractionState";
 
 export class SkillManager implements ISkillManager, IUpdatable {
     // The skill the player itself can do (only 1 skill at a time).
@@ -37,6 +39,7 @@ export class SkillManager implements ISkillManager, IUpdatable {
 
         const skillStateMapping = new Map<Skill, new (skill: Skill, playerContext: IPlayerContext) => ISkillState>([
             [gameContext.skills.mineralHarvesting, MineralHarvestingState],
+            [gameContext.skills.biomassExtraction, BiomassExtractionState],
         ]);
 
 

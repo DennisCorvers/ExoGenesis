@@ -6,11 +6,13 @@ import { Item } from "@game/entities/Item";
 import { Package } from "@game/core/Package";
 import { BiomassExtraction, MineralHarvesting } from "@game/skills";
 import { GameContext } from "@game/core/GameContext";
+import { SidebarLayout } from "@game/ui/SidebarLayout";
 
 export class DataLoader implements IDataProvider {
     readonly packages: PackageRegistry;
     readonly skills: SkillRegistry;
     readonly items: NamedObjectRegistry<Item>;
+    readonly sidebar: SidebarLayout;
 
     private m_defaultPackage: Package;
 
@@ -18,6 +20,7 @@ export class DataLoader implements IDataProvider {
         this.packages = new PackageRegistry();
         this.skills = new SkillRegistry();
         this.items = new NamedObjectRegistry<Item>();
+        this.sidebar = new SidebarLayout();
 
         this.m_defaultPackage = this.packages.registerPackage('exo', 'ExoGenesis');
 
@@ -53,6 +56,8 @@ export class DataLoader implements IDataProvider {
             this.registerItems(pkg, data.items);
         if (data.skills != null)
             this.registerSkills(pkg, data.skills);
+        if (data.sidebar != null)
+            this.registerSidebar(pkg, data.sidebar);
     }
 
     private registerSkills(pkg: Package, skillsData: any) {
@@ -74,6 +79,10 @@ export class DataLoader implements IDataProvider {
                 dataProvider: this
             }))
         });
+    }
+
+    private registerSidebar(pkg: Package, sidebarData: any) {
+        this.sidebar.registerData({ packageInfo: pkg, data: sidebarData, dataProvider: this });
     }
 
     public createGameContext(): GameContext {

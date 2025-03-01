@@ -8,7 +8,7 @@ import { ActionStoppedReason } from "./ActionStartReason";
 import { ActionStartResult } from "./ActionStartResult";
 import { SkillState } from "./SkillState";
 
-export class MineralHarvestingState extends SkillState<SimpleHarvestRecipe> {
+export class BiomassExtractionState extends SkillState<SimpleHarvestRecipe> {
     constructor(skill: Skill, playerContext: IPlayerContext) {
         super(skill, playerContext)
     }
@@ -20,12 +20,12 @@ export class MineralHarvestingState extends SkillState<SimpleHarvestRecipe> {
 
 
         const event = new ActionEvent(this, completedAction, true)
-        EventBus.instance.publish(`${this.skill.id}.action`, event);
+        //EventBus.instance.publish("mineralharvesting.action", event);
     }
 
     protected onActionStopped(stoppedAction: SimpleHarvestRecipe, reason : ActionStoppedReason): void {
         const event = new ActionStoppedEvent(this, stoppedAction, reason);
-        EventBus.instance.publish(`${this.skill.id}.stop`, event);
+        //EventBus.instance.publish("mineralharvesting.stop", event);
     }
 
     public canStartAction(action: SimpleHarvestRecipe): ActionStartResult {

@@ -2,8 +2,6 @@ import React, { Suspense } from "react";
 import { useActiveView } from "./common/ActiveViewProvider";
 import { GameContext } from "@game/core/GameContext";
 
-const MineralHarvestingUI = React.lazy(() => import("@modules/mineralharvesting/MineralHarvestingUI"))
-
 interface GameScreenProps {
   gameContext: GameContext;
 }
@@ -11,9 +9,14 @@ interface GameScreenProps {
 const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
   const { activeView } = useActiveView();
 
-  const viewComponents: { [key: string]: React.LazyExoticComponent<React.FC<any>> } = {
-    mineralharvestingskill: MineralHarvestingUI,
-  };
+  const viewComponents: { [key: string]: React.LazyExoticComponent<React.FC<any>> } = {};
+
+  const allItems = gameContext.layout.sidebarLayout.sidebarData
+  .flatMap(category => category.entries)
+  .forEach(item => {
+    viewComponents[item.route] = React.lazy(() => import(`./${item.module}`));
+  });
+
 
   const ActiveViewComponent = viewComponents[activeView as keyof typeof viewComponents];
 
