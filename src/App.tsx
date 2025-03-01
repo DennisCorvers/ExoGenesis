@@ -27,18 +27,18 @@ const App: React.FC = () => {
 
   return (
     <ActiveViewProvider>
-      <div>
-        <Sidebar />
-        <div className="main-content">
-          {gameContext ? (
-            <>
+      <div className="app-container">
+        {gameContext ? (
+          <>
+            <Sidebar gameContext={gameContext} />
+            <div className="main-content">
               <GameScreen gameContext={gameContext} />
               <Ticker gameContext={gameContext} />
-            </>
-          ) : (
-            <div>Loading Game...</div>
-          )}
-        </div>
+            </div>
+          </>
+        ) : (
+          <div className="loading-message">Loading Game...</div>
+        )}
       </div>
     </ActiveViewProvider>
   );

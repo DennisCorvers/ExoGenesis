@@ -11,7 +11,7 @@ export interface ISkillManager {
 
     get isPlayerBusy(): boolean;
 
-    getSkill(skill: Skill): ISkillState;
+    getSkillState(skill: Skill): ISkillState;
 
     startPlayerAction(skill: Skill, action: BaseRecipe): void;
 

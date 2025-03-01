@@ -20,7 +20,7 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
 
     const skill = gameContext.skills.mineralHarvesting;
     const player = gameContext.player;
-    const skillState = player.skillManager.getSkill(skill) as MineralHarvestingState;
+    const skillState = player.skillManager.getSkillState(skill) as MineralHarvestingState;
     const skillManager = player.skillManager;
 
     const onAction = useCallback((event: ActionEvent) => {

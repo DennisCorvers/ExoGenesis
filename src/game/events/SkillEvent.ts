@@ -2,14 +2,14 @@ import { ISkillState } from "../state/ISkillState";
 import { GameEvent } from "./GameEvent";
 
 export class SkillEvent extends GameEvent {
-    private m_skill: ISkillState;
+    private m_skillState: ISkillState;
 
-    public get Skill(): ISkillState {
-        return this.m_skill;
+    public get skillState(): ISkillState {
+        return this.m_skillState;
     }
 
-    constructor(skill: ISkillState) {
+    constructor(skillState: ISkillState) {
         super();
-        this.m_skill = skill;
+        this.m_skillState = skillState;
     }
 }
