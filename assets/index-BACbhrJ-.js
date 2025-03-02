@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./MineralHarvestingUI-Sk5SFtDj.js","./MineralHarvestingUI-CQaiCtma.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./MineralHarvestingUI-KVthgXON.js","./MineralHarvestingUI-CQaiCtma.css"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -12146,16 +12146,35 @@ class ErrorBoundary extends reactExports.Component {
 const GameScreen = ({ gameContext }) => {
   const { activeView } = useActiveView();
   const viewComponents = reactExports.useMemo(() => {
+    const modules = /* @__PURE__ */ Object.assign({
+      "./mineralharvesting/MineralHarvestingUI.tsx": () => __vitePreload(() => import("./MineralHarvestingUI-KVthgXON.js"), true ? __vite__mapDeps([0,1]) : void 0, import.meta.url)
+    });
     const components = {};
+    const isEmpty = (str) => {
+      return str === null || str === void 0 || str === "";
+    };
     const addView = (sidebarEntry) => {
-      if (!components[sidebarEntry.route]) {
-        components[sidebarEntry.route] = React.lazy(
-          () => __vitePreload(() => import("./MineralHarvestingUI-Sk5SFtDj.js"), true ? __vite__mapDeps([0,1]) : void 0, import.meta.url).catch((ex) => {
-            console.error(`Error loading module ${sidebarEntry.module}:`, ex);
-            return __vitePreload(() => import("./ErrorPage-BRxRpJu2.js"), true ? [] : void 0, import.meta.url);
-          })
-        );
+      if (isEmpty(sidebarEntry.module) || isEmpty(sidebarEntry.route)) {
+        return;
       }
+      if (components[sidebarEntry.route] !== void 0) {
+        return;
+      }
+      const modulePath = `./${sidebarEntry.module}.tsx`;
+      const importer = modules[modulePath];
+      if (!importer) {
+        console.error(`Module not found: ${modulePath}`);
+        components[sidebarEntry.route] = React.lazy(
+          () => __vitePreload(() => import("./ErrorPage-CVBsygSy.js"), true ? [] : void 0, import.meta.url)
+        );
+        return;
+      }
+      components[sidebarEntry.route] = React.lazy(
+        () => importer().then((module) => module).catch(async (error) => {
+          console.error(`Error loading module ${modulePath}:`, error);
+          return __vitePreload(() => import("./ErrorPage-CVBsygSy.js"), true ? [] : void 0, import.meta.url);
+        })
+      );
     };
     gameContext.layout.sidebarLayout.sidebarData.flatMap((category) => category.entries).forEach(addView);
     return components;
@@ -13256,4 +13275,4 @@ export {
   jsxRuntimeExports as j,
   reactExports as r
 };
-//# sourceMappingURL=index-BnOMN7Nq.js.map
+//# sourceMappingURL=index-BACbhrJ-.js.map
