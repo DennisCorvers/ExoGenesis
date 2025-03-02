@@ -8,6 +8,7 @@ import { ActionEvent } from '@game/events/skill/ActionEvent';
 import { ActionStoppedEvent } from '@game/events/skill/ActionStoppedEvent';
 import { useEventSubscription } from '../../hooks/EventSubscription'
 import { SimpleHarvestRecipe } from '@game/skills/requirements/SimpleHarvestRecipe';
+import './MineralHarvestingUI.css'
 
 interface MineralHarvestingUIProps {
     gameContext: GameContext;
@@ -50,8 +51,8 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
         setActionTime(nodeTime);
     }, []);
 
-    useEventSubscription(`${skill.id}.action`, onAction);
-    useEventSubscription(`${skill.id}.stop`, onStop);
+    useEventSubscription(`${skill.id}.actionComplete`, onAction);
+    useEventSubscription(`${skill.id}.actionStopped`, onStop);
 
     useEffect(() => {
         // Set the progress of the node, in case we are already harvesting
@@ -61,13 +62,6 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
 
     return (
         <div className="mining-ui">
-            <div className="node-cards">
-                {skill.registeredNodes
-                    .map((node) => (
-                        <ResourceNodeCard key={node.uid} node={node} onClick={handleNodeClick} />
-                    ))}
-            </div>
-
             {currentNode && (
                 <div className="node-details">
                     <h2>Current Node: {currentNode.displayName}</h2>
@@ -85,6 +79,17 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
                     enableProgressBars={true}
                 />
             </div>
+
+            <div className="node-container">
+                {skill.registeredNodes
+                    .map((node) => (
+                        <div className='col-6 col-md-4 col-lg-4 col-xl-3'>
+                            <ResourceNodeCard key={node.uid} node={node} onClick={handleNodeClick} />
+                        </div>
+                    ))}
+            </div>
+
+
         </div>
     );
 };
