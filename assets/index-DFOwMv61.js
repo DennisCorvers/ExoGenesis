@@ -12053,26 +12053,34 @@ const Sidebar = ({ gameContext }) => {
   ] });
 };
 const scriptRel = "modulepreload";
-const assetsURL = function(dep) {
-  return "/ExoGenesis/" + dep;
+const assetsURL = function(dep, importerUrl) {
+  return new URL(dep, importerUrl).href;
 };
 const seen = {};
 const __vitePreload = function preload(baseModule, deps, importerUrl) {
   let promise = Promise.resolve();
   if (deps && deps.length > 0) {
-    document.getElementsByTagName("link");
+    const links = document.getElementsByTagName("link");
     const cspNonceMeta = document.querySelector(
       "meta[property=csp-nonce]"
     );
     const cspNonce = (cspNonceMeta == null ? void 0 : cspNonceMeta.nonce) || (cspNonceMeta == null ? void 0 : cspNonceMeta.getAttribute("nonce"));
     promise = Promise.allSettled(
       deps.map((dep) => {
-        dep = assetsURL(dep);
+        dep = assetsURL(dep, importerUrl);
         if (dep in seen) return;
         seen[dep] = true;
         const isCss = dep.endsWith(".css");
         const cssSelector = isCss ? '[rel="stylesheet"]' : "";
-        if (document.querySelector(`link[href="${dep}"]${cssSelector}`)) {
+        const isBaseRelative = !!importerUrl;
+        if (isBaseRelative) {
+          for (let i = links.length - 1; i >= 0; i--) {
+            const link2 = links[i];
+            if (link2.href === dep && (!isCss || link2.rel === "stylesheet")) {
+              return;
+            }
+          }
+        } else if (document.querySelector(`link[href="${dep}"]${cssSelector}`)) {
           return;
         }
         const link = document.createElement("link");
@@ -12144,9 +12152,9 @@ const GameScreen = ({ gameContext }) => {
           () => __vitePreload(() => import(
             /* @vite-ignore */
             `./${sidebarEntry.module}`
-          ), true ? [] : void 0).catch((ex) => {
+          ), true ? [] : void 0, import.meta.url).catch((ex) => {
             console.error(`Error loading module ${sidebarEntry.module}:`, ex);
-            return __vitePreload(() => import("./ErrorPage-3QGthrgq.js"), true ? [] : void 0);
+            return __vitePreload(() => import("./ErrorPage-CKT0SNCL.js"), true ? [] : void 0, import.meta.url);
           })
         );
       }
@@ -12216,7 +12224,7 @@ const items = [
 const mineralHarvesting = {
   id: "exo.mineralharvesting",
   name: "Mineral Harvesting",
-  media: "assets/images/skills/mineralharvesting/mineralharvesting.svg",
+  media: "/assets/images/skills/mineralharvesting/mineralharvesting.svg",
   levelCap: 100,
   maximumConcurrentNodes: 1,
   recipes: null
@@ -12292,7 +12300,7 @@ const sidebar = [
     items: [
       {
         id: "mineralharvesting-sidebar",
-        icon: "assets/images/skills/mineralharvesting/mineralharvesting.svg",
+        icon: "/assets/images/skills/mineralharvesting/mineralharvesting.svg",
         route: "/mineralharvesting-page",
         text: "Mineral Harvesting",
         skillID: "exo.mineralharvesting",
@@ -12300,7 +12308,7 @@ const sidebar = [
       },
       {
         id: "biomassextraction-sidebar",
-        icon: "assets/images/skills/mineralharvesting/biomassextraction.svg",
+        icon: "/assets/images/skills/mineralharvesting/biomassextraction.svg",
         route: "/biomassextraction-page",
         text: "Biomass Extraction",
         skillID: "exo.biomassextraction",
@@ -12513,7 +12521,7 @@ class SimpleHarvestRecipe extends HarvestRecipe {
 }
 class MineralHarvesting extends ResourceCollectionSkill {
   constructor(pkg) {
-    super(pkg, "mineralharvesting", "Mineral Harvesting", "assets/images/skills/mineralharvesting/mineralharvesting.svg");
+    super(pkg, "mineralharvesting", "Mineral Harvesting", "/assets/images/skills/mineralharvesting/mineralharvesting.svg");
   }
   registerData(dataContext) {
     const skillData = dataContext.data;
@@ -12526,7 +12534,7 @@ class MineralHarvesting extends ResourceCollectionSkill {
 }
 class BiomassExtraction extends ResourceCollectionSkill {
   constructor(pkg) {
-    super(pkg, "biomassextraction", "Biomass Extraction", "assets/images/skills/biomassextraction/biomassextraction.svg");
+    super(pkg, "biomassextraction", "Biomass Extraction", "/assets/images/skills/biomassextraction/biomassextraction.svg");
   }
   registerData(dataContext) {
     dataContext.data;
@@ -13248,4 +13256,4 @@ clientExports.createRoot(document.getElementById("root")).render(
 export {
   jsxRuntimeExports as j
 };
-//# sourceMappingURL=index-MhsZATpK.js.map
+//# sourceMappingURL=index-DFOwMv61.js.map
