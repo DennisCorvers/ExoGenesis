@@ -1,6 +1,3 @@
-import { EventBus } from "../events/EventBus";
-import { ActionEvent } from "../events/skill/ActionEvent";
-import { ActionStoppedEvent } from "../events/skill/ActionStoppedEvent";
 import { SimpleHarvestRecipe } from "../skills/requirements/SimpleHarvestRecipe";
 import { Skill } from "../skills/Skill";
 import { IPlayerContext } from "../systems/IPlayerContext";
@@ -9,6 +6,7 @@ import { ActionStartResult } from "./ActionStartResult";
 import { SkillState } from "./SkillState";
 
 export class MineralHarvestingState extends SkillState<SimpleHarvestRecipe> {
+
     constructor(skill: Skill, playerContext: IPlayerContext) {
         super(skill, playerContext)
     }
@@ -17,15 +15,10 @@ export class MineralHarvestingState extends SkillState<SimpleHarvestRecipe> {
         // Add items and experience rewards.
         this.player.inventory.addItem(completedAction.item, completedAction.amount);
         this.addExperience(completedAction.experienceReward);
-
-
-        const event = new ActionEvent(this, completedAction, true)
-        EventBus.instance.publish(`${this.skill.id}.action`, event);
     }
 
-    protected onActionStopped(stoppedAction: SimpleHarvestRecipe, reason : ActionStoppedReason): void {
-        const event = new ActionStoppedEvent(this, stoppedAction, reason);
-        EventBus.instance.publish(`${this.skill.id}.stop`, event);
+    protected onActionStopped(action: SimpleHarvestRecipe, reason: ActionStoppedReason): void {
+        
     }
 
     public canStartAction(action: SimpleHarvestRecipe): ActionStartResult {
