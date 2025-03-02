@@ -1,0 +1,8 @@
+.mining-ui {
+    padding: 1em;
+}
+
+.node-container {
+    display: flex;
+    flex-wrap: wrap;
+}
