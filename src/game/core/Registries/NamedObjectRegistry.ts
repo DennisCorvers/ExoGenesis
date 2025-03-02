@@ -1,4 +1,4 @@
-import { NamedObject } from "./NamedObject";
+import { NamedObject } from "../NamedObject";
 
 export class NamedObjectRegistry<T extends NamedObject> {
     private m_registry: Map<string, T>;

@@ -83,7 +83,7 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
             <div className="node-container">
                 {skill.registeredNodes
                     .map((node) => (
-                        <div className='col-6 col-md-4 col-lg-4 col-xl-3'>
+                        <div key={node.uid} className='col-6 col-md-4 col-lg-4 col-xl-3'>
                             <ResourceNodeCard key={node.uid} node={node} onClick={handleNodeClick} />
                         </div>
                     ))}

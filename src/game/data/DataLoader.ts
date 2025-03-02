@@ -1,7 +1,7 @@
 import { SkillRegistry } from "@game/core/Registries/SkillRegistry";
-import { PackageRegistry } from "@game/core/PackageRegistry";
+import { PackageRegistry } from "@game/core/Registries/PackageRegistry";
 import { IDataProvider } from "./IDataProvider";
-import { NamedObjectRegistry } from "@game/core/NamedObjectRegistry";
+import { NamedObjectRegistry } from "@game/core/Registries/NamedObjectRegistry";
 import { Item } from "@game/entities/Item";
 import { Package } from "@game/core/Package";
 import { BiomassExtraction, MineralHarvesting } from "@game/skills";

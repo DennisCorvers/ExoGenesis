@@ -1,7 +1,7 @@
-import { NamedObjectRegistry } from "@game/core/NamedObjectRegistry";
 import { Package } from "@game/core/Package";
 import { BiomassExtraction, MineralHarvesting, Skill } from "@game/skills";
 import { IDataContext } from "../IDataContext";
+import { NamedObjectRegistry } from "@game/core/Registries/NamedObjectRegistry";
 
 export class SkillBuilder {
     public static setupSkills(defaultPackage: Package, skillRegistry: NamedObjectRegistry<Skill>) {
