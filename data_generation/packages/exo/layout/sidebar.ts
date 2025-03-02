@@ -52,7 +52,7 @@ export const sidebar: SidebarCategory[] = [
         items: [
             {
                 id: "mineralharvesting-sidebar",
-                icon: "/assets/images/skills/mineralharvesting/mineralharvesting.svg",
+                icon: "assets/images/skills/mineralharvesting/mineralharvesting.svg",
                 route: "/mineralharvesting-page",
                 text: "Mineral Harvesting",
                 skillID: "exo.mineralharvesting",
@@ -60,7 +60,7 @@ export const sidebar: SidebarCategory[] = [
             },
             {
                 id: "biomassextraction-sidebar",
-                icon: "/assets/images/skills/mineralharvesting/biomassextraction.svg",
+                icon: "assets/images/skills/mineralharvesting/biomassextraction.svg",
                 route: "/biomassextraction-page",
                 text: "Biomass Extraction",
                 skillID: "exo.biomassextraction",

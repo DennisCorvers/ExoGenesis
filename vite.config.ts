@@ -4,7 +4,7 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  base: '',
   resolve: {
     alias: {
       '@game': path.resolve(__dirname, 'src/game'),
@@ -12,5 +12,14 @@ export default defineConfig({
       '@assets': path.resolve(__dirname, 'src/assets'),
       '@modules': path.resolve(__dirname, 'src/modules')
     }
-  }
+  },
+  build: {
+    sourcemap: true,
+    minify: false,
+    rollupOptions: {
+      output: {
+        preserveModulesRoot: 'src',
+      },
+    },
+  },
 });
