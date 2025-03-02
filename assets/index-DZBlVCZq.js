@@ -12146,7 +12146,7 @@ const GameScreen = ({ gameContext }) => {
             `./${sidebarEntry.module}`
           ), true ? [] : void 0).catch((ex) => {
             console.error(`Error loading module ${sidebarEntry.module}:`, ex);
-            return __vitePreload(() => import("./ErrorPage-JVigUZbk.js"), true ? [] : void 0);
+            return __vitePreload(() => import("./ErrorPage-J57qAogX.js"), true ? [] : void 0);
           })
         );
       }
@@ -12292,7 +12292,7 @@ const sidebar = [
     items: [
       {
         id: "mineralharvesting-sidebar",
-        icon: "/assets/images/skills/mineralharvesting/mineralharvesting.svg",
+        icon: "assets/images/skills/mineralharvesting/mineralharvesting.svg",
         route: "/mineralharvesting-page",
         text: "Mineral Harvesting",
         skillID: "exo.mineralharvesting",
@@ -13248,4 +13248,4 @@ clientExports.createRoot(document.getElementById("root")).render(
 export {
   jsxRuntimeExports as j
 };
-//# sourceMappingURL=index-Cr-nPHKT.js.map
+//# sourceMappingURL=index-DZBlVCZq.js.map
