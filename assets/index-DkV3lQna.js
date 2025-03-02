@@ -12151,10 +12151,10 @@ const GameScreen = ({ gameContext }) => {
         components[sidebarEntry.route] = React.lazy(
           () => __vitePreload(() => import(
             /* @vite-ignore */
-            `./${sidebarEntry.module}`
+            `${sidebarEntry.module}`
           ), true ? [] : void 0, import.meta.url).catch((ex) => {
             console.error(`Error loading module ${sidebarEntry.module}:`, ex);
-            return __vitePreload(() => import("./ErrorPage-CKT0SNCL.js"), true ? [] : void 0, import.meta.url);
+            return __vitePreload(() => import("./ErrorPage-C214zanG.js"), true ? [] : void 0, import.meta.url);
           })
         );
       }
@@ -12300,7 +12300,7 @@ const sidebar = [
     items: [
       {
         id: "mineralharvesting-sidebar",
-        icon: "/assets/images/skills/mineralharvesting/mineralharvesting.svg",
+        icon: "assets/images/skills/mineralharvesting/mineralharvesting.svg",
         route: "/mineralharvesting-page",
         text: "Mineral Harvesting",
         skillID: "exo.mineralharvesting",
@@ -13256,4 +13256,4 @@ clientExports.createRoot(document.getElementById("root")).render(
 export {
   jsxRuntimeExports as j
 };
-//# sourceMappingURL=index-DFOwMv61.js.map
+//# sourceMappingURL=index-DkV3lQna.js.map
