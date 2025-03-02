@@ -1,4 +1,4 @@
-import { j as jsxRuntimeExports } from "./index-Bf0EfjCt.js";
+import { j as jsxRuntimeExports } from "./index-Bng_puOf.js";
 const ErrorPage = () => {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
@@ -22,4 +22,4 @@ const ErrorPage = () => {
 export {
   ErrorPage as default
 };
-//# sourceMappingURL=ErrorPage-Bc0bHkaW.js.map
+//# sourceMappingURL=ErrorPage-DyuE3QFe.js.map
