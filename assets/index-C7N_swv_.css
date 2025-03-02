@@ -15,7 +15,7 @@ body {
 
 @font-face {
     font-family: 'Exo';
-    src: url(/assets/Exo-VariableFont_wght-Cf0a-Ifs.ttf) format('truetype');
+    src: url(/ExoGenesis/assets/Exo-VariableFont_wght-Cf0a-Ifs.ttf) format('truetype');
     font-weight: 100 900;
     font-style: normal;
     font-display: swap;

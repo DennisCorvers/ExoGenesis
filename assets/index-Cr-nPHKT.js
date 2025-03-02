@@ -12054,7 +12054,7 @@ const Sidebar = ({ gameContext }) => {
 };
 const scriptRel = "modulepreload";
 const assetsURL = function(dep) {
-  return "/" + dep;
+  return "/ExoGenesis/" + dep;
 };
 const seen = {};
 const __vitePreload = function preload(baseModule, deps, importerUrl) {
@@ -12146,7 +12146,7 @@ const GameScreen = ({ gameContext }) => {
             `./${sidebarEntry.module}`
           ), true ? [] : void 0).catch((ex) => {
             console.error(`Error loading module ${sidebarEntry.module}:`, ex);
-            return __vitePreload(() => import("./ErrorPage-DuJhIG68.js"), true ? [] : void 0);
+            return __vitePreload(() => import("./ErrorPage-JVigUZbk.js"), true ? [] : void 0);
           })
         );
       }
@@ -13248,4 +13248,4 @@ clientExports.createRoot(document.getElementById("root")).render(
 export {
   jsxRuntimeExports as j
 };
-//# sourceMappingURL=index-zRla5ymQ.js.map
+//# sourceMappingURL=index-Cr-nPHKT.js.map
