@@ -12151,10 +12151,10 @@ const GameScreen = ({ gameContext }) => {
         components[sidebarEntry.route] = React.lazy(
           () => __vitePreload(() => import(
             /* @vite-ignore */
-            `./${sidebarEntry.module}.tsx`
+            `../modules/${sidebarEntry.module}.tsx`
           ), true ? [] : void 0, import.meta.url).catch((ex) => {
             console.error(`Error loading module ${sidebarEntry.module}:`, ex);
-            return __vitePreload(() => import("./ErrorPage-Co5fRc34.js"), true ? [] : void 0, import.meta.url);
+            return __vitePreload(() => import("./ErrorPage-BTL5Z0I0.js"), true ? [] : void 0, import.meta.url);
           })
         );
       }
@@ -13256,4 +13256,4 @@ clientExports.createRoot(document.getElementById("root")).render(
 export {
   jsxRuntimeExports as j
 };
-//# sourceMappingURL=index-DnywJ2ck.js.map
+//# sourceMappingURL=index-D90tlMoC.js.map
