@@ -12146,7 +12146,7 @@ const GameScreen = ({ gameContext }) => {
             `./${sidebarEntry.module}`
           ), true ? [] : void 0).catch((ex) => {
             console.error(`Error loading module ${sidebarEntry.module}:`, ex);
-            return __vitePreload(() => import("./ErrorPage-J57qAogX.js"), true ? [] : void 0);
+            return __vitePreload(() => import("./ErrorPage-3QGthrgq.js"), true ? [] : void 0);
           })
         );
       }
@@ -12216,7 +12216,7 @@ const items = [
 const mineralHarvesting = {
   id: "exo.mineralharvesting",
   name: "Mineral Harvesting",
-  media: "/assets/images/skills/mineralharvesting/mineralharvesting.svg",
+  media: "assets/images/skills/mineralharvesting/mineralharvesting.svg",
   levelCap: 100,
   maximumConcurrentNodes: 1,
   recipes: null
@@ -12300,7 +12300,7 @@ const sidebar = [
       },
       {
         id: "biomassextraction-sidebar",
-        icon: "/assets/images/skills/mineralharvesting/biomassextraction.svg",
+        icon: "assets/images/skills/mineralharvesting/biomassextraction.svg",
         route: "/biomassextraction-page",
         text: "Biomass Extraction",
         skillID: "exo.biomassextraction",
@@ -12513,7 +12513,7 @@ class SimpleHarvestRecipe extends HarvestRecipe {
 }
 class MineralHarvesting extends ResourceCollectionSkill {
   constructor(pkg) {
-    super(pkg, "mineralharvesting", "Mineral Harvesting", "/assets/images/skills/mineralharvesting/mineralharvesting.svg");
+    super(pkg, "mineralharvesting", "Mineral Harvesting", "assets/images/skills/mineralharvesting/mineralharvesting.svg");
   }
   registerData(dataContext) {
     const skillData = dataContext.data;
@@ -12526,7 +12526,7 @@ class MineralHarvesting extends ResourceCollectionSkill {
 }
 class BiomassExtraction extends ResourceCollectionSkill {
   constructor(pkg) {
-    super(pkg, "biomassextraction", "Biomass Extraction", "/assets/images/skills/biomassextraction/biomassextraction.svg");
+    super(pkg, "biomassextraction", "Biomass Extraction", "assets/images/skills/biomassextraction/biomassextraction.svg");
   }
   registerData(dataContext) {
     dataContext.data;
@@ -13248,4 +13248,4 @@ clientExports.createRoot(document.getElementById("root")).render(
 export {
   jsxRuntimeExports as j
 };
-//# sourceMappingURL=index-DZBlVCZq.js.map
+//# sourceMappingURL=index-MhsZATpK.js.map
