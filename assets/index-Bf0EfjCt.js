@@ -12151,10 +12151,10 @@ const GameScreen = ({ gameContext }) => {
         components[sidebarEntry.route] = React.lazy(
           () => __vitePreload(() => import(
             /* @vite-ignore */
-            `../modules/${sidebarEntry.module}.tsx`
+            `../modules/${sidebarEntry.module}`
           ), true ? [] : void 0, import.meta.url).catch((ex) => {
             console.error(`Error loading module ${sidebarEntry.module}:`, ex);
-            return __vitePreload(() => import("./ErrorPage-BTL5Z0I0.js"), true ? [] : void 0, import.meta.url);
+            return __vitePreload(() => import("./ErrorPage-Bc0bHkaW.js"), true ? [] : void 0, import.meta.url);
           })
         );
       }
@@ -12308,7 +12308,7 @@ const sidebar = [
       },
       {
         id: "biomassextraction-sidebar",
-        icon: "/assets/images/skills/mineralharvesting/biomassextraction.svg",
+        icon: "assets/images/skills/mineralharvesting/biomassextraction.svg",
         route: "/biomassextraction-page",
         text: "Biomass Extraction",
         skillID: "exo.biomassextraction",
@@ -13256,4 +13256,4 @@ clientExports.createRoot(document.getElementById("root")).render(
 export {
   jsxRuntimeExports as j
 };
-//# sourceMappingURL=index-D90tlMoC.js.map
+//# sourceMappingURL=index-Bf0EfjCt.js.map
