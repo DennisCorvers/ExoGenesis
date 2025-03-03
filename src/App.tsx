@@ -6,23 +6,19 @@ import Ticker from "@game/core/Ticker";
 import { ActiveViewProvider } from "@modules/common/ActiveViewProvider";
 import "./App.css"
 
-import { DataGenerator } from "../data_generation/DataGenerator.ts"
 import { DataLoader } from "@game/data/DataLoader.ts";
-
-// TODO: Load asset file instead of this crap.
-const data = JSON.parse(DataGenerator.serialize('exo'));
-
-
-const dataLoader = new DataLoader();
-dataLoader.registerPackage(data);
-const context = dataLoader.createGameContext();
 
 const App: React.FC = () => {
   const [gameContext, setGameContext] = useState<GameContext | null>(null);
 
   useEffect(() => {
-    // TODO: Save and load player data
-    setGameContext(context);
+    // We need this part to load the game data, before the UI elements are built.
+    const dataLoader = new DataLoader();
+    dataLoader.downloadAndRegisterPackage("/assets/data/exo-data.json").then(() => {
+      const context = dataLoader.createGameContext();
+      setGameContext(context);
+    })
+
   }, []);
 
   return (
