@@ -33,6 +33,19 @@ export class DataLoader implements IDataProvider {
         this.skills.registerObject(new BiomassExtraction(this.m_defaultPackage));
     }
 
+    public async downloadAndRegisterPackage(url: string): Promise<void> {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        const response = await fetch(url, { method: 'GET', headers, });
+        if (!response.ok) {
+            throw new Error(`Could not fetch data package with URL: ${url}. Error ${response.status}: ${response.statusText}`);
+        }
+
+        const dataPackage = await response.json();
+        this.registerPackage(dataPackage);
+    };
+
     public registerPackage(data: any) {
         const packageID = data.packageID;
         const packageName = data.displayName;
