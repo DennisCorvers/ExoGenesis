@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./MineralHarvestingUI-BbSCsOyX.js","./MineralHarvestingUI-CQaiCtma.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./MineralHarvestingUI-QROIjdBB.js","./MineralHarvestingUI-CQaiCtma.css"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -12147,7 +12147,7 @@ const GameScreen = ({ gameContext }) => {
   const { activeView } = useActiveView();
   const viewComponents = reactExports.useMemo(() => {
     const modules = /* @__PURE__ */ Object.assign({
-      "./mineralharvesting/MineralHarvestingUI.tsx": () => __vitePreload(() => import("./MineralHarvestingUI-BbSCsOyX.js"), true ? __vite__mapDeps([0,1]) : void 0, import.meta.url)
+      "./mineralharvesting/MineralHarvestingUI.tsx": () => __vitePreload(() => import("./MineralHarvestingUI-QROIjdBB.js"), true ? __vite__mapDeps([0,1]) : void 0, import.meta.url)
     });
     const components = {};
     const isEmpty = (str) => {
@@ -12165,14 +12165,14 @@ const GameScreen = ({ gameContext }) => {
       if (!importer) {
         console.error(`Module not found: ${modulePath}`);
         components[sidebarEntry.route] = React.lazy(
-          () => __vitePreload(() => import("./ErrorPage-qEYI7h2k.js"), true ? [] : void 0, import.meta.url)
+          () => __vitePreload(() => import("./ErrorPage-cJYs95Xz.js"), true ? [] : void 0, import.meta.url)
         );
         return;
       }
       components[sidebarEntry.route] = React.lazy(
         () => importer().then((module) => module).catch(async (error) => {
           console.error(`Error loading module ${modulePath}:`, error);
-          return __vitePreload(() => import("./ErrorPage-qEYI7h2k.js"), true ? [] : void 0, import.meta.url);
+          return __vitePreload(() => import("./ErrorPage-cJYs95Xz.js"), true ? [] : void 0, import.meta.url);
         })
       );
     };
@@ -13114,7 +13114,7 @@ const App = () => {
   const [gameContext, setGameContext] = reactExports.useState(null);
   reactExports.useEffect(() => {
     const dataLoader = new DataLoader();
-    dataLoader.downloadAndRegisterPackage("/assets/data/exo-data.json").then(() => {
+    dataLoader.downloadAndRegisterPackage("assets/data/exo-data.json").then(() => {
       const context = dataLoader.createGameContext();
       setGameContext(context);
     });
@@ -13135,4 +13135,4 @@ export {
   jsxRuntimeExports as j,
   reactExports as r
 };
-//# sourceMappingURL=index-DR-goK4T.js.map
+//# sourceMappingURL=index-BsppPVBj.js.map
