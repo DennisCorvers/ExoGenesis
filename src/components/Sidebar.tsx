@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useActiveView } from "@modules/common/ActiveViewProvider";
 import SidebarItem from './Sidebar/SidebarItem'
 import ChevronDown from "@assets/icons/chevron-down.svg";
