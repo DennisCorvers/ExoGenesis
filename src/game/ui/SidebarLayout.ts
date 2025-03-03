@@ -38,7 +38,7 @@ export class SidebarLayout {
 
             // Add items
             items.forEach((item: any) => {
-                let skill: Skill | null;
+                let skill: Skill | null = null;
                 if (item.skillID !== undefined) {
                     skill = dataProvider.skills.getObject(item.skillID);
                 }

@@ -1,7 +1,7 @@
 import { SkillRegistry } from "@game/core/Registries/SkillRegistry";
-import { PackageRegistry } from "@game/core/PackageRegistry";
+import { PackageRegistry } from "@game/core/Registries/PackageRegistry";
 import { IDataProvider } from "./IDataProvider";
-import { NamedObjectRegistry } from "@game/core/NamedObjectRegistry";
+import { NamedObjectRegistry } from "@game/core/Registries/NamedObjectRegistry";
 import { Item } from "@game/entities/Item";
 import { Package } from "@game/core/Package";
 import { BiomassExtraction, MineralHarvesting } from "@game/skills";
@@ -32,6 +32,19 @@ export class DataLoader implements IDataProvider {
         this.skills.registerObject(new MineralHarvesting(this.m_defaultPackage));
         this.skills.registerObject(new BiomassExtraction(this.m_defaultPackage));
     }
+
+    public async downloadAndRegisterPackage(url: string): Promise<void> {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        const response = await fetch(url, { method: 'GET', headers, });
+        if (!response.ok) {
+            throw new Error(`Could not fetch data package with URL: ${url}. Error ${response.status}: ${response.statusText}`);
+        }
+
+        const dataPackage = await response.json();
+        this.registerPackage(dataPackage);
+    };
 
     public registerPackage(data: any) {
         const packageID = data.packageID;

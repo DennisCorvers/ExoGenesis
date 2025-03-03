@@ -5,7 +5,7 @@ import { Player } from "../entities/Player";
 import { Skill } from "../skills/Skill";
 import { IGameContext } from "./IGameContext";
 import { IUpdatable } from "./IUpdatable";
-import { NamedObjectRegistry } from "./NamedObjectRegistry";
+import { NamedObjectRegistry } from "./Registries/NamedObjectRegistry";
 import { SkillRegistry } from "./Registries/SkillRegistry";
 import { Layout } from "./Layout";
 

@@ -1,7 +1,7 @@
 import { Item } from "../entities/Item";
 import { Player } from "../entities/Player";
 import { Skill } from "../skills";
-import { NamedObjectRegistry } from "./NamedObjectRegistry";
+import { NamedObjectRegistry } from "./Registries/NamedObjectRegistry";
 import { SkillRegistry } from "./Registries/SkillRegistry";
 
 export interface IGameContext {

@@ -1,5 +1,5 @@
 import { IDataContext } from "@game/data/IDataContext";
-import { NamedObjectRegistry } from "../NamedObjectRegistry";
+import { NamedObjectRegistry } from "./NamedObjectRegistry";
 import { BiomassExtraction, MineralHarvesting, Skill } from "@game/skills";
 
 export class SkillRegistry extends NamedObjectRegistry<Skill> {

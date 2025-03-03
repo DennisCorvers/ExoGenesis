@@ -1,4 +1,4 @@
-import { Package } from "./Package";
+import { Package } from "../Package";
 
 export class PackageRegistry {
     private m_registeredPackages: Map<string, Package>;

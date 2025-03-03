@@ -22,7 +22,7 @@ const Sidebar: React.FC<SidebarUIProps> = ({ gameContext }) => {
     // TODO: Filter based on planet.
     const sidebarData: ISidebarCategory[] = useMemo(() => {
         return gameContext.layout.sidebarLayout.sidebarData;
-    }, []);
+    }, [gameContext]);
 
     const renderSection = (sectionName: string, items: ISidebarEntry[]) => {
         if (items.length === 0)

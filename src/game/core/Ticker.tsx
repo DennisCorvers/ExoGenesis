@@ -9,6 +9,10 @@ export default function Ticker({ gameContext }: { gameContext: GameContext }) {
   const previousTimeRef = useRef(performance.now());
   const lagRef = useRef(0);
 
+  useEffect(() => {
+    gameContextRef.current = gameContext;
+  }, [gameContext]);
+
   const update = (deltaTime: number) => {
     gameContextRef.current.update(deltaTime);
   }
@@ -33,11 +37,10 @@ export default function Ticker({ gameContext }: { gameContext: GameContext }) {
 
   useEffect(() => {
     requestRef.current = requestAnimationFrame(tick);
-
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [gameContext]);
+  }, []);
 
   return null;
 }
