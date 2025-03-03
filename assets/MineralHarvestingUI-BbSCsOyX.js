@@ -1,4 +1,4 @@
-import { r as reactExports, j as jsxRuntimeExports, E as EventBus } from "./index-BACbhrJ-.js";
+import { r as reactExports, j as jsxRuntimeExports, E as EventBus } from "./index-DR-goK4T.js";
 const ProgressBar = ({ elapsedTime, totalTime, enableProgressBars }) => {
   const innerBarRef = reactExports.useRef(null);
   reactExports.useEffect(() => {
@@ -114,4 +114,4 @@ const MineralHarvestingUI = ({ gameContext }) => {
 export {
   MineralHarvestingUI as default
 };
-//# sourceMappingURL=MineralHarvestingUI-KVthgXON.js.map
+//# sourceMappingURL=MineralHarvestingUI-BbSCsOyX.js.map

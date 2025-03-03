@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./MineralHarvestingUI-KVthgXON.js","./MineralHarvestingUI-CQaiCtma.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./MineralHarvestingUI-BbSCsOyX.js","./MineralHarvestingUI-CQaiCtma.css"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -123,9 +123,9 @@ function requireReact_production() {
     enqueueSetState: function() {
     }
   }, assign = Object.assign, emptyObject = {};
-  function Component(props, context2, updater) {
+  function Component(props, context, updater) {
     this.props = props;
-    this.context = context2;
+    this.context = context;
     this.refs = emptyObject;
     this.updater = updater || ReactNoopUpdateQueue;
   }
@@ -143,9 +143,9 @@ function requireReact_production() {
   function ComponentDummy() {
   }
   ComponentDummy.prototype = Component.prototype;
-  function PureComponent(props, context2, updater) {
+  function PureComponent(props, context, updater) {
     this.props = props;
-    this.context = context2;
+    this.context = context;
     this.refs = emptyObject;
     this.updater = updater || ReactNoopUpdateQueue;
   }
@@ -286,11 +286,11 @@ function requireReact_production() {
     }
     return invokeCallback;
   }
-  function mapChildren(children, func, context2) {
+  function mapChildren(children, func, context) {
     if (null == children) return children;
     var result = [], count = 0;
     mapIntoArray(children, result, "", "", function(child) {
-      return func.call(context2, child, count++);
+      return func.call(context, child, count++);
     });
     return result;
   }
@@ -1367,9 +1367,9 @@ function requireReactDomClient_production() {
   }
   function pushHostContext(fiber) {
     null !== fiber.memoizedState && push(hostTransitionProviderCursor, fiber);
-    var context2 = contextStackCursor.current;
-    var JSCompiler_inline_result = getChildHostContextProd(context2, fiber.type);
-    context2 !== JSCompiler_inline_result && (push(contextFiberStackCursor, fiber), push(contextStackCursor, JSCompiler_inline_result));
+    var context = contextStackCursor.current;
+    var JSCompiler_inline_result = getChildHostContextProd(context, fiber.type);
+    context !== JSCompiler_inline_result && (push(contextFiberStackCursor, fiber), push(contextStackCursor, JSCompiler_inline_result));
   }
   function popHostContext(fiber) {
     contextFiberStackCursor.current === fiber && (pop(contextStackCursor), pop(contextFiberStackCursor));
@@ -3390,11 +3390,11 @@ function requireReactDomClient_production() {
     };
   }
   var reconcileChildFibers = createChildReconciler(true), mountChildFibers = createChildReconciler(false), currentTreeHiddenStackCursor = createCursor(null), prevEntangledRenderLanesCursor = createCursor(0);
-  function pushHiddenContext(fiber, context2) {
+  function pushHiddenContext(fiber, context) {
     fiber = entangledRenderLanes;
     push(prevEntangledRenderLanesCursor, fiber);
-    push(currentTreeHiddenStackCursor, context2);
-    entangledRenderLanes = fiber | context2.baseLanes;
+    push(currentTreeHiddenStackCursor, context);
+    entangledRenderLanes = fiber | context.baseLanes;
   }
   function reuseHiddenContextOnStack() {
     push(prevEntangledRenderLanesCursor, entangledRenderLanes);
@@ -5108,51 +5108,51 @@ function requireReactDomClient_production() {
   function updateClassComponent(current, workInProgress2, Component, nextProps, renderLanes2) {
     prepareToReadContext(workInProgress2);
     if (null === workInProgress2.stateNode) {
-      var context2 = emptyContextObject, contextType = Component.contextType;
-      "object" === typeof contextType && null !== contextType && (context2 = readContext(contextType));
-      context2 = new Component(nextProps, context2);
-      workInProgress2.memoizedState = null !== context2.state && void 0 !== context2.state ? context2.state : null;
-      context2.updater = classComponentUpdater;
-      workInProgress2.stateNode = context2;
-      context2._reactInternals = workInProgress2;
-      context2 = workInProgress2.stateNode;
-      context2.props = nextProps;
-      context2.state = workInProgress2.memoizedState;
-      context2.refs = {};
+      var context = emptyContextObject, contextType = Component.contextType;
+      "object" === typeof contextType && null !== contextType && (context = readContext(contextType));
+      context = new Component(nextProps, context);
+      workInProgress2.memoizedState = null !== context.state && void 0 !== context.state ? context.state : null;
+      context.updater = classComponentUpdater;
+      workInProgress2.stateNode = context;
+      context._reactInternals = workInProgress2;
+      context = workInProgress2.stateNode;
+      context.props = nextProps;
+      context.state = workInProgress2.memoizedState;
+      context.refs = {};
       initializeUpdateQueue(workInProgress2);
       contextType = Component.contextType;
-      context2.context = "object" === typeof contextType && null !== contextType ? readContext(contextType) : emptyContextObject;
-      context2.state = workInProgress2.memoizedState;
+      context.context = "object" === typeof contextType && null !== contextType ? readContext(contextType) : emptyContextObject;
+      context.state = workInProgress2.memoizedState;
       contextType = Component.getDerivedStateFromProps;
       "function" === typeof contextType && (applyDerivedStateFromProps(
         workInProgress2,
         Component,
         contextType,
         nextProps
-      ), context2.state = workInProgress2.memoizedState);
-      "function" === typeof Component.getDerivedStateFromProps || "function" === typeof context2.getSnapshotBeforeUpdate || "function" !== typeof context2.UNSAFE_componentWillMount && "function" !== typeof context2.componentWillMount || (contextType = context2.state, "function" === typeof context2.componentWillMount && context2.componentWillMount(), "function" === typeof context2.UNSAFE_componentWillMount && context2.UNSAFE_componentWillMount(), contextType !== context2.state && classComponentUpdater.enqueueReplaceState(context2, context2.state, null), processUpdateQueue(workInProgress2, nextProps, context2, renderLanes2), suspendIfUpdateReadFromEntangledAsyncAction(), context2.state = workInProgress2.memoizedState);
-      "function" === typeof context2.componentDidMount && (workInProgress2.flags |= 4194308);
+      ), context.state = workInProgress2.memoizedState);
+      "function" === typeof Component.getDerivedStateFromProps || "function" === typeof context.getSnapshotBeforeUpdate || "function" !== typeof context.UNSAFE_componentWillMount && "function" !== typeof context.componentWillMount || (contextType = context.state, "function" === typeof context.componentWillMount && context.componentWillMount(), "function" === typeof context.UNSAFE_componentWillMount && context.UNSAFE_componentWillMount(), contextType !== context.state && classComponentUpdater.enqueueReplaceState(context, context.state, null), processUpdateQueue(workInProgress2, nextProps, context, renderLanes2), suspendIfUpdateReadFromEntangledAsyncAction(), context.state = workInProgress2.memoizedState);
+      "function" === typeof context.componentDidMount && (workInProgress2.flags |= 4194308);
       nextProps = true;
     } else if (null === current) {
-      context2 = workInProgress2.stateNode;
+      context = workInProgress2.stateNode;
       var unresolvedOldProps = workInProgress2.memoizedProps, oldProps = resolveClassComponentProps(Component, unresolvedOldProps);
-      context2.props = oldProps;
-      var oldContext = context2.context, contextType$jscomp$0 = Component.contextType;
+      context.props = oldProps;
+      var oldContext = context.context, contextType$jscomp$0 = Component.contextType;
       contextType = emptyContextObject;
       "object" === typeof contextType$jscomp$0 && null !== contextType$jscomp$0 && (contextType = readContext(contextType$jscomp$0));
       var getDerivedStateFromProps = Component.getDerivedStateFromProps;
-      contextType$jscomp$0 = "function" === typeof getDerivedStateFromProps || "function" === typeof context2.getSnapshotBeforeUpdate;
+      contextType$jscomp$0 = "function" === typeof getDerivedStateFromProps || "function" === typeof context.getSnapshotBeforeUpdate;
       unresolvedOldProps = workInProgress2.pendingProps !== unresolvedOldProps;
-      contextType$jscomp$0 || "function" !== typeof context2.UNSAFE_componentWillReceiveProps && "function" !== typeof context2.componentWillReceiveProps || (unresolvedOldProps || oldContext !== contextType) && callComponentWillReceiveProps(
+      contextType$jscomp$0 || "function" !== typeof context.UNSAFE_componentWillReceiveProps && "function" !== typeof context.componentWillReceiveProps || (unresolvedOldProps || oldContext !== contextType) && callComponentWillReceiveProps(
         workInProgress2,
-        context2,
+        context,
         nextProps,
         contextType
       );
       hasForceUpdate = false;
       var oldState = workInProgress2.memoizedState;
-      context2.state = oldState;
-      processUpdateQueue(workInProgress2, nextProps, context2, renderLanes2);
+      context.state = oldState;
+      processUpdateQueue(workInProgress2, nextProps, context, renderLanes2);
       suspendIfUpdateReadFromEntangledAsyncAction();
       oldContext = workInProgress2.memoizedState;
       unresolvedOldProps || oldState !== oldContext || hasForceUpdate ? ("function" === typeof getDerivedStateFromProps && (applyDerivedStateFromProps(
@@ -5168,29 +5168,29 @@ function requireReactDomClient_production() {
         oldState,
         oldContext,
         contextType
-      )) ? (contextType$jscomp$0 || "function" !== typeof context2.UNSAFE_componentWillMount && "function" !== typeof context2.componentWillMount || ("function" === typeof context2.componentWillMount && context2.componentWillMount(), "function" === typeof context2.UNSAFE_componentWillMount && context2.UNSAFE_componentWillMount()), "function" === typeof context2.componentDidMount && (workInProgress2.flags |= 4194308)) : ("function" === typeof context2.componentDidMount && (workInProgress2.flags |= 4194308), workInProgress2.memoizedProps = nextProps, workInProgress2.memoizedState = oldContext), context2.props = nextProps, context2.state = oldContext, context2.context = contextType, nextProps = oldProps) : ("function" === typeof context2.componentDidMount && (workInProgress2.flags |= 4194308), nextProps = false);
+      )) ? (contextType$jscomp$0 || "function" !== typeof context.UNSAFE_componentWillMount && "function" !== typeof context.componentWillMount || ("function" === typeof context.componentWillMount && context.componentWillMount(), "function" === typeof context.UNSAFE_componentWillMount && context.UNSAFE_componentWillMount()), "function" === typeof context.componentDidMount && (workInProgress2.flags |= 4194308)) : ("function" === typeof context.componentDidMount && (workInProgress2.flags |= 4194308), workInProgress2.memoizedProps = nextProps, workInProgress2.memoizedState = oldContext), context.props = nextProps, context.state = oldContext, context.context = contextType, nextProps = oldProps) : ("function" === typeof context.componentDidMount && (workInProgress2.flags |= 4194308), nextProps = false);
     } else {
-      context2 = workInProgress2.stateNode;
+      context = workInProgress2.stateNode;
       cloneUpdateQueue(current, workInProgress2);
       contextType = workInProgress2.memoizedProps;
       contextType$jscomp$0 = resolveClassComponentProps(Component, contextType);
-      context2.props = contextType$jscomp$0;
+      context.props = contextType$jscomp$0;
       getDerivedStateFromProps = workInProgress2.pendingProps;
-      oldState = context2.context;
+      oldState = context.context;
       oldContext = Component.contextType;
       oldProps = emptyContextObject;
       "object" === typeof oldContext && null !== oldContext && (oldProps = readContext(oldContext));
       unresolvedOldProps = Component.getDerivedStateFromProps;
-      (oldContext = "function" === typeof unresolvedOldProps || "function" === typeof context2.getSnapshotBeforeUpdate) || "function" !== typeof context2.UNSAFE_componentWillReceiveProps && "function" !== typeof context2.componentWillReceiveProps || (contextType !== getDerivedStateFromProps || oldState !== oldProps) && callComponentWillReceiveProps(
+      (oldContext = "function" === typeof unresolvedOldProps || "function" === typeof context.getSnapshotBeforeUpdate) || "function" !== typeof context.UNSAFE_componentWillReceiveProps && "function" !== typeof context.componentWillReceiveProps || (contextType !== getDerivedStateFromProps || oldState !== oldProps) && callComponentWillReceiveProps(
         workInProgress2,
-        context2,
+        context,
         nextProps,
         oldProps
       );
       hasForceUpdate = false;
       oldState = workInProgress2.memoizedState;
-      context2.state = oldState;
-      processUpdateQueue(workInProgress2, nextProps, context2, renderLanes2);
+      context.state = oldState;
+      processUpdateQueue(workInProgress2, nextProps, context, renderLanes2);
       suspendIfUpdateReadFromEntangledAsyncAction();
       var newState = workInProgress2.memoizedState;
       contextType !== getDerivedStateFromProps || oldState !== newState || hasForceUpdate || null !== current && null !== current.dependencies && checkIfContextChanged(current.dependencies) ? ("function" === typeof unresolvedOldProps && (applyDerivedStateFromProps(
@@ -5206,16 +5206,16 @@ function requireReactDomClient_production() {
         oldState,
         newState,
         oldProps
-      ) || null !== current && null !== current.dependencies && checkIfContextChanged(current.dependencies)) ? (oldContext || "function" !== typeof context2.UNSAFE_componentWillUpdate && "function" !== typeof context2.componentWillUpdate || ("function" === typeof context2.componentWillUpdate && context2.componentWillUpdate(nextProps, newState, oldProps), "function" === typeof context2.UNSAFE_componentWillUpdate && context2.UNSAFE_componentWillUpdate(
+      ) || null !== current && null !== current.dependencies && checkIfContextChanged(current.dependencies)) ? (oldContext || "function" !== typeof context.UNSAFE_componentWillUpdate && "function" !== typeof context.componentWillUpdate || ("function" === typeof context.componentWillUpdate && context.componentWillUpdate(nextProps, newState, oldProps), "function" === typeof context.UNSAFE_componentWillUpdate && context.UNSAFE_componentWillUpdate(
         nextProps,
         newState,
         oldProps
-      )), "function" === typeof context2.componentDidUpdate && (workInProgress2.flags |= 4), "function" === typeof context2.getSnapshotBeforeUpdate && (workInProgress2.flags |= 1024)) : ("function" !== typeof context2.componentDidUpdate || contextType === current.memoizedProps && oldState === current.memoizedState || (workInProgress2.flags |= 4), "function" !== typeof context2.getSnapshotBeforeUpdate || contextType === current.memoizedProps && oldState === current.memoizedState || (workInProgress2.flags |= 1024), workInProgress2.memoizedProps = nextProps, workInProgress2.memoizedState = newState), context2.props = nextProps, context2.state = newState, context2.context = oldProps, nextProps = contextType$jscomp$0) : ("function" !== typeof context2.componentDidUpdate || contextType === current.memoizedProps && oldState === current.memoizedState || (workInProgress2.flags |= 4), "function" !== typeof context2.getSnapshotBeforeUpdate || contextType === current.memoizedProps && oldState === current.memoizedState || (workInProgress2.flags |= 1024), nextProps = false);
+      )), "function" === typeof context.componentDidUpdate && (workInProgress2.flags |= 4), "function" === typeof context.getSnapshotBeforeUpdate && (workInProgress2.flags |= 1024)) : ("function" !== typeof context.componentDidUpdate || contextType === current.memoizedProps && oldState === current.memoizedState || (workInProgress2.flags |= 4), "function" !== typeof context.getSnapshotBeforeUpdate || contextType === current.memoizedProps && oldState === current.memoizedState || (workInProgress2.flags |= 1024), workInProgress2.memoizedProps = nextProps, workInProgress2.memoizedState = newState), context.props = nextProps, context.state = newState, context.context = oldProps, nextProps = contextType$jscomp$0) : ("function" !== typeof context.componentDidUpdate || contextType === current.memoizedProps && oldState === current.memoizedState || (workInProgress2.flags |= 4), "function" !== typeof context.getSnapshotBeforeUpdate || contextType === current.memoizedProps && oldState === current.memoizedState || (workInProgress2.flags |= 1024), nextProps = false);
     }
-    context2 = nextProps;
+    context = nextProps;
     markRef(current, workInProgress2);
     nextProps = 0 !== (workInProgress2.flags & 128);
-    context2 || nextProps ? (context2 = workInProgress2.stateNode, Component = nextProps && "function" !== typeof Component.getDerivedStateFromError ? null : context2.render(), workInProgress2.flags |= 1, null !== current && nextProps ? (workInProgress2.child = reconcileChildFibers(
+    context || nextProps ? (context = workInProgress2.stateNode, Component = nextProps && "function" !== typeof Component.getDerivedStateFromError ? null : context.render(), workInProgress2.flags |= 1, null !== current && nextProps ? (workInProgress2.child = reconcileChildFibers(
       workInProgress2,
       current.child,
       null,
@@ -5225,7 +5225,7 @@ function requireReactDomClient_production() {
       null,
       Component,
       renderLanes2
-    )) : reconcileChildren(current, workInProgress2, Component, renderLanes2), workInProgress2.memoizedState = context2.state, current = workInProgress2.child) : current = bailoutOnAlreadyFinishedWork(
+    )) : reconcileChildren(current, workInProgress2, Component, renderLanes2), workInProgress2.memoizedState = context.state, current = workInProgress2.child) : current = bailoutOnAlreadyFinishedWork(
       current,
       workInProgress2,
       renderLanes2
@@ -5987,12 +5987,12 @@ function requireReactDomClient_production() {
     throw Error(formatProdErrorMessage(156, workInProgress2.tag));
   }
   var valueCursor = createCursor(null), currentlyRenderingFiber = null, lastContextDependency = null;
-  function pushProvider(providerFiber, context2, nextValue) {
-    push(valueCursor, context2._currentValue);
-    context2._currentValue = nextValue;
+  function pushProvider(providerFiber, context, nextValue) {
+    push(valueCursor, context._currentValue);
+    context._currentValue = nextValue;
   }
-  function popProvider(context2) {
-    context2._currentValue = valueCursor.current;
+  function popProvider(context) {
+    context._currentValue = valueCursor.current;
     pop(valueCursor);
   }
   function scheduleContextWorkOnParentPath(parent, renderLanes2, propagationRoot) {
@@ -6068,8 +6068,8 @@ function requireReactDomClient_production() {
         if (null === currentParent) throw Error(formatProdErrorMessage(387));
         currentParent = currentParent.memoizedProps;
         if (null !== currentParent) {
-          var context2 = parent.type;
-          objectIs(parent.pendingProps.value, currentParent.value) || (null !== current ? current.push(context2) : current = [context2]);
+          var context = parent.type;
+          objectIs(parent.pendingProps.value, currentParent.value) || (null !== current ? current.push(context) : current = [context]);
         }
       } else if (parent === hostTransitionProviderCursor.current) {
         currentParent = parent.alternate;
@@ -6103,22 +6103,22 @@ function requireReactDomClient_production() {
     workInProgress2 = workInProgress2.dependencies;
     null !== workInProgress2 && (workInProgress2.firstContext = null);
   }
-  function readContext(context2) {
-    return readContextForConsumer(currentlyRenderingFiber, context2);
+  function readContext(context) {
+    return readContextForConsumer(currentlyRenderingFiber, context);
   }
-  function readContextDuringReconciliation(consumer, context2) {
+  function readContextDuringReconciliation(consumer, context) {
     null === currentlyRenderingFiber && prepareToReadContext(consumer);
-    return readContextForConsumer(consumer, context2);
+    return readContextForConsumer(consumer, context);
   }
-  function readContextForConsumer(consumer, context2) {
-    var value = context2._currentValue;
-    context2 = { context: context2, memoizedValue: value, next: null };
+  function readContextForConsumer(consumer, context) {
+    var value = context._currentValue;
+    context = { context, memoizedValue: value, next: null };
     if (null === lastContextDependency) {
       if (null === consumer) throw Error(formatProdErrorMessage(308));
-      lastContextDependency = context2;
-      consumer.dependencies = { lanes: 0, firstContext: context2 };
+      lastContextDependency = context;
+      consumer.dependencies = { lanes: 0, firstContext: context };
       consumer.flags |= 524288;
-    } else lastContextDependency = lastContextDependency.next = context2;
+    } else lastContextDependency = lastContextDependency.next = context;
     return value;
   }
   var hasForceUpdate = false;
@@ -6291,16 +6291,16 @@ function requireReactDomClient_production() {
       workInProgress$jscomp$0.memoizedState = newState;
     }
   }
-  function callCallback(callback, context2) {
+  function callCallback(callback, context) {
     if ("function" !== typeof callback)
       throw Error(formatProdErrorMessage(191, callback));
-    callback.call(context2);
+    callback.call(context);
   }
-  function commitCallbacks(updateQueue, context2) {
+  function commitCallbacks(updateQueue, context) {
     var callbacks = updateQueue.callbacks;
     if (null !== callbacks)
       for (updateQueue.callbacks = null, updateQueue = 0; updateQueue < callbacks.length; updateQueue++)
-        callCallback(callbacks[updateQueue], context2);
+        callCallback(callbacks[updateQueue], context);
   }
   function commitHookEffectListMount(flags, finishedWork) {
     try {
@@ -10734,11 +10734,11 @@ function requireReactDomClient_production() {
     targetInstance = targetInstance.previousSibling;
     for (var depth = 0; targetInstance; ) {
       if (8 === targetInstance.nodeType) {
-        var data2 = targetInstance.data;
-        if ("$" === data2 || "$!" === data2 || "$?" === data2) {
+        var data = targetInstance.data;
+        if ("$" === data || "$!" === data || "$?" === data) {
           if (0 === depth) return targetInstance;
           depth--;
-        } else "/$" === data2 && depth++;
+        } else "/$" === data && depth++;
       }
       targetInstance = targetInstance.previousSibling;
     }
@@ -11946,11 +11946,11 @@ const ActiveViewProvider = ({ children }) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(ActiveViewContext.Provider, { value: { activeView, setActiveView }, children });
 };
 const useActiveView = () => {
-  const context2 = reactExports.useContext(ActiveViewContext);
-  if (!context2) {
+  const context = reactExports.useContext(ActiveViewContext);
+  if (!context) {
     throw new Error("useActiveView must be used within an ActiveViewProvider");
   }
-  return context2;
+  return context;
 };
 const _EventBus = class _EventBus {
   constructor() {
@@ -12027,9 +12027,9 @@ const Sidebar = ({ gameContext }) => {
   };
   const sidebarData = reactExports.useMemo(() => {
     return gameContext.layout.sidebarLayout.sidebarData;
-  }, []);
-  const renderSection = (sectionName, items2) => {
-    if (items2.length === 0)
+  }, [gameContext]);
+  const renderSection = (sectionName, items) => {
+    if (items.length === 0)
       return null;
     const isExpanded = expandedSections[sectionName];
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { children: [
@@ -12037,7 +12037,7 @@ const Sidebar = ({ gameContext }) => {
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sidebar-nav-heading-text", children: sectionName }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sidebar-nav-chevron", children: isExpanded ? /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: ChevronDown, alt: "Chevron Down" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: ChevronRight, alt: "Chevron Right" }) })
       ] }) }),
-      isExpanded && /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "sidebar-nav", children: items2.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      isExpanded && /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "sidebar-nav", children: items.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
         SidebarItem,
         {
           item,
@@ -12147,7 +12147,7 @@ const GameScreen = ({ gameContext }) => {
   const { activeView } = useActiveView();
   const viewComponents = reactExports.useMemo(() => {
     const modules = /* @__PURE__ */ Object.assign({
-      "./mineralharvesting/MineralHarvestingUI.tsx": () => __vitePreload(() => import("./MineralHarvestingUI-KVthgXON.js"), true ? __vite__mapDeps([0,1]) : void 0, import.meta.url)
+      "./mineralharvesting/MineralHarvestingUI.tsx": () => __vitePreload(() => import("./MineralHarvestingUI-BbSCsOyX.js"), true ? __vite__mapDeps([0,1]) : void 0, import.meta.url)
     });
     const components = {};
     const isEmpty = (str) => {
@@ -12165,14 +12165,14 @@ const GameScreen = ({ gameContext }) => {
       if (!importer) {
         console.error(`Module not found: ${modulePath}`);
         components[sidebarEntry.route] = React.lazy(
-          () => __vitePreload(() => import("./ErrorPage-CVBsygSy.js"), true ? [] : void 0, import.meta.url)
+          () => __vitePreload(() => import("./ErrorPage-qEYI7h2k.js"), true ? [] : void 0, import.meta.url)
         );
         return;
       }
       components[sidebarEntry.route] = React.lazy(
         () => importer().then((module) => module).catch(async (error) => {
           console.error(`Error loading module ${modulePath}:`, error);
-          return __vitePreload(() => import("./ErrorPage-CVBsygSy.js"), true ? [] : void 0, import.meta.url);
+          return __vitePreload(() => import("./ErrorPage-qEYI7h2k.js"), true ? [] : void 0, import.meta.url);
         })
       );
     };
@@ -12191,6 +12191,9 @@ function Ticker({ gameContext }) {
   const gameContextRef = reactExports.useRef(gameContext);
   const previousTimeRef = reactExports.useRef(performance.now());
   const lagRef = reactExports.useRef(0);
+  reactExports.useEffect(() => {
+    gameContextRef.current = gameContext;
+  }, [gameContext]);
   const update = (deltaTime) => {
     gameContextRef.current.update(deltaTime);
   };
@@ -12212,161 +12215,8 @@ function Ticker({ gameContext }) {
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [gameContext]);
+  }, []);
   return null;
-}
-const items$1 = [
-  {
-    id: "goldore",
-    name: "Gold Ore",
-    media: "",
-    description: ""
-  },
-  {
-    id: "magnetiteore",
-    name: "Magnetite Ore",
-    media: "",
-    description: ""
-  },
-  {
-    id: "malachiteore",
-    name: "Malachite Ore",
-    media: "",
-    description: ""
-  }
-];
-const items = [
-  ...items$1
-];
-const mineralHarvesting = {
-  id: "exo.mineralharvesting",
-  name: "Mineral Harvesting",
-  media: "/assets/images/skills/mineralharvesting/mineralharvesting.svg",
-  levelCap: 100,
-  maximumConcurrentNodes: 1,
-  recipes: null
-};
-const recipes = [
-  {
-    id: "magnetitevein",
-    name: "Magnetite Vein",
-    item: "exo.magnetiteore",
-    amount: 1,
-    experienceReward: 5,
-    levelRequirement: 1,
-    actionTime: 3
-  },
-  {
-    id: "malachiteore",
-    name: "Malachite Vein",
-    item: "exo.malachiteore",
-    amount: 1,
-    experienceReward: 10,
-    levelRequirement: 3,
-    actionTime: 2
-  },
-  {
-    id: "goldvein",
-    name: "Gold Vein",
-    item: "exo.goldore",
-    amount: 2,
-    experienceReward: 5,
-    levelRequirement: 5,
-    actionTime: 1.5
-  }
-];
-mineralHarvesting.recipes = recipes;
-const skills = [mineralHarvesting];
-const sidebar = [
-  {
-    name: "Player",
-    items: [
-      {
-        id: "storage",
-        icon: "storage-icon.png",
-        route: "/player/storage",
-        text: "Storage",
-        page: ""
-      },
-      {
-        id: "inventory",
-        icon: "inventory-icon.png",
-        route: "/player/inventory",
-        text: "Inventory",
-        page: ""
-      },
-      {
-        id: "statistics",
-        icon: "statistics-icon.png",
-        route: "/player/statistics",
-        text: "Statistics",
-        page: ""
-      }
-    ]
-  },
-  {
-    name: "Navigation",
-    items: []
-  },
-  {
-    name: "Combat",
-    items: []
-  },
-  {
-    name: "Gathering",
-    items: [
-      {
-        id: "mineralharvesting-sidebar",
-        icon: "assets/images/skills/mineralharvesting/mineralharvesting.svg",
-        route: "/mineralharvesting-page",
-        text: "Mineral Harvesting",
-        skillID: "exo.mineralharvesting",
-        page: "mineralharvesting/MineralHarvestingUI"
-      },
-      {
-        id: "biomassextraction-sidebar",
-        icon: "assets/images/skills/mineralharvesting/biomassextraction.svg",
-        route: "/biomassextraction-page",
-        text: "Biomass Extraction",
-        skillID: "exo.biomassextraction",
-        page: "biomassextraction/BiomassExtractionUI"
-      }
-    ]
-  },
-  {
-    name: "Synthesis",
-    items: []
-  },
-  {
-    name: "Settings",
-    items: []
-  }
-];
-class GameData {
-  constructor() {
-    this.items = items;
-    this.skills = skills;
-    this.sidebar = sidebar;
-  }
-}
-class DataContainer {
-  constructor(packageID, displayName, data2) {
-    this.packageID = packageID;
-    this.displayName = displayName;
-    this.data = data2;
-  }
-}
-class DataGenerator {
-  static serialize(packageID) {
-    const pkg = this.getPackage(packageID);
-    return JSON.stringify(pkg);
-  }
-  static getPackage(packageID) {
-    if (packageID === "exo") {
-      return new DataContainer(packageID, "ExoGenesis", new GameData());
-    }
-    throw Error(`Provided namespace ${packageID} does not exist in packages.`);
-  }
 }
 class NamedObjectRegistry {
   constructor() {
@@ -12522,12 +12372,12 @@ class BaseRecipe extends NamedObject {
 class HarvestRecipe extends BaseRecipe {
 }
 class SimpleHarvestRecipe extends HarvestRecipe {
-  constructor(pkg, data2, dataProvider) {
-    super(pkg, data2.id, data2.name, data2.experienceReward, data2.levelRequirement, data2.actionTime);
+  constructor(pkg, data, dataProvider) {
+    super(pkg, data.id, data.name, data.experienceReward, data.levelRequirement, data.actionTime);
     __publicField(this, "m_item");
     __publicField(this, "m_amount");
-    this.m_item = dataProvider.items.getObject(data2.item);
-    this.m_amount = data2.amount;
+    this.m_item = dataProvider.items.getObject(data.item);
+    this.m_amount = data.amount;
   }
   get item() {
     return this.m_item;
@@ -13160,13 +13010,13 @@ class SidebarLayout {
     return category;
   }
   registerData(dataContext) {
-    const data2 = dataContext.data;
+    const data = dataContext.data;
     const dataProvider = dataContext.dataProvider;
-    data2.forEach((page) => {
+    data.forEach((page) => {
       const categoryName = page.name;
-      const items2 = page.items;
+      const items = page.items;
       const category = this.getOrCreateCategory(categoryName);
-      items2.forEach((item) => {
+      items.forEach((item) => {
         let skill = null;
         if (item.skillID !== void 0) {
           skill = dataProvider.skills.getObject(item.skillID);
@@ -13202,9 +13052,19 @@ class DataLoader {
     this.skills.registerObject(new MineralHarvesting(this.m_defaultPackage));
     this.skills.registerObject(new BiomassExtraction(this.m_defaultPackage));
   }
-  registerPackage(data2) {
-    const packageID = data2.packageID;
-    const packageName = data2.displayName;
+  async downloadAndRegisterPackage(url) {
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    const response = await fetch(url, { method: "GET", headers });
+    if (!response.ok) {
+      throw new Error(`Could not fetch data package with URL: ${url}. Error ${response.status}: ${response.statusText}`);
+    }
+    const dataPackage = await response.json();
+    this.registerPackage(dataPackage);
+  }
+  registerPackage(data) {
+    const packageID = data.packageID;
+    const packageName = data.displayName;
     if (packageID == null) {
       throw new Error("Package does not have a valid identifier.");
     }
@@ -13212,17 +13072,17 @@ class DataLoader {
     if (pkg == null) {
       pkg = this.packages.registerPackage(packageID, packageName);
     }
-    if (data2.data !== void 0) {
-      this.registerGameData(pkg, data2.data);
+    if (data.data !== void 0) {
+      this.registerGameData(pkg, data.data);
     }
   }
-  registerGameData(pkg, data2) {
-    if (data2.items != null)
-      this.registerItems(pkg, data2.items);
-    if (data2.skills != null)
-      this.registerSkills(pkg, data2.skills);
-    if (data2.sidebar != null)
-      this.registerSidebar(pkg, data2.sidebar);
+  registerGameData(pkg, data) {
+    if (data.items != null)
+      this.registerItems(pkg, data.items);
+    if (data.skills != null)
+      this.registerSkills(pkg, data.skills);
+    if (data.sidebar != null)
+      this.registerSidebar(pkg, data.sidebar);
   }
   registerSkills(pkg, skillsData) {
     skillsData.forEach((skillData) => {
@@ -13250,14 +13110,14 @@ class DataLoader {
     return new GameContext(this);
   }
 }
-const data = JSON.parse(DataGenerator.serialize("exo"));
-const dataLoader = new DataLoader();
-dataLoader.registerPackage(data);
-const context = dataLoader.createGameContext();
 const App = () => {
   const [gameContext, setGameContext] = reactExports.useState(null);
   reactExports.useEffect(() => {
-    setGameContext(context);
+    const dataLoader = new DataLoader();
+    dataLoader.downloadAndRegisterPackage("/assets/data/exo-data.json").then(() => {
+      const context = dataLoader.createGameContext();
+      setGameContext(context);
+    });
   }, []);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(ActiveViewProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "app-container", children: gameContext ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Sidebar, { gameContext }),
@@ -13275,4 +13135,4 @@ export {
   jsxRuntimeExports as j,
   reactExports as r
 };
-//# sourceMappingURL=index-BACbhrJ-.js.map
+//# sourceMappingURL=index-DR-goK4T.js.map
