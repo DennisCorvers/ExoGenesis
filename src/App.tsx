@@ -14,7 +14,7 @@ const App: React.FC = () => {
   useEffect(() => {
     // We need this part to load the game data, before the UI elements are built.
     const dataLoader = new DataLoader();
-    dataLoader.downloadAndRegisterPackage("/assets/data/exo-data.json").then(() => {
+    dataLoader.downloadAndRegisterPackage("assets/data/exo-data.json").then(() => {
       const context = dataLoader.createGameContext();
       setGameContext(context);
     })
