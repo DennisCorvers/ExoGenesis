@@ -8,6 +8,7 @@ import { EventBus } from "@game/events/EventBus";
 import { SkillExperienceChangedEvent } from "@game/events/skill/SkillExpChangedEvent";
 import { ActionStoppedEvent } from "@game/events/skill/ActionStoppedEvent";
 import { ActionEvent } from "@game/events/skill/ActionEvent";
+import { start } from "repl";
 
 export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
     private m_playerContext: IPlayerContext;
@@ -64,7 +65,7 @@ export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
         this.m_playerContext = playerContext;
         this.m_skill = skill;
         this.m_experience = 0;
-        this.m_level = 0;
+        this.m_level = 1;
         this.m_progress = 0;
         this.m_activeAction = null;
     }
@@ -107,8 +108,15 @@ export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
 
     public startAction(recipe: BaseRecipe) {
         // TODO: Support concurrent actions.
-        this.m_progress = 0;
-        this.m_activeAction = <T>recipe;
+        const action = <T>recipe;
+        const startResult = this.canStartAction(action);
+        if (startResult.canStart) {
+            this.m_progress = 0;
+            this.m_activeAction = action;
+        }
+        else {
+            throw new Error(`Unable to start action: ${ActionStoppedReason[startResult.reason!]}`)
+        }
     }
 
     public stopAction(recipe: BaseRecipe) {
@@ -143,7 +151,7 @@ export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
 
     public abstract canStartAction(action: T): IActionStartResult
 
-    protected abstract onActionComplete(completedAction: T): void
-
-    protected abstract onActionStopped(action: T, reason: ActionStoppedReason) : void
+    protected abstract onActionStart(action: T): void
+    protected abstract onActionComplete(action: T): void
+    protected abstract onActionStopped(action: T, reason: ActionStoppedReason): void
 }

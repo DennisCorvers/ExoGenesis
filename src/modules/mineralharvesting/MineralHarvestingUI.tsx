@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { GameContext } from '@game/core/GameContext';
-import ProgressBar from '../common/ProgressBar';
-import ResourceNodeCard from '../common/ResourceNodeCard';
 import { BaseRecipe } from '@game/skills/requirements/BaseRecipe';
 import { MineralHarvestingState } from '@game/state/MineralHarvestingState';
 import { ActionEvent } from '@game/events/skill/ActionEvent';
 import { ActionStoppedEvent } from '@game/events/skill/ActionStoppedEvent';
 import { useEventSubscription } from '../../hooks/EventSubscription'
-import { SimpleHarvestRecipe } from '@game/skills/requirements/SimpleHarvestRecipe';
+import { MineralNode } from '@game/skills/requirements/MineralNode';
+import MineralNodeCard from './MineralNodeCard';
+import ProgressBar from '../common/ProgressBar';
 import './MineralHarvestingUI.css'
 
 interface MineralHarvestingUIProps {
@@ -25,14 +25,14 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
     const skillManager = player.skillManager;
 
     const onAction = useCallback((event: ActionEvent) => {
-        updateHarvestProgress(event.action as SimpleHarvestRecipe);
+        updateHarvestProgress(event.action as MineralNode);
     }, []);
 
     const onStop = useCallback((event: ActionStoppedEvent) => {
-        updateHarvestProgress(event.action as SimpleHarvestRecipe)
+        updateHarvestProgress(event.action as MineralNode)
     }, []);
 
-    const handleNodeClick = useCallback((node: SimpleHarvestRecipe) => {
+    const handleNodeClick = useCallback((node: MineralNode) => {
         // If the chosen action is running, stop the action, otherwise switch / start
         if (skillState.isRunningAction(node)) {
             skillManager.stopPlayerAction(skill, node);
@@ -44,7 +44,7 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
         updateHarvestProgress(node);
     }, []);
 
-    const updateHarvestProgress = useCallback((action: SimpleHarvestRecipe) => {
+    const updateHarvestProgress = useCallback((action: MineralNode) => {
         const nodeTime = skillState.isActive ? action.actionTime : 0;
         setCurrentNode(skillState.activeAction);
         setProgress(skillState.progress)
@@ -84,12 +84,10 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
                 {skill.registeredNodes
                     .map((node) => (
                         <div key={node.uid} className='col-6 col-md-4 col-lg-4 col-xl-3'>
-                            <ResourceNodeCard key={node.uid} node={node} onClick={handleNodeClick} />
+                            <MineralNodeCard key={node.uid} node={node} onClick={handleNodeClick} />
                         </div>
                     ))}
             </div>
-
-
         </div>
     );
 };

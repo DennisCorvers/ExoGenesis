@@ -1,9 +1,9 @@
 import { Package } from "@game/core/Package";
 import { ResourceCollectionSkill } from "./ResourceCollectionSkill";
-import { SimpleHarvestRecipe } from "./requirements/SimpleHarvestRecipe";
 import { IDataContext } from "@game/data/IDataContext";
+import { MineralNode } from "./requirements/MineralNode";
 
-export class MineralHarvesting extends ResourceCollectionSkill<SimpleHarvestRecipe> {
+export class MineralHarvesting extends ResourceCollectionSkill<MineralNode> {
   constructor(pkg: Package) {
     super(pkg, 'mineralharvesting', 'Mineral Harvesting', '/assets/images/skills/mineralharvesting/mineralharvesting.svg');
 
@@ -15,7 +15,7 @@ export class MineralHarvesting extends ResourceCollectionSkill<SimpleHarvestReci
 
     // Override already set data?
     skillData.recipes.forEach((recipeData: any) => {
-      super.registerRecipe(new SimpleHarvestRecipe(dataContext.packageInfo, recipeData, dataProvider));
+      super.registerRecipe(new MineralNode(dataContext.packageInfo, recipeData, dataProvider));
     });
 
     super.registerData(dataContext);

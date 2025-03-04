@@ -86,11 +86,7 @@ export class DataLoader implements IDataProvider {
 
     private registerItems(pkg: Package, itemData: any) {
         itemData.forEach((item: any) => {
-            this.items.registerObject(new Item({
-                packageInfo: pkg,
-                data: item,
-                dataProvider: this
-            }))
+            this.items.registerObject(new Item(pkg, item));
         });
     }
 

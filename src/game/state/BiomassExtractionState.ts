@@ -13,6 +13,9 @@ export class BiomassExtractionState extends SkillState<SimpleHarvestRecipe> {
         super(skill, playerContext)
     }
 
+    protected onActionStart(action: SimpleHarvestRecipe): void {
+    }
+
     protected onActionComplete(completedAction: SimpleHarvestRecipe): void {
         // Add items and experience rewards.
         this.player.inventory.addItem(completedAction.item, completedAction.amount);
