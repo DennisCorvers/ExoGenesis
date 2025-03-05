@@ -38,7 +38,7 @@ export class MineralHarvestingState extends SkillState<MineralNode> {
         // If the (partial) harvested node is not set, or it's a different one, reset the remaining health.
         if (this.m_partialHarvestedNode == null || this.m_partialHarvestedNode.uid != action.uid) {
             this.m_partialHarvestedNode = action;
-            this.m_remainingNodeHealth = 0;
+            this.m_remainingNodeHealth = action.health;
         }
     }
 
