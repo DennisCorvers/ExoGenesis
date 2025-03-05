@@ -6,3 +6,19 @@
     display: flex;
     flex-wrap: wrap;
 }
+
+.nodehealth {
+    margin: .5rem;
+}
+
+.nodehealth .inner-bar {
+    background-color: rgb(108, 145, 214);
+}
+
+.miningprogress {
+    margin: .5rem;
+}
+
+.miningprogress .inner-bar {
+    background-color: rgb(117, 223, 191);
+}

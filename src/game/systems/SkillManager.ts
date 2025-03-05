@@ -6,7 +6,6 @@ import { BaseRecipe } from "../skills/requirements/BaseRecipe";
 import { IPlayerContext } from "./IPlayerContext";
 import { ISkillState } from "../state/ISkillState";
 import { ISkillManager } from "./ISkillManager";
-import { BiomassExtraction } from "@game/skills";
 import { BiomassExtractionState } from "@game/state/BiomassExtractionState";
 
 export class SkillManager implements ISkillManager, IUpdatable {
@@ -15,6 +14,7 @@ export class SkillManager implements ISkillManager, IUpdatable {
     // Passive skills
     private m_activeSkills: Map<string, ISkillState>;
     private m_skillStates: Map<string, ISkillState>;
+    private m_gameContext: IGameContext;
 
     public get activeSkills(): ISkillState[] {
         return [...this.m_activeSkills.values()];
@@ -36,12 +36,12 @@ export class SkillManager implements ISkillManager, IUpdatable {
         this.m_playerSelectedSkill = null;
         this.m_activeSkills = new Map<string, ISkillState>();
         this.m_skillStates = new Map<string, ISkillState>();
+        this.m_gameContext = gameContext;
 
         const skillStateMapping = new Map<Skill, new (skill: Skill, playerContext: IPlayerContext) => ISkillState>([
             [gameContext.skills.mineralHarvesting, MineralHarvestingState],
             [gameContext.skills.biomassExtraction, BiomassExtractionState],
         ]);
-
 
         for (const [skill, StateClass] of skillStateMapping) {
             this.m_skillStates.set(skill.id, new StateClass(skill, playerContext));
@@ -67,6 +67,15 @@ export class SkillManager implements ISkillManager, IUpdatable {
         }
 
         return state;
+    }
+
+    public getSkillStateByID(skillID: string): ISkillState {
+        const skill = this.m_gameContext.skills.getObject(skillID);
+        if (skill == null) {
+            throw new Error(`Skill with ID: ${skillID} does not exist.`);
+        }
+
+        return this.getSkillState(skill);
     }
 
     public startPlayerAction(skill: Skill, action: BaseRecipe, toggle: boolean = false) {

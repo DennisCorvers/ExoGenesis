@@ -7,6 +7,7 @@ import { Package } from "@game/core/Package";
 import { BiomassExtraction, MineralHarvesting } from "@game/skills";
 import { GameContext } from "@game/core/GameContext";
 import { SidebarLayout } from "@game/ui/SidebarLayout";
+import { ItemBuilder } from "./Builders/ItemBuilder";
 
 export class DataLoader implements IDataProvider {
     readonly packages: PackageRegistry;
@@ -85,13 +86,8 @@ export class DataLoader implements IDataProvider {
     }
 
     private registerItems(pkg: Package, itemData: any) {
-        itemData.forEach((item: any) => {
-            this.items.registerObject(new Item({
-                packageInfo: pkg,
-                data: item,
-                dataProvider: this
-            }))
-        });
+        const itemBuilder = new ItemBuilder(this.items, this);
+        itemBuilder.registerItems(pkg, itemData);
     }
 
     private registerSidebar(pkg: Package, sidebarData: any) {

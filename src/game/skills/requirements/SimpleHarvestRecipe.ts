@@ -16,7 +16,7 @@ export class SimpleHarvestRecipe extends HarvestRecipe {
     }
 
     constructor(pkg: Package, data: any, dataProvider: IDataProvider) {
-        super(pkg, data.id, data.name, data.experienceReward, data.levelRequirement, data.actionTime)
+        super(pkg, data)
         this.m_item = dataProvider.items.getObject(data.item);
         this.m_amount = data.amount;
     }
