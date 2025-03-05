@@ -8,6 +8,7 @@ import { Miningtool } from "@game/entities/Miningtool";
 
 export class MineralHarvestingState extends SkillState<MineralNode> {
     private m_remainingNodeHealth: number;
+    private m_partialHarvestedNode: MineralNode | null;
     private m_selectedPickaxe: Miningtool | null;
 
     public get selectedPickaxe(): Miningtool | null {
@@ -30,11 +31,15 @@ export class MineralHarvestingState extends SkillState<MineralNode> {
         super(skill, playerContext)
         this.m_remainingNodeHealth = -1;
         this.m_selectedPickaxe = null;
+        this.m_partialHarvestedNode = null;
     }
 
     protected onActionStart(action: MineralNode): void {
-        // Reset the node health if a different node is selected.
-        this.m_remainingNodeHealth = action.health;
+        // If the (partial) harvested node is not set, or it's a different one, reset the remaining health.
+        if (this.m_partialHarvestedNode == null || this.m_partialHarvestedNode.uid != action.uid) {
+            this.m_partialHarvestedNode = action;
+            this.m_remainingNodeHealth = 0;
+        }
     }
 
     protected onActionComplete(completedAction: MineralNode): void {
@@ -47,7 +52,7 @@ export class MineralHarvestingState extends SkillState<MineralNode> {
 
         // Node isn't fully mined yet.
         if (this.m_remainingNodeHealth > 0) {
-            // Award some experience?
+            this.addExperience(1);
             return;
         }
 
