@@ -24,13 +24,13 @@ const SidebarItem: React.FC<SidebarItemProps> = (props) => {
     useEffect(() => {
         if (props.item.skill != null) {
             const skillState = props.gameContext.player.skillManager.getSkillState(props.item.skill);
-            EventBus.instance.subscribe(`${props.item.skill.id}.levelup`, onLevelup)
+            EventBus.instance.subscribe(`${props.item.skill.id}.levelChanged`, onLevelup)
             setInfo(`Lv ${skillState.level}`);
         }
 
         return () => {
             if (props.item.skill != null) {
-                EventBus.instance.unsubscribe(`${props.item.skill.id}.levelup`, onLevelup)
+                EventBus.instance.unsubscribe(`${props.item.skill.id}.levelChanged`, onLevelup)
             }
         }
     }, []);
