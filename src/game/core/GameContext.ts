@@ -8,7 +8,7 @@ import { IUpdatable } from "./IUpdatable";
 import { NamedObjectRegistry } from "./Registries/NamedObjectRegistry";
 import { SkillRegistry } from "./Registries/SkillRegistry";
 import { Layout } from "./Layout";
-
+import { TestPlayer } from "../../test/TestPlayer";
 
 export class GameContext implements IGameContext, ISerializable, IUpdatable {
     private m_player: Player;
@@ -34,11 +34,7 @@ export class GameContext implements IGameContext, ISerializable, IUpdatable {
         return this.m_skillRegistry;
     }
 
-    public get items(): Item[] {
-        return this.m_itemRegistry.objects;
-    }
-
-    public get itemRegistry(): NamedObjectRegistry<Item> {
+    public get items(): NamedObjectRegistry<Item> {
         return this.m_itemRegistry;
     }
 
@@ -54,12 +50,16 @@ export class GameContext implements IGameContext, ISerializable, IUpdatable {
 
 
         // This should be one of the last steps, as data needs to be loaded to create a (blank) player.
-        this.m_player = new Player(this);
+        this.m_player = new TestPlayer(this);
     }
 
     public update(deltaTime: number) {
         if (this.m_isPaused) return;
 
         this.m_player.update(deltaTime);
+    }
+
+    public loadData() {
+        this.m_player.loadData();
     }
 }

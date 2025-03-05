@@ -15,8 +15,8 @@ interface MineralHarvestingUIProps {
 }
 
 const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }) => {
-    const [actionTime, setActionTime] = useState(0)
-    const [progress, setProgress] = useState(0);
+    const [progressBar, setProgressBar] = useState({ current: 0, total: 0 });
+    const [nodeHealth, setNodeHealthBar] = useState({ current: 0, total: 0 });
     const [currentNode, setCurrentNode] = useState<BaseRecipe | null>(null);
 
     const skill = gameContext.skills.mineralHarvesting;
@@ -47,8 +47,8 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
     const updateHarvestProgress = useCallback((action: MineralNode) => {
         const nodeTime = skillState.isActive ? action.actionTime : 0;
         setCurrentNode(skillState.activeAction);
-        setProgress(skillState.progress)
-        setActionTime(nodeTime);
+        setProgressBar({ current: skillState.progress, total: nodeTime });
+        setNodeHealthBar({ current: skillState.nodeHealth, total: action.health });
     }, []);
 
     useEventSubscription(`${skill.id}.actionComplete`, onAction);
@@ -66,18 +66,18 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
                 <div className="node-details">
                     <h2>Current Node: {currentNode.displayName}</h2>
                     <p>Experience: {currentNode.experienceReward}</p>
-                    <p>Harvesting Time: {currentNode.actionTime} seconds</p>
                     <p>Level Requirement: {currentNode.levelRequirement}</p>
                 </div>
             )}
 
-            <div className="progress-bar" style={{ marginTop: '20px', maxWidth: '300px' }}>
+            <div style={{ marginTop: '20px', maxWidth: '300px' }}>
                 <h3>Mining Progress</h3>
-                <ProgressBar
-                    elapsedTime={progress}
-                    totalTime={actionTime}
-                    enableProgressBars={true}
-                />
+                <div className='nodehealth'>
+                    <ProgressBar current={nodeHealth.current} total={nodeHealth.total} isAnimated={false} />
+                </div>
+                <div className='miningprogress'>
+                    <ProgressBar current={progressBar.current} total={progressBar.total} isAnimated={true} />
+                </div>
             </div>
 
             <div className="node-container">

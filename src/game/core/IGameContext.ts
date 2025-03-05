@@ -9,5 +9,5 @@ export interface IGameContext {
     get player(): Player;
     get skillList(): Skill[];
     get skills(): SkillRegistry;
-    get itemRegistry(): NamedObjectRegistry<Item>;
+    get items(): NamedObjectRegistry<Item>;
 }

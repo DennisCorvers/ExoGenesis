@@ -13,6 +13,8 @@ export interface ISkillManager {
 
     getSkillState(skill: Skill): ISkillState;
 
+    getSkillStateByID(skillID : string) : ISkillState;
+
     startPlayerAction(skill: Skill, action: BaseRecipe): void;
 
     stopPlayerAction(skill: Skill, action: BaseRecipe): void;

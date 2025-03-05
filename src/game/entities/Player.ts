@@ -7,6 +7,7 @@ import { IPlayerContext } from "../systems/IPlayerContext";
 import { ISkillManager } from "../systems/ISkillManager";
 
 export class Player implements IPlayerContext, ISerializable, IUpdatable {
+    protected gameContext : IGameContext;
     private m_name: string;
     private m_inventory: StorageManager;
     private m_skillManager: SkillManager;
@@ -31,9 +32,14 @@ export class Player implements IPlayerContext, ISerializable, IUpdatable {
         this.m_name = "Test Player";
         this.m_inventory = new StorageManager(game);
         this.m_skillManager = new SkillManager(game, this);
+        this.gameContext = game;
     }
 
     public update(deltaTime: number) {
         this.m_skillManager.update(deltaTime);
+    }
+
+    public loadData() {
+        
     }
 }

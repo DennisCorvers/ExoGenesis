@@ -2,7 +2,6 @@ import { Package } from "@game/core/Package";
 import { IDataProvider } from "../IDataProvider";
 import { NamedObjectRegistry } from "@game/core/Registries/NamedObjectRegistry";
 import { Item } from "@game/entities/Item";
-import { PatchRoutesOnNavigationFunction } from "react-router-dom";
 import { Miningtool } from "@game/entities/Miningtool";
 
 export class ItemBuilder {
