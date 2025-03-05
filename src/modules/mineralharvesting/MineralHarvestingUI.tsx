@@ -73,7 +73,7 @@ const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }
             <div style={{ marginTop: '20px', maxWidth: '300px' }}>
                 <h3>Mining Progress</h3>
                 <div className='nodehealth'>
-                    <ProgressBar current={nodeHealth.current} total={nodeHealth.total} isAnimated={false} />
+                    <ProgressBar current={nodeHealth.current} total={nodeHealth.total} isAnimated={false} isReversed={true}/>
                 </div>
                 <div className='miningprogress'>
                     <ProgressBar current={progressBar.current} total={progressBar.total} isAnimated={true} />
