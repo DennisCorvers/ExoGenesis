@@ -1,15 +1,18 @@
 import { IUpdatable } from "../core/IUpdatable";
-import { IStorageManager, StorageManager } from "../systems/StorageManager";
 import { SkillManager } from "../systems/SkillManager";
 import { ISerializable } from "../data/ISerializable";
 import { IGameContext } from "../core/IGameContext";
 import { IPlayerContext } from "../systems/IPlayerContext";
 import { ISkillManager } from "../systems/ISkillManager";
+import { IStorageManager } from "@game/systems/storage/IStorageManager";
+import { Inventory } from "@game/systems/storage/Inventory";
+import { Storage } from "@game/systems/storage/Storage";
 
 export class Player implements IPlayerContext, ISerializable, IUpdatable {
-    protected gameContext : IGameContext;
+    protected gameContext: IGameContext;
     private m_name: string;
-    private m_inventory: StorageManager;
+    private m_inventory: IStorageManager;
+    private m_storage: IStorageManager;
     private m_skillManager: SkillManager;
 
     public get name(): string {
@@ -25,12 +28,13 @@ export class Player implements IPlayerContext, ISerializable, IUpdatable {
     }
 
     public get storage(): IStorageManager {
-        throw new Error("Player has no storage.");
+        return this.m_storage;
     }
 
     constructor(game: IGameContext) {
         this.m_name = "Test Player";
-        this.m_inventory = new StorageManager(game);
+        this.m_inventory = new Inventory();
+        this.m_storage = new Storage();
         this.m_skillManager = new SkillManager(game, this);
         this.gameContext = game;
     }
@@ -40,6 +44,6 @@ export class Player implements IPlayerContext, ISerializable, IUpdatable {
     }
 
     public loadData() {
-        
+
     }
 }
