@@ -2,7 +2,6 @@ import { IDataProvider } from "@game/data/IDataProvider";
 import { NamedObject } from "../core/NamedObject";
 import { BaseRecipe } from "./requirements/BaseRecipe";
 import { Package } from "@game/core/Package";
-import { IDataContext } from "@game/data/IDataContext";
 import { ILevelTable } from "./levels/ILevelTable";
 import { SkillLevelTable } from "./levels/SkillLevelTable";
 
@@ -35,8 +34,8 @@ export abstract class Skill extends NamedObject {
         this.m_skillLevelTable = new SkillLevelTable();
     }
 
-    public registerData(dataContext: IDataContext) {
-        this.m_levelCap = dataContext.data.levelCap;
+    public registerData(pkg : Package, data : any, dataProvider : IDataProvider) {
+        this.m_levelCap = data.levelCap;
     }
 
     abstract isValidRecipe(recipe: BaseRecipe): boolean;

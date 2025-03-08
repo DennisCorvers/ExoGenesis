@@ -1,8 +1,8 @@
 import React, { Suspense, useMemo } from "react";
 import { useActiveView } from "./common/ActiveViewProvider";
-import { GameContext } from "@game/core/GameContext";
 import { ISidebarEntry } from "@game/ui/ISidebarEntry";
 import ErrorBoundary from "./common/ErrorBoundary";
+import { GameContext } from "@game/core/GameContext";
 
 interface GameScreenProps {
   gameContext: GameContext;

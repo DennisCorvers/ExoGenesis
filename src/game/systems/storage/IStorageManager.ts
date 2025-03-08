@@ -5,6 +5,8 @@ export interface IStorageManager {
     get storageSize(): number;
     get itemCount(): number;
 
+    get items() : IStorageSlot[];
+
     addItem(item: Item, amount: number): number;
 
     hasItemAmount(item: Item, amount: number): boolean;

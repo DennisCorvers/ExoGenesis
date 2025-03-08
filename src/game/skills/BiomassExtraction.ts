@@ -1,7 +1,7 @@
 import { Package } from "@game/core/Package";
 import { ResourceCollectionSkill } from "./ResourceCollectionSkill";
 import { SimpleHarvestRecipe } from "./requirements/SimpleHarvestRecipe";
-import { IDataContext } from "@game/data/IDataContext";
+import { IDataProvider } from "@game/data/IDataProvider";
 
 export class BiomassExtraction extends ResourceCollectionSkill<SimpleHarvestRecipe> {
   constructor(pkg: Package) {
@@ -9,11 +9,8 @@ export class BiomassExtraction extends ResourceCollectionSkill<SimpleHarvestReci
 
   }
 
-  public registerData(dataContext: IDataContext) {
-    const skillData = dataContext.data;
-    const dataProvider = dataContext.dataProvider;
-
-    super.registerData(dataContext);
+  public registerData(pkg: Package, data: any, dataProvider: IDataProvider) {
+    super.registerData(pkg, data, dataProvider);
   }
 }
 

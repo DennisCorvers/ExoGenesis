@@ -1,7 +1,7 @@
 import { Package } from "@game/core/Package";
 import { ResourceCollectionSkill } from "./ResourceCollectionSkill";
-import { IDataContext } from "@game/data/IDataContext";
 import { MineralNode } from "./requirements/MineralNode";
+import { IDataProvider } from "@game/data/IDataProvider";
 
 export class MineralHarvesting extends ResourceCollectionSkill<MineralNode> {
   constructor(pkg: Package) {
@@ -9,15 +9,12 @@ export class MineralHarvesting extends ResourceCollectionSkill<MineralNode> {
 
   }
 
-  public registerData(dataContext: IDataContext) {
-    const skillData = dataContext.data;
-    const dataProvider = dataContext.dataProvider;
-
+  public registerData(pkg: Package, data: any, dataProvider: IDataProvider) {
     // Override already set data?
-    skillData.recipes.forEach((recipeData: any) => {
-      super.registerRecipe(new MineralNode(dataContext.packageInfo, recipeData, dataProvider));
+    data.recipes.forEach((recipeData: any) => {
+      super.registerRecipe(new MineralNode(pkg, recipeData, dataProvider));
     });
 
-    super.registerData(dataContext);
+    super.registerData(pkg, data, dataProvider);
   }
 }

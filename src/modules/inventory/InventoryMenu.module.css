@@ -1,0 +1,111 @@
+.inventory {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.inventoryHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+.inventoryHeader h2 {
+    margin: 0;
+    font-size: 1rem;
+    letter-spacing: 0.0625rem;
+}
+
+.inventoryCount {
+    font-size: .8rem;
+}
+
+.inventoryTabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    margin: 10px 0;
+    height: 2.5rem;
+}
+
+.inventoryTab {
+    align-content: center;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    width: 100px;
+}
+
+.selectedTab {
+    border-bottom: 2px solid #333;
+    background-color: #eee;
+}
+
+.tabIcon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Sort options area */
+.inventorySort {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    margin-left: .5em;
+    margin-right: .5em;
+    height: 2.3rem;
+}
+
+.sortDropdown {
+    flex: 1;
+    padding: 5px;
+    height: 100%;
+    max-width: 250px;
+    font-family: inherit;
+    font-weight: 500;
+    margin-right: 10px;
+}
+
+.sortButton {
+    padding: 5px 10px;
+    margin-left: auto;
+    width: 80px;
+    height: 100%;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: .85em;
+}
+
+.inventoryContainer {
+    max-height: 400px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.inventoryContainer::-webkit-scrollbar {
+    width: 8px;
+}
+
+.inventoryContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.inventoryContainer::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+    border: 2px solid #f1f1f1;
+}
+
+.inventoryContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.inventorySearch input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+}

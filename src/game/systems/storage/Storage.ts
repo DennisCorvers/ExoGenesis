@@ -6,8 +6,12 @@ export class Storage implements IStorageManager {
     private m_items: Map<number, StorageSlot>;
     private m_storageSize: number;
 
-    public get items(): StorageSlot[] {
+    public get items(): IStorageSlot[] {
         return Array.from(this.m_items.values());
+    }
+
+    public get itemIterator() : IterableIterator<IStorageSlot>{
+        return this.m_items.values();
     }
 
     get storageSize(): number {
