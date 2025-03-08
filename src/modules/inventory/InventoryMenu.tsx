@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { act, useCallback, useEffect, useState } from "react";
 import { InventoryMenuItem } from "./InventoryMenuItem";
 import { IStorageSlot } from "@game/systems/storage/IStorageSlot";
 import { IDynamicViewProps } from "@modules/IDynamicViewProps";
@@ -16,32 +16,46 @@ export const InventoryMenu: React.FC<IDynamicViewProps> = ({ gameContext }) => {
     const inventoryLayout = gameContext.layout.inventoryLayout;
     const inventoryManager = gameContext.player.inventory;
 
-    const [activeTab, setActiveTab] = useState<IInventoryTab>();
-    const [inventory, setInventory] = useState<IStorageSlot[]>(inventoryManager.items);
+    const [selectedTab, setSelectedTab] = useState<string>(InventoryState.selectedTab!);
+    const [inventory, setInventory] = useState<IStorageSlot[]>();
     const [selectedItem, setSelectedItem] = useState<IStorageSlot | null>(null);
 
     const [maxCount, setMaxCount] = useState(inventoryManager.storageSize)
     const [itemCount, setItemCount] = useState(inventoryManager.itemCount)
 
+    const filterInventory = useCallback((tab: IInventoryTab) => (itemSlot: IStorageSlot) =>
+        tab.itemTypes.length === 0 || tab.itemTypes.includes(itemSlot.item.type), []
+    );
 
-    const handleTabSelection = (tab: IInventoryTab) => {
+    const handleTabSelection = useCallback((tab: IInventoryTab) => {
         console.log(`Selected tab: ${tab.tabName}`);
-        setActiveTab(tab);
+        InventoryState.selectedTab = tab.tabID;
+
         // Switch inventory to selected tab (by filtering items)
-    };
+        const sortedItems = inventoryManager.items
+            .filter(filterInventory(tab))
+            .sort((a, b) => a.item.displayName.localeCompare(b.item.displayName));
+
+        setInventory(sortedItems);
+    }, []);
 
     const onItemSelected = useCallback((storageSlot: IStorageSlot) => {
-        gameContext
+
+    }, []);
+
+    const updateInventory = useCallback((changedItem: IStorageSlot) => {
+
     }, []);
 
     useEffect(() => {
-        if (!InventoryState.selectedTab) {
-            InventoryState.selectedTab = inventoryLayout.inventoryTabs[0].tabID;
+        const tabs = inventoryLayout.inventoryTabs;
+        if (InventoryState.selectedTab == null) {
+            InventoryState.selectedTab = tabs[0]?.tabID;
         }
 
-        const updateInventory = (changedItem: IStorageSlot) => {
-
-        };
+        const tabToLoad = tabs.find(x => x.tabID === InventoryState.selectedTab) || tabs[0];
+        setSelectedTab(tabToLoad.tabID);
+        handleTabSelection(tabToLoad);
 
         return () => {
             // Remove event listener (if using real events)
@@ -59,7 +73,7 @@ export const InventoryMenu: React.FC<IDynamicViewProps> = ({ gameContext }) => {
             </header>
 
             {/* Tabs */}
-            <InventoryTabs initialActiveTab={InventoryState.selectedTab!} tabs={inventoryLayout.inventoryTabs} onTabSelect={handleTabSelection} />
+            <InventoryTabs initialActiveTab={selectedTab!} tabs={inventoryLayout.inventoryTabs} onTabSelect={handleTabSelection} />
 
             {/* Sort Options */}
             <div className={styles.inventorySort}>
@@ -73,7 +87,7 @@ export const InventoryMenu: React.FC<IDynamicViewProps> = ({ gameContext }) => {
 
             {/* Inventory Items */}
             <div className={styles.inventoryContainer}>
-                {inventory.map((slot: IStorageSlot) => (
+                {inventory?.map((slot: IStorageSlot) => (
                     <InventoryMenuItem key={slot.slotid} slot={slot} onSelect={onItemSelected} />
                 ))}
             </div>
