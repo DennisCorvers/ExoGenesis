@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { GameContext } from '@game/core/GameContext';
+import { IDynamicViewProps } from '@modules/IDynamicViewProps';
 import { BaseRecipe } from '@game/skills/requirements/BaseRecipe';
 import { MineralHarvestingState } from '@game/state/MineralHarvestingState';
 import { ActionEvent } from '@game/events/skill/ActionEvent';
@@ -10,11 +10,7 @@ import MineralNodeCard from './MineralNodeCard';
 import ProgressBar from '../common/ProgressBar';
 import './MineralHarvestingUI.css'
 
-interface MineralHarvestingUIProps {
-    gameContext: GameContext;
-}
-
-const MineralHarvestingUI: React.FC<MineralHarvestingUIProps> = ({ gameContext }) => {
+const MineralHarvestingUI: React.FC<IDynamicViewProps> = ({ gameContext }) => {
     const [progressBar, setProgressBar] = useState({ current: 0, total: 0 });
     const [nodeHealth, setNodeHealthBar] = useState({ current: 0, total: 0 });
     const [currentNode, setCurrentNode] = useState<BaseRecipe | null>(null);

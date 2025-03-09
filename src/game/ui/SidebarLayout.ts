@@ -1,6 +1,7 @@
 import { Skill } from "@game/skills/Skill";
 import { SidebarCategory, SidebarEntry } from "./SidebarEntry";
-import { IDataContext } from "@game/data/IDataContext";
+import { Package } from "@game/core/Package";
+import { IDataProvider } from "@game/data/IDataProvider";
 
 export class SidebarLayout {
     private m_sidebar: SidebarCategory[] = [];
@@ -13,7 +14,7 @@ export class SidebarLayout {
         this.m_sidebar = [];
     }
 
-    public getOrCreateCategory(categoryName: string): SidebarCategory {
+    private getOrCreateCategory(categoryName: string): SidebarCategory {
         let category = this.m_sidebar.find(category => category.name === categoryName);
 
         if (!category) {
@@ -25,10 +26,7 @@ export class SidebarLayout {
         return category;
     }
 
-    public registerData(dataContext: IDataContext) {
-        const data = dataContext.data;
-        const dataProvider = dataContext.dataProvider;
-
+    public registerData(pkg: Package, data: any, dataProvider: IDataProvider) {
         data.forEach((page: any) => {
             const categoryName = page.name;
             const items = page.items;
@@ -37,18 +35,18 @@ export class SidebarLayout {
             const category = this.getOrCreateCategory(categoryName);
 
             // Add items
-            items.forEach((item: any) => {
+            items.forEach((sidebarItem: any) => {
                 let skill: Skill | null = null;
-                if (item.skillID !== undefined) {
-                    skill = dataProvider.skills.getObject(item.skillID);
+                if (sidebarItem.skillID !== undefined) {
+                    skill = dataProvider.skills.getObject(sidebarItem.skillID);
                 }
 
                 category.addEntry(new SidebarEntry(
-                    item.id,
-                    item.icon,
-                    item.route,
-                    item.text,
-                    item.page,
+                    sidebarItem.id,
+                    sidebarItem.icon,
+                    sidebarItem.route,
+                    sidebarItem.text,
+                    sidebarItem.page,
                     skill,
                 ))
             });

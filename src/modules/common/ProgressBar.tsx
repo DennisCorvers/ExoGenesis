@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
+import { TICK_RATE } from '@game/core/Constants';
 import './ProgressBar.css'
 
 interface ProgressBarProps {
@@ -25,7 +26,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 
   const animationStyle = useMemo(() => {
     const delay = -current;
-    const duration = total;
+    const duration = total - (TICK_RATE / 1000);
     return {
       animation: `${duration}s linear ${delay}s 1 progressBar`,
       animationDirection: isReversed ? 'reverse' : 'normal',

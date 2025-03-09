@@ -1,0 +1,44 @@
+.inventory-entry {
+    display: flex;
+    height: 2em;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 .5em 0 .5em;
+    border: 1px solid blue;
+    cursor: pointer;
+}
+
+.inventory-entry.locked {
+    background-color: rgba(87, 130, 185, 0.2);
+}
+
+.inventory-itemicon {
+    width: 24px;
+    height: 24px;
+    border: brown;
+    margin-right: 8px;
+    min-width: 24px;
+    object-fit: contain;
+}
+
+.inventory-entry-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+}
+
+.inventory-entry-details div {
+    flex: 1;
+    text-align: right;
+    padding-left: 8px;
+}
+
+.inventory-entry-details .inventory-amount {
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: 50px;
+}
+

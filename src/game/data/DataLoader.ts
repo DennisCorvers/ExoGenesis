@@ -6,14 +6,14 @@ import { Item } from "@game/entities/Item";
 import { Package } from "@game/core/Package";
 import { BiomassExtraction, MineralHarvesting } from "@game/skills";
 import { GameContext } from "@game/core/GameContext";
-import { SidebarLayout } from "@game/ui/SidebarLayout";
 import { ItemBuilder } from "./Builders/ItemBuilder";
+import { LayoutRegistry } from "@game/core/Registries/LayoutRegistry";
 
 export class DataLoader implements IDataProvider {
     readonly packages: PackageRegistry;
     readonly skills: SkillRegistry;
     readonly items: NamedObjectRegistry<Item>;
-    readonly sidebar: SidebarLayout;
+    readonly layout: LayoutRegistry;
 
     private m_defaultPackage: Package;
 
@@ -21,7 +21,7 @@ export class DataLoader implements IDataProvider {
         this.packages = new PackageRegistry();
         this.skills = new SkillRegistry();
         this.items = new NamedObjectRegistry<Item>();
-        this.sidebar = new SidebarLayout();
+        this.layout = new LayoutRegistry();
 
         this.m_defaultPackage = this.packages.registerPackage('exo', 'ExoGenesis');
 
@@ -70,18 +70,14 @@ export class DataLoader implements IDataProvider {
             this.registerItems(pkg, data.items);
         if (data.skills != null)
             this.registerSkills(pkg, data.skills);
-        if (data.sidebar != null)
-            this.registerSidebar(pkg, data.sidebar);
+        if (data.layout != null)
+            this.registerLayout(pkg, data.layout);
     }
 
     private registerSkills(pkg: Package, skillsData: any) {
         skillsData.forEach((skillData: any) => {
             const skill = this.skills.getObject(skillData.id);
-            skill.registerData({
-                packageInfo: pkg,
-                data: skillData,
-                dataProvider: this
-            });
+            skill.registerData(pkg, skillData, this);
         });
     }
 
@@ -90,8 +86,8 @@ export class DataLoader implements IDataProvider {
         itemBuilder.registerItems(pkg, itemData);
     }
 
-    private registerSidebar(pkg: Package, sidebarData: any) {
-        this.sidebar.registerData({ packageInfo: pkg, data: sidebarData, dataProvider: this });
+    private registerLayout(pkg: Package, layoutData: any) {
+        this.layout.registerData(pkg, layoutData, this);
     }
 
     public createGameContext(): GameContext {

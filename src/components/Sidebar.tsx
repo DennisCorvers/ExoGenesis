@@ -3,12 +3,12 @@ import { useActiveView } from "@modules/common/ActiveViewProvider";
 import SidebarItem from './Sidebar/SidebarItem'
 import ChevronDown from "@assets/icons/chevron-down.svg";
 import ChevronRight from "@assets/icons/chevron-right.svg";
-import "./Sidebar.css";
-import { GameContext } from "@game/core/GameContext";
 import { ISidebarCategory, ISidebarEntry } from "@game/ui/ISidebarEntry";
+import { IGameContext } from "@game/core/IGameContext";
+import "./Sidebar.css";
 
 interface SidebarUIProps {
-    gameContext: GameContext;
+    gameContext: IGameContext;
 }
 
 const Sidebar: React.FC<SidebarUIProps> = ({ gameContext }) => {

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { GameContext } from "./GameContext";
+import { TICK_RATE } from "./Constants";
 
-const TICK_RATE = 1000 / 60;
 
 export default function Ticker({ gameContext }: { gameContext: GameContext }) {
   const requestRef = useRef<number | null>(null);

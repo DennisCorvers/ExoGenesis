@@ -1,8 +1,8 @@
 import React, { Suspense, useMemo } from "react";
 import { useActiveView } from "./common/ActiveViewProvider";
-import { GameContext } from "@game/core/GameContext";
 import { ISidebarEntry } from "@game/ui/ISidebarEntry";
 import ErrorBoundary from "./common/ErrorBoundary";
+import { GameContext } from "@game/core/GameContext";
 
 interface GameScreenProps {
   gameContext: GameContext;
@@ -16,9 +16,13 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
     const modules = import.meta.glob(
       [
         '../modules/*/**.tsx',
-        '!../modules/common/**'
+        '!../modules/common/**',
       ]
     );
+
+    // Pre-load all modules.
+    Object.values(modules).forEach(x => x());
+
     const components: { [key: string]: React.LazyExoticComponent<React.FC<any>> } = {};
 
     const isEmpty = (str: string): boolean => {
@@ -72,10 +76,8 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
   return (
     <div>
       <ErrorBoundary fallback={<div>Error loading component.</div>}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <h2>Game Screen</h2>
-          {ActiveViewComponent ? <ActiveViewComponent gameContext={gameContext} /> : null}
-        </Suspense>
+        <h2>Game Screen</h2>
+        {ActiveViewComponent ? <ActiveViewComponent gameContext={gameContext} /> : null}
       </ErrorBoundary>
     </div>
   );

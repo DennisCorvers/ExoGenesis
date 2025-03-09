@@ -1,4 +1,3 @@
-import { IDataContext } from "@game/data/IDataContext";
 import { NamedObjectRegistry } from "./NamedObjectRegistry";
 import { BiomassExtraction, MineralHarvesting, Skill } from "@game/skills";
 
@@ -34,15 +33,5 @@ export class SkillRegistry extends NamedObjectRegistry<Skill> {
         super.registerObject(skill);
         this.m_skillTypeMap.set(skill.constructor, skill);
         return skill;
-    }
-
-    public getOrAddSkill<T extends Skill>(skill: new (...args: any[]) => T, dataContext: IDataContext): T {
-        let skillInstance = this.getSkillSafe(skill);
-
-        if (skillInstance === null) {
-            skillInstance = new skill(dataContext);
-            this.registerObject(skillInstance);
-        }
-        return skillInstance;
     }
 }
