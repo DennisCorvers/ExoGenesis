@@ -8,7 +8,7 @@ import { useEventSubscription } from '../../hooks/EventSubscription'
 import { MineralNode } from '@game/skills/requirements/MineralNode';
 import MineralNodeCard from './MineralNodeCard';
 import ProgressBar from '../common/ProgressBar';
-import './MineralHarvestingUI.css'
+import './MineralHarvestingView.css'
 
 const MineralHarvestingUI: React.FC<IDynamicViewProps> = ({ gameContext }) => {
     const [progressBar, setProgressBar] = useState({ current: 0, total: 0 });

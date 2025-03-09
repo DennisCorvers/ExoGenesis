@@ -3,10 +3,10 @@ import { InventoryMenuItem } from "./InventoryMenuItem";
 import { IStorageSlot } from "@game/systems/storage/IStorageSlot";
 import { IDynamicViewProps } from "@modules/IDynamicViewProps";
 import { InventoryTabs } from "./InventoryTabs";
-import { IInventoryTab } from "@game/ui/IInventoryTab";
 import { InventorySorting } from "./InventorySorting";
 import styles from './InventoryMenu.module.css';
 
+{/*
 const sortOptions: string[] = [
     'Name',
     'Value',
@@ -111,7 +111,6 @@ export const InventoryMenu: React.FC<IDynamicViewProps> = ({ gameContext }) => {
 
     return (
         <div className={styles.inventory}>
-            {/* Header */}
             <header className={styles.inventoryHeader}>
                 <h2>Inventory</h2>
                 <span className={styles.inventoryCount}>
@@ -119,34 +118,29 @@ export const InventoryMenu: React.FC<IDynamicViewProps> = ({ gameContext }) => {
                 </span>
             </header>
 
-            {/* Tabs */}
             <InventoryTabs
                 initialActiveTab={inventoryOptions.selectedTab!}
                 tabs={inventoryLayout.inventoryTabs}
                 onTabSelect={handleTabSelection} />
 
-            {/* Sort Options */}
             <InventorySorting
                 initialSort={inventoryOptions.selectedSort!}
                 sortOptions={sortOptions}
                 sortDescending={inventoryOptions.sortDescending}
                 onSortClick={onSortClick} />
 
-            {/* Inventory Items */}
             <div className={styles.inventoryContainer}>
                 {inventory?.map((slot: IStorageSlot) => (
                     <InventoryMenuItem key={slot.slotid} slot={slot} onSelect={onItemSelected} />
                 ))}
             </div>
 
-            {/* Search Box */}
-            {/*
             <div className={styles.inventorySearch}>
                 <input type="text" placeholder="Search inventory..." />
             </div>
-            */}
         </div>
     );
 };
 
 export default InventoryMenu;
+*/}
