@@ -1,14 +1,29 @@
 .sidebar {
-    width: 240px;
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     z-index: 1;
     height: 100%;
+    width: 240px;
     overflow-y: auto;
     background-color: darkslategray;
 }
+
+/*
+@media (min-width: 992px) {
+    .sidebar {
+        width: 240px;
+    }
+}
+
+@media (min-width: 992px) {
+    .sidebar {
+        -webkit-transform: translateX(0) translateY(0) translateZ(0);
+        transform: translateX(0) translateY(0) translateZ(0);
+    }
+}
+*/
 
 .sidebar-nav {
     padding-left: 0;

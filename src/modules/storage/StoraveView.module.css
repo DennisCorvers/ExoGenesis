@@ -1,11 +1,9 @@
 .storageContainer {
-    width: 800px;
+    width: 100%;
     margin: 20px auto;
     background: #2b2b2b;
-    padding: 15px;
     border: 2px solid #555;
     border-radius: 8px;
-    font-family: 'Arial', sans-serif;
     color: #fff;
 }
 
@@ -13,7 +11,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    padding: 10px;
 }
 
 .storageHeader h2 {
