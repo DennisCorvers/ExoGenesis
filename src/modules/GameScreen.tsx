@@ -76,10 +76,8 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
   return (
     <div>
       <ErrorBoundary fallback={<div>Error loading component.</div>}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <h2>Game Screen</h2>
-          {ActiveViewComponent ? <ActiveViewComponent gameContext={gameContext} /> : null}
-        </Suspense>
+        <h2>Game Screen</h2>
+        {ActiveViewComponent ? <ActiveViewComponent gameContext={gameContext} /> : null}
       </ErrorBoundary>
     </div>
   );
