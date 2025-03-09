@@ -16,9 +16,13 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
     const modules = import.meta.glob(
       [
         '../modules/*/**.tsx',
-        '!../modules/common/**'
+        '!../modules/common/**',
       ]
     );
+
+    // Pre-load all modules.
+    Object.values(modules).forEach(x => x());
+
     const components: { [key: string]: React.LazyExoticComponent<React.FC<any>> } = {};
 
     const isEmpty = (str: string): boolean => {
