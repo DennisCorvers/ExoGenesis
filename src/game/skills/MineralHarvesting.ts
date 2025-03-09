@@ -5,7 +5,7 @@ import { IDataProvider } from "@game/data/IDataProvider";
 
 export class MineralHarvesting extends ResourceCollectionSkill<MineralNode> {
   constructor(pkg: Package) {
-    super(pkg, 'mineralharvesting', 'Mineral Harvesting', '/assets/images/skills/mineralharvesting/mineralharvesting.svg');
+    super(pkg, 'mining', 'Mining', '/assets/images/skills/mining/mining.svg');
 
   }
 
