@@ -4,63 +4,110 @@ import { IStorageSlot } from "@game/systems/storage/IStorageSlot";
 import { IDynamicViewProps } from "@modules/IDynamicViewProps";
 import { InventoryTabs } from "./InventoryTabs";
 import { IInventoryTab } from "@game/ui/IInventoryTab";
+import { InventorySorting } from "./InventorySorting";
 import styles from './InventoryMenu.module.css';
 
-// Dirty way to keep the inventory state through the duration of the app.
-// We do not care about persisting this.
-class InventoryState {
-    static selectedTab: string | null;
+const sortOptions: string[] = [
+    'Name',
+    'Value',
+    'Locked'
+];
+
+const filterInventory = (tab: IInventoryTab) => (itemSlot: IStorageSlot) => {
+    return tab.itemTypes.length === 0 || tab.itemTypes.includes(itemSlot.item.type)
+}
+
+interface InventoryOptions {
+    selectedSort: string | null,
+    selectedTab: IInventoryTab | null,
+    sortDescending: boolean,
 }
 
 export const InventoryMenu: React.FC<IDynamicViewProps> = ({ gameContext }) => {
     const inventoryLayout = gameContext.layout.inventoryLayout;
     const inventoryManager = gameContext.player.inventory;
+    const layoutConfig = gameContext.player.layoutConfig;
 
-    const [selectedTab, setSelectedTab] = useState<string>(InventoryState.selectedTab!);
+    const [inventoryOptions, setInventoryOptions] = useState<InventoryOptions>({
+        selectedTab: null,
+        selectedSort: 'Name',
+        sortDescending: false,
+    });
+
     const [inventory, setInventory] = useState<IStorageSlot[]>();
     const [selectedItem, setSelectedItem] = useState<IStorageSlot | null>(null);
 
     const [maxCount, setMaxCount] = useState(inventoryManager.storageSize)
     const [itemCount, setItemCount] = useState(inventoryManager.itemCount)
 
-    const filterInventory = useCallback((tab: IInventoryTab) => (itemSlot: IStorageSlot) =>
-        tab.itemTypes.length === 0 || tab.itemTypes.includes(itemSlot.item.type), []
-    );
-
     const handleTabSelection = useCallback((tab: IInventoryTab) => {
-        console.log(`Selected tab: ${tab.tabName}`);
-        InventoryState.selectedTab = tab.tabID;
-
-        // Switch inventory to selected tab (by filtering items)
-        const sortedItems = inventoryManager.items
-            .filter(filterInventory(tab))
-            .sort((a, b) => a.item.displayName.localeCompare(b.item.displayName));
-
-        setInventory(sortedItems);
+        console.log("tab select");
+        layoutConfig.selectedInventoryTab = tab.tabID;
+        setInventoryOptions((prev) => ({
+            ...prev,
+            selectedTab: tab,
+        }));
     }, []);
 
-    const onItemSelected = useCallback((storageSlot: IStorageSlot) => {
+    const onSortClick = useCallback((sortOption: string) => {
+        console.log('sort click')
+        layoutConfig.selectedInventorySort = sortOption;
+        setInventoryOptions((prev) => ({
+            ...prev,
+            selectedSort: sortOption,
+        }));
+    }, [])
 
+    const onItemSelected = useCallback((storageSlot: IStorageSlot) => {
+        console.log("Selected item" + storageSlot.item.displayName);
+        // TODO: signal to details window to load the given slot.
     }, []);
 
     const updateInventory = useCallback((changedItem: IStorageSlot) => {
 
     }, []);
 
+    const sortInventory = () => {
+        // TODO: Add sort option filtering.
+        // Switch inventory to selected tab (by filtering items)
+        const selectedTab = inventoryOptions.selectedTab;
+        const filteredItems = inventoryManager.items
+            .filter(filterInventory(selectedTab!))
+            .sort((a, b) => a.item.displayName.localeCompare(b.item.displayName));
+
+        setInventory(filteredItems);
+    };
+
     useEffect(() => {
         const tabs = inventoryLayout.inventoryTabs;
-        if (InventoryState.selectedTab == null) {
-            InventoryState.selectedTab = tabs[0]?.tabID;
+        if (layoutConfig.selectedInventoryTab == null) {
+            layoutConfig.selectedInventoryTab = tabs[0]?.tabID;
         }
 
-        const tabToLoad = tabs.find(x => x.tabID === InventoryState.selectedTab) || tabs[0];
-        setSelectedTab(tabToLoad.tabID);
-        handleTabSelection(tabToLoad);
+        if (layoutConfig.selectedInventorySort == null) {
+            layoutConfig.selectedInventorySort = sortOptions[0];
+        }
+
+        const tabToLoad = tabs.find(x => x.tabID === layoutConfig.selectedInventoryTab) || tabs[0];
+
+        setInventoryOptions({
+            selectedTab: tabToLoad,
+            selectedSort: layoutConfig.selectedInventorySort,
+            sortDescending: false
+        });
 
         return () => {
             // Remove event listener (if using real events)
         };
     }, [gameContext]);
+
+    useEffect(() => {
+        if (!inventoryOptions.selectedTab || !inventoryOptions.selectedSort) {
+            return;
+        }
+
+        sortInventory();
+    }, [inventoryOptions])
 
     return (
         <div className={styles.inventory}>
@@ -73,17 +120,17 @@ export const InventoryMenu: React.FC<IDynamicViewProps> = ({ gameContext }) => {
             </header>
 
             {/* Tabs */}
-            <InventoryTabs initialActiveTab={selectedTab!} tabs={inventoryLayout.inventoryTabs} onTabSelect={handleTabSelection} />
+            <InventoryTabs
+                initialActiveTab={inventoryOptions.selectedTab!}
+                tabs={inventoryLayout.inventoryTabs}
+                onTabSelect={handleTabSelection} />
 
             {/* Sort Options */}
-            <div className={styles.inventorySort}>
-                <select className={styles.sortDropdown}>
-                    <option value="name">Name</option>
-                    <option value="amount">Amount</option>
-                    <option value="attack">Attack</option>
-                </select>
-                <button className={styles.sortButton}>Sort</button>
-            </div>
+            <InventorySorting
+                initialSort={inventoryOptions.selectedSort!}
+                sortOptions={sortOptions}
+                sortDescending={inventoryOptions.sortDescending}
+                onSortClick={onSortClick} />
 
             {/* Inventory Items */}
             <div className={styles.inventoryContainer}>
