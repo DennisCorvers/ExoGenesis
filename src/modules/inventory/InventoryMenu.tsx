@@ -60,7 +60,7 @@ export const InventoryMenu: React.FC<IDynamicViewProps> = ({ gameContext }) => {
 
     const onItemSelected = useCallback((storageSlot: IStorageSlot) => {
         console.log("Selected item" + storageSlot.item.displayName);
-        // TODO: signal to details window to load the given slot.
+        setSelectedItem(storageSlot);
     }, []);
 
     const updateInventory = useCallback((changedItem: IStorageSlot) => {
@@ -140,9 +140,11 @@ export const InventoryMenu: React.FC<IDynamicViewProps> = ({ gameContext }) => {
             </div>
 
             {/* Search Box */}
+            {/*
             <div className={styles.inventorySearch}>
                 <input type="text" placeholder="Search inventory..." />
             </div>
+            */}
         </div>
     );
 };
