@@ -1,0 +1,79 @@
+.storageContainer {
+    width: 800px;
+    margin: 20px auto;
+    background: #2b2b2b;
+    padding: 15px;
+    border: 2px solid #555;
+    border-radius: 8px;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+}
+
+.storageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.storageHeader h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.storageCount {
+    font-size: 16px;
+    color: #ccc;
+}
+
+.storageControls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.storageSearch {
+    flex: 1;
+    padding: 5px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 4px;
+}
+
+.storageGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 60px);
+    gap: 5px;
+}
+
+.storageItem {
+    width: 60px;
+    height: 60px;
+    background-color: #3c3c3c;
+    border: 1px solid #666;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.storageItem img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.storageItemAmount {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1px 3px;
+    border-radius: 2px;
+    font-size: 10px;
+}
+
+.storageItemEmpty {
+    background-color: transparent;
+    border: 1px dashed #666;
+}

@@ -12,17 +12,12 @@ import { ILayoutConfig, LayoutConfig } from "@game/ui/LayoutConfig";
 export class Player implements IPlayerContext, ISerializable, IUpdatable {
     protected gameContext: IGameContext;
     private m_name: string;
-    private m_inventory: IStorageManager;
     private m_storage: IStorageManager;
     private m_skillManager: SkillManager;
     private m_layoutPreferences: ILayoutConfig;
 
     public get name(): string {
         return this.m_name;
-    }
-
-    public get inventory(): IStorageManager {
-        return this.m_inventory;
     }
 
     public get skillManager(): ISkillManager {
@@ -39,7 +34,6 @@ export class Player implements IPlayerContext, ISerializable, IUpdatable {
 
     constructor(game: IGameContext) {
         this.m_name = "Test Player";
-        this.m_inventory = new Inventory();
         this.m_storage = new Storage();
         this.m_skillManager = new SkillManager(game, this);
         this.gameContext = game;

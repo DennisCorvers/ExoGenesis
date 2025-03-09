@@ -19,8 +19,8 @@ export class TestPlayer extends Player {
             return;
         }
 
-        this.inventory.addItem(pickaxe, 1);
-        const skill = <MineralHarvestingState>this.skillManager.getSkillStateByID('exo.mineralharvesting');
+        this.storage.addItem(pickaxe, 1);
+        const skill = <MineralHarvestingState>this.skillManager.getSkillStateByID('exo.mining');
         skill.selectedPickaxe = <Miningtool>pickaxe;
     }
 }

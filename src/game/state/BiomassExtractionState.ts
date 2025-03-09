@@ -17,22 +17,12 @@ export class BiomassExtractionState extends SkillState<SimpleHarvestRecipe> {
     }
 
     protected onActionComplete(completedAction: SimpleHarvestRecipe): void {
-        // Add items and experience rewards.
-        this.player.inventory.addItem(completedAction.item, completedAction.amount);
-        this.addExperience(completedAction.experienceReward);
-
-
-        const event = new ActionEvent(this, completedAction, true)
-        //EventBus.instance.publish("mineralharvesting.action", event);
     }
 
-    protected onActionStopped(stoppedAction: SimpleHarvestRecipe, reason : ActionStoppedReason): void {
-        const event = new ActionStoppedEvent(this, stoppedAction, reason);
-        //EventBus.instance.publish("mineralharvesting.stop", event);
+    protected onActionStopped(stoppedAction: SimpleHarvestRecipe, reason: ActionStoppedReason): void {
     }
 
     public canStartAction(action: SimpleHarvestRecipe): ActionStartResult {
-        // TODO : Check for pickaxe / drill
         return ActionStartResult.success();
     }
 }
