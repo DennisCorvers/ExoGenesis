@@ -26,9 +26,11 @@ export const InventorySorting: React.FC<InventorySortingProps> = React.memo(({ s
                 className={styles.sortDropdown}
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value)}>
-                <option value="name">Name</option>
-                <option value="amount">Amount</option>
-                <option value="attack">Attack</option>
+                {sortOptions.map((option) => (
+                    <option key={option} value={option}>
+                        {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </option>
+                ))}
             </select>
             <button className={styles.sortButton} onClick={handleSortClick}>Sort</button>
         </div>
