@@ -5,14 +5,14 @@ import { IGameContext } from "../core/IGameContext";
 import { IPlayerContext } from "../systems/IPlayerContext";
 import { ISkillManager } from "../systems/ISkillManager";
 import { IStorageManager } from "@game/systems/storage/IStorageManager";
-import { Inventory } from "@game/systems/storage/Inventory";
 import { Storage } from "@game/systems/storage/Storage";
 import { ILayoutConfig, LayoutConfig } from "@game/ui/LayoutConfig";
+import { IPlayerStorage } from "@game/systems/storage/IPlayerStorage";
 
 export class Player implements IPlayerContext, ISerializable, IUpdatable {
     protected gameContext: IGameContext;
     private m_name: string;
-    private m_storage: IStorageManager;
+    private m_storage: IPlayerStorage;
     private m_skillManager: SkillManager;
     private m_layoutPreferences: ILayoutConfig;
 
@@ -24,7 +24,7 @@ export class Player implements IPlayerContext, ISerializable, IUpdatable {
         return this.m_skillManager;
     }
 
-    public get storage(): IStorageManager {
+    public get storage(): IPlayerStorage {
         return this.m_storage;
     }
 

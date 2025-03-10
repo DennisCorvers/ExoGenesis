@@ -1,17 +1,21 @@
 import { Item } from "@game/entities/Item";
 import { IStorageSlot } from "./IStorageSlot";
 import { IStorageManager } from "./IStorageManager";
+import { IStorageTab } from "./IStorageTab";
 
 export class Storage implements IStorageManager {
-    private m_items: Map<number, StorageSlot>;
+    private m_itemLookup: Map<number, StorageSlot>;
+    private m_items: StorageSlot[];
+    private m_storageTabs: IStorageTab[];
     private m_storageSize: number;
 
-    public get items(): IStorageSlot[] {
-        return Array.from(this.m_items.values());
+    public get items(): readonly IStorageSlot[] {
+        return Array.from(this.m_itemLookup.values());
+        //return this.m_items;
     }
 
-    public get itemIterator() : IterableIterator<IStorageSlot>{
-        return this.m_items.values();
+    public get storageTabs(): readonly IStorageTab[] {
+        return this.m_storageTabs;
     }
 
     get storageSize(): number {
@@ -19,12 +23,17 @@ export class Storage implements IStorageManager {
     }
 
     get itemCount(): number {
-        return this.m_items.size;
+        return this.m_itemLookup.size;
     }
 
     constructor() {
-        this.m_items = new Map<number, StorageSlot>();
+        this.m_itemLookup = new Map<number, StorageSlot>();
+        this.m_storageTabs = [];
+        this.m_items = [];
         this.m_storageSize = 100;
+
+        // Default tab that is always present.
+        this.m_storageTabs.push({ tabIndex: 0 });
     }
 
     public addItem(item: Item, amount: number): number {
@@ -32,32 +41,32 @@ export class Storage implements IStorageManager {
             throw new Error("Amount cannot be negative");
         }
 
-        let slot = this.m_items.get(item.uid);
+        let slot = this.m_itemLookup.get(item.uid);
         if (slot) {
             slot.amount += amount;
             return amount;
         }
 
-        if (this.m_items.size >= this.m_storageSize)
+        if (this.m_itemLookup.size >= this.m_storageSize)
             return 0;
 
         slot = new StorageSlot(item, amount, false);
-        this.m_items.set(item.uid, slot);
+        this.m_itemLookup.set(item.uid, slot);
 
         return amount;
     }
 
     public hasItem(item: Item): boolean {
-        return this.m_items.get(item.uid) != null;
+        return this.m_itemLookup.get(item.uid) != null;
     }
 
     public hasItemAmount(item: Item, amount: number): boolean {
-        const slot = this.m_items.get(item.uid);
+        const slot = this.m_itemLookup.get(item.uid);
         return (slot != null && slot.amount >= amount);
     }
 
     public getItemCount(item: Item): number {
-        return this.m_items.get(item.uid)?.amount || 0;
+        return this.m_itemLookup.get(item.uid)?.amount || 0;
     }
 
     public removeStorageSlotQuantity(targetSlot: IStorageSlot, requestedAmount: number): number {
@@ -65,13 +74,13 @@ export class Storage implements IStorageManager {
     }
 
     public removeItemQuantity(item: Item, requestedAmount: number): number {
-        const slot = this.m_items.get(item.uid);
+        const slot = this.m_itemLookup.get(item.uid);
         if (!slot) {
             throw new Error(`Item ${item.id} does not exist in inventory.`);
         }
 
         if (slot.amount <= requestedAmount) {
-            this.m_items.delete(item.uid);
+            this.m_itemLookup.delete(item.uid);
             return slot.amount;
         }
         else {
@@ -81,7 +90,7 @@ export class Storage implements IStorageManager {
     }
 
     public removeAllOfItem(item: Item): number {
-        const slot = this.m_items.get(item.uid);
+        const slot = this.m_itemLookup.get(item.uid);
         if (!slot) {
             throw new Error(`Item ${item.id} does not exist in inventory.`);
         }
@@ -93,18 +102,18 @@ export class Storage implements IStorageManager {
             slot.amount = 0;
         }
         else {
-            this.m_items.delete(item.uid);
+            this.m_itemLookup.delete(item.uid);
         }
 
         return amount;
     }
 
     public deleteStorageSlot(targetSlot: IStorageSlot): boolean {
-        return this.m_items.delete(targetSlot.item.uid);
+        return this.m_itemLookup.delete(targetSlot.item.uid);
     }
 
     public getStorageSlot(item: Item): IStorageSlot | null {
-        return this.m_items.get(item.uid) || null;
+        return this.m_itemLookup.get(item.uid) || null;
     }
 
     findItems(predicate: (item: IStorageSlot) => boolean): IStorageSlot[] {

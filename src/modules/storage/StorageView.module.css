@@ -11,16 +11,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: #fff;
     padding: 10px;
 }
 
 .storageHeader h2 {
     margin: 0;
-    font-size: 24px;
+    font-size: 1.25rem;
+    letter-spacing: 0.0625rem;
 }
 
 .storageCount {
-    font-size: 16px;
+    font-size: .9rem;
     color: #ccc;
 }
 
@@ -74,4 +76,29 @@
 .storageItemEmpty {
     background-color: transparent;
     border: 1px dashed #666;
+}
+
+.storageTabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    margin: 10px 0;
+    height: 2.5rem;
+}
+
+.storageTab {
+    align-content: center;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    width: 100px;
+}
+
+.selectedTab {
+    border-bottom: 2px solid #333;
+    background-color: #eee;
+}
+
+.tabIcon {
+    width: 24px;
+    height: 24px;
 }

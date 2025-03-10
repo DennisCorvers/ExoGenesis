@@ -1,11 +1,13 @@
 import { Item } from "@game/entities/Item";
 import { IStorageSlot } from "./IStorageSlot";
+import { IStorageTab } from "./IStorageTab";
 
 export interface IStorageManager {
     get storageSize(): number;
+
     get itemCount(): number;
 
-    get items() : IStorageSlot[];
+    get items() : readonly IStorageSlot[];
 
     addItem(item: Item, amount: number): number;
 
