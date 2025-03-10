@@ -84,14 +84,15 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
                 initialActiveTab={storageTabs[0]}
                 tabs={storageTabs}
                 onTabSelect={handleTabSelection} />
-
-            <div className={styles.storageGrid}>
-                {items.map(slot => (
-                    <div key={slot.slotid} className={styles.storageItem}>
-                        <img src={slot.item.media} alt={slot.item.displayName} className={styles.storageItemIcon} />
-                        <div className={styles.storageItemAmount}>{slot.amount}</div>
-                    </div>
-                ))}
+            <div className={styles.storageGridWrapper}>
+                <div className={styles.storageGrid}>
+                    {items.map(slot => (
+                        <div key={slot.slotid} className={styles.storageItem}>
+                            <img src={slot.item.media} alt={slot.item.displayName} className={styles.storageItemIcon} />
+                            <div className={styles.storageItemAmount}>{slot.amount}</div>
+                        </div>
+                    ))}
+                </div>
             </div>
 
             <div className={styles.storeControls}>
