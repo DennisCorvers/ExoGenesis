@@ -1,6 +1,5 @@
 import { Item } from "@game/entities/Item";
 import { IStorageSlot } from "./IStorageSlot";
-import { IStorageTab } from "./IStorageTab";
 
 export interface IStorageManager {
     get storageSize(): number;
@@ -14,15 +13,11 @@ export interface IStorageManager {
     hasItemAmount(item: Item, amount: number): boolean;
 
     getItemCount(item: Item) : number;
-    
-    removeStorageSlotQuantity(targetSlot: IStorageSlot, requestedAmount: number): number;
-    
+
     removeItemQuantity(item: Item, requestedAmount: number): number;
 
     removeAllOfItem(item: Item): number;
 
-    deleteStorageSlot(targetSlot: IStorageSlot): boolean;
-
-    findItems(predicate: (item: IStorageSlot) => boolean): IStorageSlot[];
+    filterItems(predicate: (item: IStorageSlot) => boolean): readonly IStorageSlot[]
 }
 
