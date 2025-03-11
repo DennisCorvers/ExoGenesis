@@ -78,9 +78,7 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
     }, [gameContext])
 
     useEffect(() => {
-        if (!selectedTab) {
-            sortStorage();
-        }
+        sortStorage();
     }, [selectedTab])
 
     useEventSubscription(`storage.itemChanged`, onItemChanged);
