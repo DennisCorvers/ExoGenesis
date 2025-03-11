@@ -6,13 +6,15 @@ export interface IStorageManager {
 
     get itemCount(): number;
 
-    get items() : readonly IStorageSlot[];
+    get items(): readonly IStorageSlot[];
 
     addItem(item: Item, amount: number): number;
 
+    getItem(item: Item): IStorageSlot;
+
     hasItemAmount(item: Item, amount: number): boolean;
 
-    getItemCount(item: Item) : number;
+    getItemCount(item: Item): number;
 
     removeItemQuantity(item: Item, requestedAmount: number): number;
 

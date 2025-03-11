@@ -4,7 +4,6 @@ import { ISerializable } from "../data/ISerializable";
 import { IGameContext } from "../core/IGameContext";
 import { IPlayerContext } from "../systems/IPlayerContext";
 import { ISkillManager } from "../systems/ISkillManager";
-import { IStorageManager } from "@game/systems/storage/IStorageManager";
 import { Storage } from "@game/systems/storage/Storage";
 import { ILayoutConfig, LayoutConfig } from "@game/ui/LayoutConfig";
 import { IPlayerStorage } from "@game/systems/storage/IPlayerStorage";

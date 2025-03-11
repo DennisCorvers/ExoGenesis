@@ -3,7 +3,9 @@ import { IStorageSlot } from "./IStorageSlot";
 import { IPlayerStorage } from "./IPlayerStorage";
 import { IStorageTab } from "./IStorageTab";
 import { EventBus } from "@game/events/EventBus";
-import { ItemAmountChangedEvent } from "@game/events/storage/ItemAmountChangedEvent";
+import { ItemChangedEvent } from "@game/events/storage/ItemChangedEvent";
+import { SizeChangedEvent } from "@game/events/storage/SizeChangedEvent";
+import { TabsChangedEvent } from "@game/events/storage/TabsChangedEvent";
 
 export class Storage implements IPlayerStorage {
     private m_itemLookup: Map<number, StorageSlot>;
@@ -21,6 +23,12 @@ export class Storage implements IPlayerStorage {
 
     public get storageSize(): number {
         return this.m_storageSize;
+    }
+
+    public set storageSize(maxSize: number) {
+        this.m_storageSize = maxSize;
+        const event = new SizeChangedEvent(this.m_itemLookup.size, this.m_storageSize);
+        EventBus.instance.publish('storage.sizeChanged', event);
     }
 
     public get itemCount(): number {
@@ -65,9 +73,10 @@ export class Storage implements IPlayerStorage {
             const targetTab = this.getItemDefaultTab(item);
             slot = targetTab.addNewItem(item, amount);
             this.m_itemLookup.set(item.uid, slot);
+            EventBus.instance.publish('storage.sizeChanged', new SizeChangedEvent(this.m_itemLookup.size, this.m_storageSize));
         }
 
-        const event = new ItemAmountChangedEvent(item, oldAmount, slot.amount);
+        const event = new ItemChangedEvent(item, oldAmount, slot.amount);
         EventBus.instance.publish('storage.itemChanged', event);
         return amount;
     }
@@ -99,6 +108,7 @@ export class Storage implements IPlayerStorage {
             }
             // Remove slot entirely if it's not locked.
             else {
+                const slotIndex = slot.itemIndex;
                 const tab = this.m_storageTabs[slot.tabIndex];
                 tab.removeStorageSlot(slot);
 
@@ -107,10 +117,16 @@ export class Storage implements IPlayerStorage {
                 }
 
                 this.m_itemLookup.delete(itemID);
+
+                // If the deleted item was in index 0, tab item needs to change.
+                if (slotIndex === 0) {
+                    EventBus.instance.publish('storage.tabsChanged', new TabsChangedEvent());
+                }
+                EventBus.instance.publish('storage.sizeChanged', new SizeChangedEvent(this.m_itemLookup.size, this.m_storageSize));
             }
         }
 
-        const event = new ItemAmountChangedEvent(slot.item, oldamount, slot.amount);
+        const event = new ItemChangedEvent(slot.item, oldamount, slot.amount);
         EventBus.instance.publish('storage.itemChanged', event);
         return satisfiedamount;
     }
@@ -122,6 +138,15 @@ export class Storage implements IPlayerStorage {
 
     public addItem(item: Item, amount: number): number {
         return this.innerAddItem(item, amount);
+    }
+
+    public getItem(item: Item): IStorageSlot {
+        const slot = this.m_itemLookup.get(item.uid);
+        if (!slot) {
+            throw new Error('Item does not exist in storage.');
+        }
+
+        return slot;
     }
 
     public removeItemQuantity(item: Item, amount: number): number {
@@ -157,9 +182,12 @@ export class Storage implements IPlayerStorage {
         return filtered;
     }
 
-    public moveItemToTab(item: IStorageSlot, tabID: number | undefined): boolean {
+    public moveItemToTab(item: IStorageSlot, tabID: number | null): boolean {
         const slot = this.m_itemLookup.get(item.slotid);
         if (!slot) return false;
+
+        let needsUpdate = slot.itemIndex === 0;
+        const tabCount = this.tabCount;
 
         const tabFrom = this.getTab(slot.tabIndex);
         if (!tabFrom) return false;
@@ -167,16 +195,24 @@ export class Storage implements IPlayerStorage {
         const tabTo = this.getOrAddTab(tabID);
         if (!tabTo) return false;
 
+        needsUpdate ||= this.tabCount > tabCount;
+
         tabFrom.removeStorageSlot(slot);
         tabTo.addStorageSlot(slot);
 
-        if (tabFrom.itemCount === 0)
+        if (tabFrom.itemCount === 0) {
             this.ratifyTabs();
+            needsUpdate = true;
+        }
+
+        if (needsUpdate) {
+            EventBus.instance.publish('storage.tabsChanged', new TabsChangedEvent());
+        }
 
         return true;
     }
 
-    public moveItemsToTab(items: IStorageSlot[], tabID: number | undefined): boolean {
+    public moveItemsToTab(items: IStorageSlot[], tabID: number | null = null): boolean {
         if (items.length === 1) {
             return this.moveItemToTab(items[0], tabID);
         }
@@ -214,26 +250,35 @@ export class Storage implements IPlayerStorage {
             });
         });
 
-        // Ratify all tabs, in case some became empty.
         this.ratifyTabs();
+
+        // Just pre-emtively fire an event. It's not like this function is going to see
+        // high trafic.
+        EventBus.instance.publish('storage.tabsChanged', new TabsChangedEvent());
+
         return true;
     }
 
-    private getOrAddTab(tabID: number | undefined): StorageTab | null {
+    private getOrAddTab(tabID: number | null): StorageTab | null {
         if (tabID) {
             return this.getTab(tabID);
         }
 
-        return this.m_storageTabs.length < this.m_tabLimit
-            ? new StorageTab(this.m_storageTabs.length)
-            : null;
+        if (this.m_storageTabs.length < this.m_tabLimit) {
+            const newTab = new StorageTab(this.m_storageTabs.length);
+            this.m_storageTabs.push(newTab);
+            return newTab;
+        }
+
+        return null;
     }
 
     private getTab(tabID: number): StorageTab | null {
         return (tabID >= 0 && tabID < this.m_storageTabs.length) ? this.m_storageTabs[tabID] : null;
     }
 
-    private ratifyTabs() {
+    private ratifyTabs(): boolean {
+        const tabCount = this.tabCount;
         for (let i = 1; i < this.m_storageTabs.length; i++) {
             const tab = this.m_storageTabs[i];
 
@@ -245,6 +290,8 @@ export class Storage implements IPlayerStorage {
                 this.m_storageTabs.splice(i--, 1);
             }
         }
+
+        return this.tabCount !== tabCount;
     }
 }
 

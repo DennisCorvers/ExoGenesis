@@ -2,20 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { IDynamicViewProps } from '@modules/IDynamicViewProps';
 import { IStorageSlot } from '@game/systems/storage/IStorageSlot';
 import { StorageTabs } from './StorageTabs';
-import { IPlayerStorage } from '@game/systems/storage/IPlayerStorage';
+import { StorageGrid } from './StorageGrid';
+import { IStorageTab } from '@game/systems/storage/IStorageTab';
+import { ItemChangedEvent } from '@game/events/storage/ItemChangedEvent';
+import { TabsChangedEvent } from '@game/events/storage/TabsChangedEvent';
+import { useEventSubscription } from '@hooks/EventSubscription';
 import styles from './StorageView.module.css'
+import { SizeChangedEvent } from '@game/events/storage/SizeChangedEvent';
 
-interface StorageTab {
-    tabIndex: number,
-    media: string,
-}
-
-const constructTabs = (storage: IPlayerStorage) => {
-    // TODO: Add other storage tabs.
-    const tabs: StorageTab[] = [];
-    tabs.push({ tabIndex: 0, media: 'assets/images/storage/defaultstoragetab.png' });
-    return tabs;
-}
 
 export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
     const storage = gameContext.player.storage;
@@ -23,41 +17,59 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
 
     const [items, setItems] = useState<readonly IStorageSlot[]>([]);
     const [selectedItem, setSelectedItem] = useState<IStorageSlot | null>(null);
+    const [storageTabs, setStorageTabs] = useState<readonly IStorageTab[]>(storage.storageTabs);
 
+    const [maxItems, setMaxItems] = useState<number>(storage.storageSize);
+    const [itemCount, setItemCount] = useState<number>(storage.itemCount);
     const [selectedTab, setSelectedTab] = useState<number>(0);
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const [maxCount, setMaxCount] = useState(storage.storageSize)
-    const [itemCount, setItemCount] = useState(storage.itemCount)
-    const [storageTabs, setStorageTabs] = useState<StorageTab[]>([])
-
     const handleTabSelection = useCallback((tabIndex: number) => {
-        console.log("tab select");
+        console.log("tab selected " + tabIndex);
         layoutConfig.selectedStorageTab = tabIndex;
 
         setSelectedTab(tabIndex);
     }, []);
 
     const onItemSelected = useCallback((storageSlot: IStorageSlot) => {
-        console.log("Selected item" + storageSlot.item.displayName);
+        console.log("Selected item " + storageSlot.item.displayName);
         setSelectedItem(storageSlot);
-    }, []);
-
-    const updateStorage = useCallback((changedItem: IStorageSlot) => {
-
     }, []);
 
     const sortStorage = () => {
         // TODO: Add sort option filtering.
-        // Switch inventory to selected tab (by filtering items)
-
-        setItems(storage.items);
+        console.log("Setting new items for view...");
+        if (selectedTab === 0) {
+            setItems(storage.items);
+        } else {
+            const tab = storageTabs[selectedTab];
+            setItems(tab.tabItems);
+        }
     };
 
-    useEffect(() => {
-        const tabs = constructTabs(storage);
+    const getSelectedTab = useCallback((tabIndex: number) => {
+        if (tabIndex >= 0 && tabIndex < storageTabs.length) {
+            return storageTabs[tabIndex];
+        }
+        return storageTabs[0];
+    }, [storageTabs]);
 
-        setStorageTabs(tabs);
+    const onItemChanged = useCallback((event: ItemChangedEvent) => {
+        console.log(" item changed " + event.item.displayName);
+    }, []);
+
+    const onTabsChanged = useCallback((event: TabsChangedEvent) => {
+        console.log('something changed in tabs');
+        setStorageTabs([...storage.storageTabs]);
+    }, [])
+
+    const onSizeChanged = useCallback((event: SizeChangedEvent) => {
+        setMaxItems(event.storageSize);
+        setItemCount(event.storageCount);
+    }, [])
+
+    useEffect(() => {
+        setStorageTabs(storage.storageTabs);
         setSelectedTab(layoutConfig.selectedStorageTab);
 
         return () => {
@@ -71,29 +83,24 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
         }
     }, [selectedTab])
 
+    useEventSubscription(`storage.itemChanged`, onItemChanged);
+    useEventSubscription(`storage.tabsChanged`, onTabsChanged);
+    useEventSubscription(`storage.sizeChanged`, onSizeChanged);
+
     return (
         <div className={styles.storageContainer}>
             <header className={styles.storageHeader}>
                 <h2>Storage</h2>
                 <span className={styles.storageCount}>
-                    {itemCount.toLocaleString()} / {maxCount.toLocaleString()}
+                    {itemCount.toLocaleString()} / {maxItems.toLocaleString()}
                 </span>
             </header>
 
             <StorageTabs
-                initialActiveTab={storageTabs[0]}
-                tabs={storageTabs}
+                initialActiveTab={getSelectedTab(layoutConfig.selectedStorageTab)}
+                tabs={storage.storageTabs}
                 onTabSelect={handleTabSelection} />
-            <div className={styles.storageGridWrapper}>
-                <div className={styles.storageGrid}>
-                    {items.map(slot => (
-                        <div key={slot.slotid} className={styles.storageItem}>
-                            <img src={slot.item.media} alt={slot.item.displayName} className={styles.storageItemIcon} />
-                            <div className={styles.storageItemAmount}>{slot.amount}</div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+            <StorageGrid items={items} onSelect={onItemSelected} />
 
             <div className={styles.storeControls}>
                 <input

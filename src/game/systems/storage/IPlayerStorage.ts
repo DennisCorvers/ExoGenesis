@@ -7,5 +7,5 @@ export interface IPlayerStorage extends IStorageManager {
         get tabCount(): number;
         get tabLimit(): number;
 
-        moveItemsToTab(items: IStorageSlot[], tabID: number | undefined): boolean
+        moveItemsToTab(items: IStorageSlot[], tabID: number | null): boolean
 }

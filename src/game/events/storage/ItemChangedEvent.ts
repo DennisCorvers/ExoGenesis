@@ -1,7 +1,7 @@
 import { Item } from "../../entities/Item";
 import { GameEvent } from "../GameEvent";
 
-export class ItemAmountChangedEvent extends GameEvent {
+export class ItemChangedEvent extends GameEvent {
     private m_item: Item;
     private m_oldAmount: number;
     private m_newAmount: number;

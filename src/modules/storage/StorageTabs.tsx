@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { IStorageTab } from '@game/systems/storage/IStorageTab';
 import styles from './StorageView.module.css'
 
-interface IStorageTab {
-    tabIndex: number;
-    media: string;
-}
-
 interface StorageTabsProps {
-    tabs: IStorageTab[];
+    tabs: readonly IStorageTab[];
     initialActiveTab: IStorageTab;
     onTabSelect: (tabIndex: number) => void;
 }
@@ -33,7 +29,7 @@ export const StorageTabs: React.FC<StorageTabsProps> = React.memo(({ tabs, initi
                     key={tab.tabIndex}
                     className={`${styles.storageTab} ${tab.tabIndex === activeTab?.tabIndex ? styles.selectedTab : ''}`}
                     onClick={() => handleTabClick(tab)}>
-                    <img src={tab.media} className={styles.tabIcon} />
+                    <img src={tab.tabImage} className={styles.tabIcon} />
                 </div>
             ))}
         </div>
