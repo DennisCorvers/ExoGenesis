@@ -2,6 +2,8 @@ import { Item } from "@game/entities/Item";
 import { IStorageSlot } from "./IStorageSlot";
 import { IPlayerStorage } from "./IPlayerStorage";
 import { IStorageTab } from "./IStorageTab";
+import { EventBus } from "@game/events/EventBus";
+import { ItemAmountChangedEvent } from "@game/events/storage/ItemAmountChangedEvent";
 
 export class Storage implements IPlayerStorage {
     private m_itemLookup: Map<number, StorageSlot>;
@@ -17,12 +19,20 @@ export class Storage implements IPlayerStorage {
         return this.m_storageTabs;
     }
 
-    get storageSize(): number {
+    public get storageSize(): number {
         return this.m_storageSize;
     }
 
-    get itemCount(): number {
+    public get itemCount(): number {
         return this.m_itemLookup.size;
+    }
+
+    public get tabCount(): number {
+        return this.m_storageTabs.length;
+    }
+
+    public get tabLimit(): number {
+        return this.m_tabLimit;
     }
 
     constructor() {
@@ -41,55 +51,67 @@ export class Storage implements IPlayerStorage {
         }
 
         let slot = this.m_itemLookup.get(item.uid);
+        let oldAmount = 0;
         if (slot) {
+            oldAmount = slot.amount;
             slot.amount += amount;
-            return amount;
+        }
+        else {
+            if (this.m_itemLookup.size >= this.m_storageSize) {
+                return 0;
+            }
+
+            // Add new slot to index / tab.
+            const targetTab = this.getItemDefaultTab(item);
+            slot = targetTab.addNewItem(item, amount);
+            this.m_itemLookup.set(item.uid, slot);
         }
 
-        if (this.m_itemLookup.size >= this.m_storageSize) {
-            return 0;
-        }
-
-        // Add new slot to index / tab.
-        const targetTab = this.getItemDefaultTab(item);
-        const newSlot = targetTab.addNewItem(item, amount);
-        this.m_itemLookup.set(item.uid, newSlot);
-
+        const event = new ItemAmountChangedEvent(item, oldAmount, slot.amount);
+        EventBus.instance.publish('storage.itemChanged', event);
         return amount;
     }
 
     private innerRemoveItem(itemID: number, amount: number): number {
-        // Nothing to remove if the item does not exist.
-        if (amount < 1 || !this.m_itemLookup.has(itemID))
-            return 0;
+        if (amount <= 0) {
+            throw new Error('Unable to remove zero or negative amount.');
+        }
 
         const slot = this.m_itemLookup.get(itemID);
         if (!slot) {
-            return 0;
+            throw new Error('Item does not exist in the storage.');
         }
+
+        let satisfiedamount = 0;
+        let oldamount = slot.amount;
 
         if (slot.amount > amount) {
             slot.amount -= amount;
-            return amount;
+            satisfiedamount = amount;
+        }
+        else {
+            // Not enough to satisfy request, check to delete the slot
+            satisfiedamount = slot.amount;
+
+            // Keep locked slots, even at 0.
+            if (slot.isLocked) {
+                slot.amount = 0;
+            }
+            // Remove slot entirely if it's not locked.
+            else {
+                const tab = this.m_storageTabs[slot.tabIndex];
+                tab.removeStorageSlot(slot);
+
+                if (tab.itemCount == 0) {
+                    this.ratifyTabs();
+                }
+
+                this.m_itemLookup.delete(itemID);
+            }
         }
 
-        // Not enough to satisfy request, check to delete the slot
-        const satisfiedamount = slot.amount;
-
-        // Keep locked slots, even at 0.
-        if (slot.isLocked) {
-            slot.amount = 0;
-            return satisfiedamount;
-        }
-
-        const tab = this.m_storageTabs[slot.tabIndex];
-        tab.removeStorageSlot(slot);
-
-        if (tab.itemCount == 0) {
-            this.ratifyTabs();
-        }
-
-        this.m_itemLookup.delete(itemID);
+        const event = new ItemAmountChangedEvent(slot.item, oldamount, slot.amount);
+        EventBus.instance.publish('storage.itemChanged', event);
         return satisfiedamount;
     }
 
@@ -106,6 +128,11 @@ export class Storage implements IPlayerStorage {
         return this.innerRemoveItem(item.uid, amount);
     }
 
+    public removeAllOfItem(item: Item): number {
+        const targetAmount = this.getItemCount(item);
+        return this.innerRemoveItem(item.uid, targetAmount);
+    }
+
     public hasItem(item: Item): boolean {
         return this.m_itemLookup.get(item.uid) != null;
     }
@@ -117,11 +144,6 @@ export class Storage implements IPlayerStorage {
 
     public getItemCount(item: Item): number {
         return this.m_itemLookup.get(item.uid)?.amount || 0;
-    }
-
-    public removeAllOfItem(item: Item): number {
-        const targetAmount = this.getItemCount(item);
-        return this.innerRemoveItem(item.uid, targetAmount);
     }
 
     public filterItems(predicate: (item: IStorageSlot) => boolean): readonly IStorageSlot[] {
