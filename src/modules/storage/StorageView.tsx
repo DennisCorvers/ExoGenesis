@@ -24,6 +24,8 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
     const [selectedTab, setSelectedTab] = useState<number>(0);
     const [searchQuery, setSearchQuery] = useState<string>('');
 
+    const [version, forceUpdate] = useState<number>(0);
+
     const handleTabSelection = useCallback((tabIndex: number) => {
         console.log("tab selected " + tabIndex);
         layoutConfig.selectedStorageTab = tabIndex;
@@ -56,6 +58,9 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
 
     const onItemChanged = useCallback((event: ItemChangedEvent) => {
         console.log(" item changed " + event.item.displayName);
+
+        // if item slot isn't in currently visible slot, ignore
+        forceUpdate(x => x + 1);
     }, []);
 
     const onTabsChanged = useCallback((event: TabsChangedEvent) => {
@@ -98,7 +103,10 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
                 initialActiveTab={getSelectedTab(layoutConfig.selectedStorageTab)}
                 tabs={storage.storageTabs}
                 onTabSelect={handleTabSelection} />
-            <StorageGrid items={items} onSelect={onItemSelected} />
+            <StorageGrid 
+                version={version} 
+                items={items} 
+                onSelect={onItemSelected} />
 
             <div className={styles.storeControls}>
                 <input

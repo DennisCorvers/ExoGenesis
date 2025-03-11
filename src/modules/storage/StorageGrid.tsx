@@ -3,11 +3,13 @@ import React from "react";
 import styles from './StorageGrid.module.css'
 
 interface StorageGridProps {
+    readonly version: number;
     readonly items: readonly IStorageSlot[],
     readonly onSelect: (selectedItem: IStorageSlot) => void;
 }
 
 export const StorageGrid: React.FC<StorageGridProps> = React.memo(({
+    version,
     items,
     onSelect }) => {
 
@@ -15,7 +17,13 @@ export const StorageGrid: React.FC<StorageGridProps> = React.memo(({
         <div className={styles.storageGridWrapper}>
             <div className={styles.storageGrid}>
                 {items.map((slot: IStorageSlot) => (
-                    <StorageGridItem key={slot.slotid} item={slot} onSelect={onSelect} />
+                    <StorageGridItem
+                        key={slot.slotid}
+                        item={slot}
+                        isLocked={slot.isLocked}
+                        itemID={slot.slotid}
+                        amount={slot.amount}
+                        onSelect={onSelect} />
                 ))}
             </div>
         </div>
@@ -24,16 +32,19 @@ export const StorageGrid: React.FC<StorageGridProps> = React.memo(({
 
 interface StorageGridItemProps {
     readonly item: IStorageSlot;
+    readonly isLocked: boolean;
+    readonly itemID: number;
+    readonly amount: number;
     readonly onSelect: (selectedItem: IStorageSlot) => void;
 }
 
-const getStorageItemClasses = (slot : IStorageSlot) => {
+const getStorageItemClasses = (isLocked: boolean, amount: number) => {
     let classes = [styles.storageItem];
 
-    if (slot.isLocked)
+    if (isLocked)
         classes.push(styles.storageItemLocked);
 
-    if (slot.amount === 0)
+    if (amount === 0)
         classes.push(styles.storageItemEmpty);
 
     return classes.join(' ');
@@ -41,12 +52,17 @@ const getStorageItemClasses = (slot : IStorageSlot) => {
 
 const StorageGridItem: React.FC<StorageGridItemProps> = React.memo(({
     item: slot,
-    onSelect }) => {
+    isLocked,
+    itemID,
+    amount,
+    onSelect
+}) => {
 
     return (
-        <div key={slot.slotid} className={getStorageItemClasses(slot)} onClick={() => onSelect(slot)}>
+        <div key={slot.slotid} className={getStorageItemClasses(isLocked, amount)} onClick={() => onSelect(slot)}>
             <img src={slot.item.media} alt={slot.item.displayName} className={styles.storageItemIcon} />
-            <div className={styles.storageItemAmount}>{slot.amount}</div>
+            <div className={styles.storageItemAmount}>{amount}</div>
         </div>
     );
 });
+
