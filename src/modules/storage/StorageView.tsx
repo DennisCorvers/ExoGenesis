@@ -57,11 +57,19 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
     }, [storageTabs]);
 
     const onItemChanged = useCallback((event: ItemChangedEvent) => {
-        console.log(" item changed " + event.item.displayName);
+        const slot = event.item;
+        // Check if this is the same storage tab as what is being viewed.
+        if (slot.tabId === selectedTab || slot.tabId === 0) {
 
-        // if item slot isn't in currently visible slot, ignore
-        forceUpdate(x => x + 1);
-    }, []);
+            // If a new item is added, or an item is removed, shallow copy the list.
+            if (event.oldAmount === 0 || (event.newAmount === 0 && !event.item.isLocked)) {
+                sortStorage();
+            }
+            else {
+                forceUpdate(x => x + 1);
+            }
+        }
+    }, [selectedTab]);
 
     const onTabsChanged = useCallback((event: TabsChangedEvent) => {
         console.log('something changed in tabs');
@@ -103,9 +111,9 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
                 initialActiveTab={getSelectedTab(layoutConfig.selectedStorageTab)}
                 tabs={storage.storageTabs}
                 onTabSelect={handleTabSelection} />
-            <StorageGrid 
-                version={version} 
-                items={items} 
+            <StorageGrid
+                version={version}
+                items={items}
                 onSelect={onItemSelected} />
 
             <div className={styles.storeControls}>

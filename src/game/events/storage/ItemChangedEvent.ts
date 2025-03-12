@@ -1,13 +1,13 @@
-import { Item } from "../../entities/Item";
+import { IStorageSlot } from "@game/systems/storage/IStorageSlot";
 import { GameEvent } from "../GameEvent";
 
 export class ItemChangedEvent extends GameEvent {
-    private m_item: Item;
+    private m_slot: IStorageSlot;
     private m_oldAmount: number;
     private m_newAmount: number;
 
-    public get item(): Item {
-        return this.m_item;
+    public get item(): IStorageSlot {
+        return this.m_slot;
     }
 
     public get oldAmount(): number {
@@ -18,9 +18,9 @@ export class ItemChangedEvent extends GameEvent {
         return this.m_newAmount;
     }
 
-    constructor(item: Item, oldAmount: number, newAmount: number) {
+    constructor(item: IStorageSlot, oldAmount: number, newAmount: number) {
         super()
-        this.m_item = item;
+        this.m_slot = item;
         this.m_oldAmount = oldAmount;
         this.m_newAmount = newAmount;
     }

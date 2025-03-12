@@ -76,7 +76,7 @@ export class Storage implements IPlayerStorage {
             EventBus.instance.publish('storage.sizeChanged', new SizeChangedEvent(this.m_itemLookup.size, this.m_storageSize));
         }
 
-        const event = new ItemChangedEvent(item, oldAmount, slot.amount);
+        const event = new ItemChangedEvent(slot, oldAmount, slot.amount);
         EventBus.instance.publish('storage.itemChanged', event);
         return amount;
     }
@@ -109,7 +109,7 @@ export class Storage implements IPlayerStorage {
             // Remove slot entirely if it's not locked.
             else {
                 const slotIndex = slot.itemIndex;
-                const tab = this.m_storageTabs[slot.tabIndex];
+                const tab = this.m_storageTabs[slot.tabId];
                 tab.removeStorageSlot(slot);
 
                 if (tab.itemCount == 0) {
@@ -126,7 +126,7 @@ export class Storage implements IPlayerStorage {
             }
         }
 
-        const event = new ItemChangedEvent(slot.item, oldamount, slot.amount);
+        const event = new ItemChangedEvent(slot, oldamount, slot.amount);
         EventBus.instance.publish('storage.itemChanged', event);
         return satisfiedamount;
     }
@@ -189,7 +189,7 @@ export class Storage implements IPlayerStorage {
         let needsUpdate = slot.itemIndex === 0;
         const tabCount = this.tabCount;
 
-        const tabFrom = this.getTab(slot.tabIndex);
+        const tabFrom = this.getTab(slot.tabId);
         if (!tabFrom) return false;
 
         const tabTo = this.getOrAddTab(tabID);
@@ -224,10 +224,10 @@ export class Storage implements IPlayerStorage {
             const slot = this.m_itemLookup.get(item.slotid);
             if (!slot) continue;
 
-            let tabItems = itemsByTab.get(slot.tabIndex);
+            let tabItems = itemsByTab.get(slot.tabId);
             if (!tabItems) {
                 tabItems = [];
-                itemsByTab.set(slot.tabIndex, tabItems);
+                itemsByTab.set(slot.tabId, tabItems);
             }
 
             tabItems.push(slot);
@@ -339,7 +339,7 @@ class StorageTab implements IStorageTab {
      * @param slot The item slot to move.
      */
     public addStorageSlot(slot: StorageSlot) {
-        slot.tabIndex = this.tabIndex;
+        slot.tabId = this.tabIndex;
         slot.itemIndex = this.tabItems.length;
         this.m_tabItems.push(slot);
     }
@@ -351,7 +351,7 @@ class StorageTab implements IStorageTab {
      */
     public removeStorageSlot(slot: StorageSlot) {
         const index = slot.itemIndex;
-        if (index === -1 || slot.tabIndex != this.tabIndex) {
+        if (index === -1 || slot.tabId != this.tabIndex) {
             return;
         }
         this.m_tabItems.splice(index, 1);
@@ -376,7 +376,7 @@ class StorageTab implements IStorageTab {
             const slot = slots[i];
             const index = slot.itemIndex;
 
-            if (index === -1 || slot.tabIndex !== this.tabIndex) {
+            if (index === -1 || slot.tabId !== this.tabIndex) {
                 continue;
             }
 
@@ -406,14 +406,14 @@ class StorageSlot implements IStorageSlot {
     private m_item: Item;
     private m_amount: number;
     private m_isLocked: boolean;
-    private m_tabIndex: number;
+    private m_tabId: number;
     private m_itemIndex: number;
 
     constructor(item: Item, amount: number, isLocked: boolean, tabIndex: number, itemIndex: number) {
         this.m_item = item
         this.m_amount = amount
         this.m_isLocked = isLocked
-        this.m_tabIndex = tabIndex;
+        this.m_tabId = tabIndex;
         this.m_itemIndex = itemIndex;
     }
 
@@ -441,12 +441,12 @@ class StorageSlot implements IStorageSlot {
         this.m_isLocked = isLocked;
     }
 
-    public get tabIndex(): number {
-        return this.m_tabIndex;
+    public get tabId(): number {
+        return this.m_tabId;
     }
 
-    public set tabIndex(index: number) {
-        this.m_tabIndex = index;
+    public set tabId(index: number) {
+        this.m_tabId = index;
     }
 
     public get itemIndex(): number {
