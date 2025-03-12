@@ -60,19 +60,16 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
         const slot = event.item;
         // Check if this is the same storage tab as what is being viewed.
         if (slot.tabId === selectedTab || slot.tabId === 0) {
-
-            // If a new item is added, or an item is removed, shallow copy the list.
-            if (event.oldAmount === 0 || (event.newAmount === 0 && !event.item.isLocked)) {
-                sortStorage();
-            }
-            else {
-                forceUpdate(x => x + 1);
-            }
+            forceUpdate(x => x + 1);
         }
     }, [selectedTab]);
 
     const onTabsChanged = useCallback((event: TabsChangedEvent) => {
         console.log('something changed in tabs');
+        if (selectedTab >= storage.tabCount) {
+            setSelectedTab(0);
+        }
+
         setStorageTabs([...storage.storageTabs]);
     }, [])
 
@@ -91,7 +88,7 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
     }, [gameContext])
 
     useEffect(() => {
-        sortStorage();
+        //sortStorage();
     }, [selectedTab])
 
     useEventSubscription(`storage.itemChanged`, onItemChanged);
@@ -111,10 +108,25 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
                 initialActiveTab={getSelectedTab(layoutConfig.selectedStorageTab)}
                 tabs={storage.storageTabs}
                 onTabSelect={handleTabSelection} />
-            <StorageGrid
-                version={version}
-                items={items}
-                onSelect={onItemSelected} />
+
+            <div className={styles.storageGrid}>
+                {selectedTab === 0 ? (
+                    storage.storageTabs.map((tab, index) => (
+                        <div key={index}>
+                            <span className={styles.storageGridTitle}>{`Tab ${tab.tabIndex + 1}`}</span>
+                            <StorageGrid
+                                version={version}
+                                items={tab.tabItems}
+                                onSelect={onItemSelected} />
+                        </div>
+                    ))
+                ) : (
+                    <StorageGrid
+                        version={version}
+                        items={storage.storageTabs[selectedTab].tabItems}
+                        onSelect={onItemSelected} />
+                )}
+            </div>
 
             <div className={styles.storeControls}>
                 <input

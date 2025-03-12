@@ -15,18 +15,16 @@ export const StorageGrid: React.FC<StorageGridProps> = React.memo(({
     onSelect }) => {
 
     return (
-        <div className={styles.storageGridWrapper}>
-            <div className={styles.storageGrid}>
-                {items.map((slot: IStorageSlot) => (
-                    <StorageGridItem
-                        key={slot.slotid}
-                        item={slot}
-                        isLocked={slot.isLocked}
-                        itemID={slot.slotid}
-                        amount={slot.amount}
-                        onSelect={onSelect} />
-                ))}
-            </div>
+        <div className={styles.storageGrid}>
+            {items.map((slot: IStorageSlot) => (
+                <StorageGridItem
+                    key={slot.slotid}
+                    item={slot}
+                    isLocked={slot.isLocked}
+                    itemID={slot.slotid}
+                    amount={slot.amount}
+                    onSelect={onSelect} />
+            ))}
         </div>
     );
 });
