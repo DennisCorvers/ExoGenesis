@@ -58,7 +58,6 @@ const getAmountClass = (amount: number) => {
 };
 
 const formatAmount = (amount: number) => {
-    if (amount === 1) return null;
     if (amount >= 10000000) return `${Math.floor(amount / 1000000).toLocaleString()}M`;
     if (amount >= 100000) return `${Math.floor(amount / 1000).toLocaleString()}K`;
     return amount.toLocaleString();
@@ -80,7 +79,7 @@ const StorageGridItem: React.FC<StorageGridItemProps> = React.memo(({
         // Removed the inner 'key' prop as it's already set in the parent component
         <div className={itemClasses} onClick={() => onSelect(slot)}>
             <img src={slot.item.media} alt={slot.item.displayName} className={styles.storageItemIcon} />
-            {amount !== 0 && (
+            {amount !== 1 && (
                 <div className={`${styles.storageItemAmount} ${amountClass}`}>
                     {formattedAmount}
                 </div>
