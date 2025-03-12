@@ -21,7 +21,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
     );
 
     // Pre-load all modules.
-    Object.values(modules).forEach(x => x());
+    //Object.values(modules).forEach(x => x());
 
     const components: { [key: string]: React.LazyExoticComponent<React.FC<any>> } = {};
 

@@ -10,7 +10,8 @@ export default defineConfig({
       '@game': path.resolve(__dirname, 'src/game'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@assets': path.resolve(__dirname, 'src/assets'),
-      '@modules': path.resolve(__dirname, 'src/modules')
+      '@modules': path.resolve(__dirname, 'src/modules'),
+      '@hooks': path.resolve(__dirname, 'src/hooks')
     }
   },
   build: {

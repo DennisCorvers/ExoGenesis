@@ -4,16 +4,14 @@ import { ISerializable } from "../data/ISerializable";
 import { IGameContext } from "../core/IGameContext";
 import { IPlayerContext } from "../systems/IPlayerContext";
 import { ISkillManager } from "../systems/ISkillManager";
-import { IStorageManager } from "@game/systems/storage/IStorageManager";
-import { Inventory } from "@game/systems/storage/Inventory";
 import { Storage } from "@game/systems/storage/Storage";
 import { ILayoutConfig, LayoutConfig } from "@game/ui/LayoutConfig";
+import { IPlayerStorage } from "@game/systems/storage/IPlayerStorage";
 
 export class Player implements IPlayerContext, ISerializable, IUpdatable {
     protected gameContext: IGameContext;
     private m_name: string;
-    private m_inventory: IStorageManager;
-    private m_storage: IStorageManager;
+    private m_storage: IPlayerStorage;
     private m_skillManager: SkillManager;
     private m_layoutPreferences: ILayoutConfig;
 
@@ -21,15 +19,11 @@ export class Player implements IPlayerContext, ISerializable, IUpdatable {
         return this.m_name;
     }
 
-    public get inventory(): IStorageManager {
-        return this.m_inventory;
-    }
-
-    public get skillManager(): ISkillManager {
+    public get skills(): ISkillManager {
         return this.m_skillManager;
     }
 
-    public get storage(): IStorageManager {
+    public get storage(): IPlayerStorage {
         return this.m_storage;
     }
 
@@ -39,7 +33,6 @@ export class Player implements IPlayerContext, ISerializable, IUpdatable {
 
     constructor(game: IGameContext) {
         this.m_name = "Test Player";
-        this.m_inventory = new Inventory();
         this.m_storage = new Storage();
         this.m_skillManager = new SkillManager(game, this);
         this.gameContext = game;

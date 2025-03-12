@@ -1,0 +1,41 @@
+.storageGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 50px);
+    gap: 5px;
+    margin-bottom: 1em;
+}
+
+.storageItem {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #666;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    contain: content;
+}
+
+.storageItem img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.storageItemAmount {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1px 3px;
+    border-radius: 2px;
+    font-size: 10px;
+}
+
+.storageItemLocked {
+    box-shadow: 0 0 0 2px red inset;
+}
+
+.storageItemEmpty img {
+    opacity: 0.5;
+}

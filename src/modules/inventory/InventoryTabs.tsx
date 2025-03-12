@@ -1,6 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './InventoryMenu.module.css';
-import { IInventoryTab } from '@game/ui/IInventoryTab';
+
+interface IInventoryTab {
+    tabID: string;
+    media: string;
+}
 
 interface InventoryTabProps {
     tabs: IInventoryTab[];

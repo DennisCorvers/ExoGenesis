@@ -10,4 +10,6 @@ export interface IStorageSlot {
     set isLocked(isLocked: boolean);
 
     get slotid() : number;
+
+    get tabId() : number;
 }
