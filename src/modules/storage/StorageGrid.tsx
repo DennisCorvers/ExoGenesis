@@ -1,6 +1,7 @@
 import { IStorageSlot } from "@game/systems/storage/IStorageSlot";
 import React from "react";
 import styles from './StorageGrid.module.css'
+import '../../styles/global.css'
 
 interface StorageGridProps {
     readonly version: number;
@@ -50,6 +51,19 @@ const getStorageItemClasses = (isLocked: boolean, amount: number) => {
     return classes.join(' ');
 };
 
+const getAmountClass = (amount: number) => {
+    if (amount >= 10000000) return 'item-amount-million';
+    if (amount >= 100000) return 'item-amount-thousand';
+    return '';
+};
+
+const formatAmount = (amount: number) => {
+    if (amount === 1) return null;
+    if (amount >= 10000000) return `${Math.floor(amount / 1000000).toLocaleString()}M`;
+    if (amount >= 100000) return `${Math.floor(amount / 1000).toLocaleString()}K`;
+    return amount.toLocaleString();
+};
+
 const StorageGridItem: React.FC<StorageGridItemProps> = React.memo(({
     item: slot,
     isLocked,
@@ -58,10 +72,19 @@ const StorageGridItem: React.FC<StorageGridItemProps> = React.memo(({
     onSelect
 }) => {
 
+    const itemClasses = React.useMemo(() => getStorageItemClasses(isLocked, amount), [isLocked, amount]);
+    const amountClass = React.useMemo(() => getAmountClass(amount), [amount]);
+    const formattedAmount = React.useMemo(() => formatAmount(amount), [amount]);
+
     return (
-        <div key={slot.slotid} className={getStorageItemClasses(isLocked, amount)} onClick={() => onSelect(slot)}>
+        // Removed the inner 'key' prop as it's already set in the parent component
+        <div className={itemClasses} onClick={() => onSelect(slot)}>
             <img src={slot.item.media} alt={slot.item.displayName} className={styles.storageItemIcon} />
-            <div className={styles.storageItemAmount}>{amount}</div>
+            {amount !== 0 && (
+                <div className={`${styles.storageItemAmount} ${amountClass}`}>
+                    {formattedAmount}
+                </div>
+            )}
         </div>
     );
 });
