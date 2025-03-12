@@ -22,6 +22,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    contain: content;
 }
 
 .storageItem img {
@@ -31,8 +32,8 @@
 
 .storageItemAmount {
     position: absolute;
-    bottom: 1px;
-    right: 1px;
+    bottom: 0px;
+    right: 0px;
     background: rgba(0, 0, 0, 0.7);
     padding: 1px 3px;
     border-radius: 2px;
@@ -40,7 +41,7 @@
 }
 
 .storageItemLocked {
-    border: 1px solid #c00;
+    box-shadow: 0 0 0 2px red inset;
 }
 
 .storageItemEmpty img {

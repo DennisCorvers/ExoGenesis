@@ -4,6 +4,8 @@ import { IStorageSlot } from "./IStorageSlot";
 export interface IStorageManager {
     get storageSize(): number;
 
+    set storageSize(newSize : number);
+
     get itemCount(): number;
 
     get items(): readonly IStorageSlot[];
