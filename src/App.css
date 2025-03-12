@@ -1,3 +1,12 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
 .main-content {
   display: flex;
   flex-direction: column;
@@ -7,4 +16,13 @@
   flex-basis: auto;
   max-width: 100%;
   padding-left: 240px;
+  padding-right: 5px;
 }
+
+/*
+@media (min-width: 992px) {
+  .main-content {
+      padding-left: 240px;
+  }
+}
+*/

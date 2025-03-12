@@ -3,24 +3,25 @@ import { IStorageSlot } from "./IStorageSlot";
 
 export interface IStorageManager {
     get storageSize(): number;
+
+    set storageSize(newSize : number);
+
     get itemCount(): number;
 
-    get items() : IStorageSlot[];
+    get items(): readonly IStorageSlot[];
 
     addItem(item: Item, amount: number): number;
 
+    getItem(item: Item): IStorageSlot;
+
     hasItemAmount(item: Item, amount: number): boolean;
 
-    getItemCount(item: Item) : number;
-    
-    removeStorageSlotQuantity(targetSlot: IStorageSlot, requestedAmount: number): number;
-    
+    getItemCount(item: Item): number;
+
     removeItemQuantity(item: Item, requestedAmount: number): number;
 
     removeAllOfItem(item: Item): number;
 
-    deleteStorageSlot(targetSlot: IStorageSlot): boolean;
-
-    findItems(predicate: (item: IStorageSlot) => boolean): IStorageSlot[];
+    filterItems(predicate: (item: IStorageSlot) => boolean): readonly IStorageSlot[]
 }
 

@@ -1,0 +1,90 @@
+.storageContainer {
+    width: 100%;
+    margin: 20px auto;
+    background: #292929;
+    border: 2px solid #555;
+    border-radius: 8px;
+    color: #fff;
+}
+
+.storageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    padding: 10px;
+}
+
+.storageHeader h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    letter-spacing: 0.0625rem;
+}
+
+.storageCount {
+    font-size: .9rem;
+    color: #ccc;
+}
+
+.storageControls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.storageSearch {
+    flex: 1;
+    padding: 5px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.storageTabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    margin: 0 10px 0 10px;
+    height: 3rem;
+}
+
+.storageTab {
+    align-content: center;
+    text-align: center;
+    cursor: pointer;
+    width: 3rem;
+    border: 1px solid #444;
+    border-radius: 4px;
+    margin: 0 5px;
+    background: #292929;
+    transition: all 0.3s ease;
+}
+
+.selectedTab {
+    border: 1px solid #666;
+    margin: 0 5px;
+    background-color: #383838;
+    border-bottom: none;
+    box-shadow: inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.tabIcon {
+    width: 32px;
+    height: 32px;
+}
+
+.storageGrid {
+    padding: 10px;
+    border: 1px solid #666;
+    background-color: #383838;
+    border-bottom: none;
+    box-shadow: inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.storageGridTitle{
+    display: block;
+    border-bottom: 1px solid #666;
+    margin-bottom: 5px;
+    font-size: 12px;
+    line-height: normal;
+}

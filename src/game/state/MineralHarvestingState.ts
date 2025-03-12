@@ -83,7 +83,7 @@ export class MineralHarvestingState extends SkillState<MineralNode> {
 
     private awardItems(action: MineralNode) {
         // Include things like bonus items or random rolls.
-        this.player.inventory.addItem(action.item, action.itemAmount);
+        this.player.storage.addItem(action.item, action.itemAmount);
     }
 
     private awardExperience(action: MineralNode) {

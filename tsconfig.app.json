@@ -28,6 +28,7 @@
       "@components/*": ["src/components/*"],
       "@assets/*": ["src/assets/*"],
       "@modules/*": ["src/modules/*"],
+      "@hooks/*" : ["src/hooks/*"]
     }
   },
   "include": ["src"]

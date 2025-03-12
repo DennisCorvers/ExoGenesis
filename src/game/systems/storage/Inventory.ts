@@ -1,9 +1,8 @@
 import { Item } from "@game/entities/Item";
 import { IStorageSlot } from "./IStorageSlot";
-import { IStorageManager } from "./IStorageManager";
 
 
-export class Inventory implements IStorageManager {
+export class Inventory {
     // Holds all unique (visual) inventory slots where Key is an inventory-bound unique identifier.
     private m_items: Map<number, InventorySlot>
     private m_stackables: Map<number, InventorySlot>;
@@ -31,7 +30,6 @@ export class Inventory implements IStorageManager {
         this.m_uniqueIdentifier = 0;
         this.m_inventorySize = 100;
     }
-
 
     public addItem(item: Item, amount: number): number {
         if (this.itemCount >= this.m_inventorySize) {
@@ -265,6 +263,9 @@ class InventorySlot implements IStorageSlot {
         this.m_amount = amount
         this.m_isLocked = isLocked
         this.m_inventoryID = inventoryID
+    }
+    get tabId(): number {
+        throw new Error("Method not implemented.");
     }
     public get slotid(): number {
         return this.m_inventoryID;
