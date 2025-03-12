@@ -20,7 +20,7 @@ export class TestPlayer extends Player {
         }
 
         this.storage.addItem(pickaxe, 1);
-        const skill = <MineralHarvestingState>this.skillManager.getSkillStateByID('exo.mining');
+        const skill = <MineralHarvestingState>this.skills.getSkillStateByID('exo.mining');
         skill.selectedPickaxe = <Miningtool>pickaxe;
 
         const goldOre = this.gameContext.items.getObject('exo.goldore')

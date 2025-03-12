@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
+import { SkillLevelChangedEvent } from '@game/events/skill/SkillLevelChangedEvent';
 import React from 'react';
 import { ISidebarEntry } from '@game/ui/ISidebarEntry';
-import '../Sidebar.css'
 import { IPlayerContext } from '@game/systems/IPlayerContext';
+import '../Sidebar.css'
 import { EventBus } from '@game/events/EventBus';
-import { SizeChangedEvent } from '@game/events/storage/SizeChangedEvent';
-
 
 interface SidebarItemProps {
     item: ISidebarEntry;
@@ -17,22 +16,23 @@ const SidebarItem: React.FC<SidebarItemProps> = (props) => {
     const { item, onClick } = props;
     const [info, setInfo] = useState("");
 
-    const onStorageChange = useCallback((event: SizeChangedEvent) => {
-        setInfo(`${event.storageCount} / ${event.storageSize}`);
+    const onLevelup = useCallback((event: SkillLevelChangedEvent) => {
+        setInfo(`${event.newLevel} / ${event.newLevel}`)
     }, []);
 
     useEffect(() => {
-        const entry = props.item;
-        if (entry.id === 'storage') {
-            const storage = props.player.storage;
-            setInfo(`${storage.itemCount} / ${storage.storageSize}`);
-
-            EventBus.instance.subscribe('storage.sizeChanged', onStorageChange)
+        const skill = props.item.skill;
+        if (!skill) {
+            throw Error("No skill available in this skill bar entry.");
         }
 
+        const skillState = props.player.skills.getSkillState(skill);
+        EventBus.instance.subscribe(`${skill.id}.levelChanged`, onLevelup)
+        setInfo(`${skillState.level} / ${skillState.level}`)
+
         return () => {
-            if (entry.id === 'storage') {
-                EventBus.instance.unsubscribe('storage.sizeChanged', onStorageChange)
+            if (skill != null) {
+                EventBus.instance.unsubscribe(`${skill.id}.levelChanged`, onLevelup)
             }
         }
     }, [props]);

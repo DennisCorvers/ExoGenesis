@@ -6,6 +6,7 @@ import ChevronRight from "@assets/icons/chevron-right.svg";
 import { ISidebarCategory, ISidebarEntry } from "@game/ui/ISidebarEntry";
 import { IGameContext } from "@game/core/IGameContext";
 import "./Sidebar.css";
+import SidebarSkill from "./Sidebar/SidebarSkill";
 
 interface SidebarUIProps {
     gameContext: IGameContext;
@@ -18,6 +19,16 @@ const Sidebar: React.FC<SidebarUIProps> = ({ gameContext }) => {
     const toggleExpand = (sectionName: string) => {
         setExpandedSections(prev => ({ ...prev, [sectionName]: !prev[sectionName], }));
     };
+
+    const getSidebarComponent = useMemo(() => {
+        return (item: ISidebarEntry) => {
+            if (item.isSkill) {
+                return <SidebarSkill key={item.id} item={item} player={gameContext.player} onClick={setActiveView} />;
+            }
+
+            return <SidebarItem key={item.id} item={item} player={gameContext.player} onClick={setActiveView} />;
+        };
+    }, [gameContext]);
 
     // TODO: Filter based on planet.
     const sidebarData: ISidebarCategory[] = useMemo(() => {
@@ -46,13 +57,7 @@ const Sidebar: React.FC<SidebarUIProps> = ({ gameContext }) => {
                 </div>
                 {isExpanded && (
                     <ul className="sidebar-nav">
-                        {items.map(item => (
-                            <SidebarItem
-                                key={item.id}
-                                item={item}
-                                gameContext={gameContext}
-                                onClick={setActiveView} />
-                        ))}
+                        {items.map(getSidebarComponent)}
                     </ul>
                 )}
             </li>

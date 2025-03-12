@@ -19,7 +19,7 @@ export class Player implements IPlayerContext, ISerializable, IUpdatable {
         return this.m_name;
     }
 
-    public get skillManager(): ISkillManager {
+    public get skills(): ISkillManager {
         return this.m_skillManager;
     }
 

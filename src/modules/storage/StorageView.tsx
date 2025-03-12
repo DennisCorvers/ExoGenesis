@@ -81,10 +81,6 @@ export const StorageView: React.FC<IDynamicViewProps> = ({ gameContext }) => {
     useEffect(() => {
         setStorageTabs(storage.storageTabs);
         setSelectedTab(layoutConfig.selectedStorageTab);
-
-        return () => {
-            // Remove event listener (if using real events)
-        };
     }, [gameContext])
 
     useEffect(() => {
