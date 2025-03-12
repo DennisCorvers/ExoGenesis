@@ -184,7 +184,7 @@ export class Storage implements IPlayerStorage {
 
     public moveItemToTab(item: IStorageSlot, tabID: number | null): boolean {
         const slot = this.m_itemLookup.get(item.slotid);
-        if (!slot) return false;
+        if (!slot || slot.tabId === tabID) return false;
 
         let needsUpdate = slot.itemIndex === 0;
         const tabCount = this.tabCount;
@@ -222,7 +222,7 @@ export class Storage implements IPlayerStorage {
         const itemsByTab = new Map<number, StorageSlot[]>();
         for (const item of items) {
             const slot = this.m_itemLookup.get(item.slotid);
-            if (!slot) continue;
+            if (!slot || slot.tabId === tabID) continue;
 
             let tabItems = itemsByTab.get(slot.tabId);
             if (!tabItems) {
