@@ -6,9 +6,9 @@ import { ActionStartResult } from "./ActionStartResult";
 import { SkillState } from "./SkillState";
 import { Miningtool } from "@game/entities/Miningtool";
 
-export class MineralHarvestingState extends SkillState<MineralNode> {
+export class MiningState extends SkillState<MineralNode> {
     private m_remainingNodeHealth: number;
-    private m_partialHarvestedNode: MineralNode | null;
+    private m_partialMinedNode: MineralNode | null;
     private m_selectedPickaxe: Miningtool | null;
 
     public get selectedPickaxe(): Miningtool | null {
@@ -31,13 +31,13 @@ export class MineralHarvestingState extends SkillState<MineralNode> {
         super(skill, playerContext)
         this.m_remainingNodeHealth = -1;
         this.m_selectedPickaxe = null;
-        this.m_partialHarvestedNode = null;
+        this.m_partialMinedNode = null;
     }
 
     protected onActionStart(action: MineralNode): void {
         // If the (partial) harvested node is not set, or it's a different one, reset the remaining health.
-        if (this.m_partialHarvestedNode == null || this.m_partialHarvestedNode.uid != action.uid) {
-            this.m_partialHarvestedNode = action;
+        if (this.m_partialMinedNode == null || this.m_partialMinedNode.uid != action.uid) {
+            this.m_partialMinedNode = action;
             this.m_remainingNodeHealth = action.health;
         }
     }
@@ -78,7 +78,18 @@ export class MineralHarvestingState extends SkillState<MineralNode> {
     }
 
     private calculateDamage(pickaxe: Miningtool, action: MineralNode): number {
-        return this.level + pickaxe.damage + (pickaxe.hardness - action.hardness);
+        // TODO: Add pickaxe damage variability with min/max damage.
+        // Add increase in crit change on level unlocks
+        const pickaxeDamage = Math.round(pickaxe.damage * (1 + (Math.random() * 0.5 - 0.25)));
+        const hardnessSum = Math.min(0, pickaxe.hardness - action.hardness);
+        const baseDamage = pickaxeDamage + hardnessSum;
+
+        let totalDamage = baseDamage
+        if (Math.random() < 0.1) {
+            totalDamage += this.level;
+        }
+
+        return Math.max(1, totalDamage);
     }
 
     private awardItems(action: MineralNode) {

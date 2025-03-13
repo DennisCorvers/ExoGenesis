@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { IDynamicViewProps } from '@modules/IDynamicViewProps';
 import { BaseRecipe } from '@game/skills/requirements/BaseRecipe';
-import { MineralHarvestingState } from '@game/state/MineralHarvestingState';
+import { MiningState } from '@game/state/MiningState';
 import { ActionEvent } from '@game/events/skill/ActionEvent';
 import { ActionStoppedEvent } from '@game/events/skill/ActionStoppedEvent';
 import { useEventSubscription } from '../../hooks/EventSubscription'
@@ -18,7 +18,7 @@ const MineralHarvestingUI: React.FC<IDynamicViewProps> = ({ gameContext }) => {
     const skill = gameContext.skills.mineralHarvesting;
     const player = gameContext.player;
 
-    const skillState = player.skills.getSkillState(skill) as MineralHarvestingState;
+    const skillState = player.skills.getSkillState(skill) as MiningState;
     const skillManager = player.skills;
 
     const onAction = useCallback((event: ActionEvent) => {
