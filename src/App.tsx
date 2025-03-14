@@ -18,7 +18,7 @@ const App: React.FC = () => {
   useEffect(() => {
 
     Visibility.subscribe('statusChanged', x => {
-      gameClock.current?.simulateTicks(1 * 60 * 30);
+      
     });
 
     // We need this part to load the game data, before the UI elements are built.
