@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { TICK_RATE } from '@game/core/Constants';
-import './ProgressBar.css'
+import './ProgressBar.css';
 
 interface ProgressBarProps {
   current: number;
@@ -15,34 +15,38 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   total,
   enableProgressBars = true,
   isAnimated = true,
-  isReversed = false }) => {
+  isReversed = false,
+}) => {
   const innerBarRef = useRef<HTMLDivElement | null>(null);
 
-  const widthStyle = useMemo(() => {
-    const progress = (current / total) * 100;
-    const percent = isReversed ? 100 - progress : progress;
-    return { width: `${percent}%` };
-  }, [current, total, isReversed]);
+  const progress = (current / total) * 100;
+  const percent = isReversed ? 100 - progress : progress;
 
-  const animationStyle = useMemo(() => {
-    const delay = -current;
-    const duration = total - (TICK_RATE / 1000);
-    return {
-      animation: `${duration}s linear ${delay}s 1 progressBar`,
-      animationDirection: isReversed ? 'reverse' : 'normal',
-    };
-  }, [current, total, isReversed]);
+  const widthStyle = useMemo(() => ({ width: `${percent}%` }), [percent]);
+
+  const delay = -current;
+  const duration = total - TICK_RATE / 1000;
+  const animation = `${duration}s linear ${delay}s 1 progressBar`;
+  const animationDirection = isReversed ? 'reverse' : 'normal';
+
+  const computedAnimationStyle = useMemo(
+    () => ({
+      animation,
+      animationDirection,
+    }),
+    [animation, animationDirection]
+  );
 
   useEffect(() => {
     if (enableProgressBars && isAnimated && innerBarRef.current) {
+      const bar = innerBarRef.current;
+      bar.style.animation = 'none';
 
-      innerBarRef.current.style.animation = 'none';
-      void innerBarRef.current.offsetHeight;
-
-      innerBarRef.current.style.animation = animationStyle.animation;
-      innerBarRef.current.style.animationDirection = animationStyle.animationDirection;
+      void bar.offsetHeight;
+      bar.style.animation = computedAnimationStyle.animation;
+      bar.style.animationDirection = computedAnimationStyle.animationDirection;
     }
-  }, [animationStyle, enableProgressBars, isAnimated]);
+  });
 
   return (
     <div className="outer-bar">
