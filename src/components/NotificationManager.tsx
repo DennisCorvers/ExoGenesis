@@ -8,6 +8,7 @@ import { SkillLevelChangedEvent } from "@game/events/skill/SkillLevelChangedEven
 
 interface NotificationManagerProps {
     gameContext: IGameContext;
+    isActive: boolean;
 }
 
 interface NotificationData {
@@ -18,21 +19,22 @@ interface NotificationData {
 
 const DISPLAY_TIME = 3000;
 
-const NotificationManager: React.FC<NotificationManagerProps> = ({ gameContext }) => {
+const NotificationManager: React.FC<NotificationManagerProps> = ({ gameContext, isActive }) => {
     const notificationidRef = useRef(0);
     const [notifications, setNotifications] = useState<NotificationData[]>([]);
-    const [isActive, setIsActive] = useState<boolean>(true);
 
     const removeNotification = useCallback((id: number) => {
         setNotifications(prev => prev.filter(x => x.id !== id));
     }, []);
 
     const queueNotification = useCallback((notif: NotificationData) => {
-        if (!isActive)
-            return;
-
-        setNotifications(prev => [...prev, notif]);
-    }, [isActive]);
+        // Temp fix to stop notification spam after simulation.
+        setNotifications(prev => {
+            if (prev.length > 3)
+                return prev;
+            return [...prev, notif];
+        });
+    }, [notifications]);
 
     const onExpGained = useCallback((event: SkillExperienceChangedEvent) => {
         const notif: NotificationData = {

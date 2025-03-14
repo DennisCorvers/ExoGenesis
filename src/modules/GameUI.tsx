@@ -33,7 +33,7 @@ const GameUI: React.FC<GameUIProps> = ({ gameContext }) => {
                         <div className="main-content">
                             <GameContent gameContext={gameContext} />
                         </div>
-                        <NotificationManager gameContext={gameContext} />
+                        <NotificationManager gameContext={gameContext} isActive={true} />
                     </>
                 ) : (
                     <div className="loading-message">Loading Game...</div>
