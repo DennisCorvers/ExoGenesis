@@ -128,10 +128,13 @@ export abstract class SkillState<T extends BaseRecipe> implements ISkillState {
         const action = <T>recipe;
         const startResult = this.canStartAction(action);
         if (startResult.canStart) {
-            this.onActionStart(action);
+            // Stop previous action first.
+            if (this.isActive)
+                this.stopAction(this.activeAction!);
 
             this.m_progress = 0;
             this.m_activeAction = action;
+            this.onActionStart(action);
         }
         else {
             throw new Error(`Unable to start action: ${ActionStoppedReason[startResult.reason!]}`)
