@@ -4,11 +4,11 @@ import { ISidebarEntry } from "@game/ui/ISidebarEntry";
 import ErrorBoundary from "./common/ErrorBoundary";
 import { GameContext } from "@game/core/GameContext";
 
-interface GameScreenProps {
+interface GameContentProps {
   gameContext: GameContext;
 }
 
-const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
+const GameContent: React.FC<GameContentProps> = ({ gameContext }) => {
   const { activeView } = useActiveView();
 
   const viewComponents = useMemo(() => {
@@ -45,7 +45,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
         console.error(`Module not found: ${modulePath}`);
 
         components[sidebarEntry.route] = React.lazy(() =>
-          import('../modules/common/ErrorPage') as Promise<{ default: React.FC<any> }>
+          import('./common/ErrorPage') as Promise<{ default: React.FC<any> }>
         );
 
         return;
@@ -56,7 +56,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
           .then((module) => module as { default: React.FC<any> })
           .catch(async (error) => {
             console.error(`Error loading module ${modulePath}:`, error);
-            return import('../modules/common/ErrorPage') as Promise<{ default: React.FC<any> }>;
+            return import('./common/ErrorPage') as Promise<{ default: React.FC<any> }>;
           })
       );
     };
@@ -83,4 +83,4 @@ const GameScreen: React.FC<GameScreenProps> = ({ gameContext }) => {
   );
 };
 
-export default GameScreen;
+export default GameContent;
