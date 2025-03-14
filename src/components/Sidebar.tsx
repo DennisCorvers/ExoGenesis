@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
 import { useActiveView } from "@modules/common/ActiveViewProvider";
-import SidebarItem from './Sidebar/SidebarItem'
+import SidebarItem from './sidebar/SidebarItem'
 import ChevronDown from "@assets/icons/chevron-down.svg";
 import ChevronRight from "@assets/icons/chevron-right.svg";
 import { ISidebarCategory, ISidebarEntry } from "@game/ui/ISidebarEntry";
 import { IGameContext } from "@game/core/IGameContext";
 import "./Sidebar.css";
-import SidebarSkill from "./Sidebar/SidebarSkill";
+import SidebarSkill from "./sidebar/SidebarSkill";
 
 interface SidebarUIProps {
     gameContext: IGameContext;

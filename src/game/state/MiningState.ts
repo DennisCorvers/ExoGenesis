@@ -93,7 +93,7 @@ export class MiningState extends SkillState<MineralNode> {
     }
 
     private awardItems(action: MineralNode) {
-        // Include things like bonus items or random rolls.
+        // TODO: Include things like bonus items or random rolls.
         this.player.storage.addItem(action.item, action.itemAmount);
     }
 

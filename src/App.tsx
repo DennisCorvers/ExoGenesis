@@ -1,17 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { GameContext } from "../src/game/core/GameContext";
 import Sidebar from "./components/Sidebar";
 import GameScreen from "@modules/GameScreen";
-import Ticker from "@game/core/Ticker";
 import { ActiveViewProvider } from "@modules/common/ActiveViewProvider";
-import "./App.css"
+
 
 import { DataLoader } from "@game/data/DataLoader.ts";
+import NotificationManager from "@components/NotificationManager";
+import { Gameclock } from "@game/core/Gameclock";
+import Visibility from "./utils/AppVisibility";
+import "./App.css"
 
 const App: React.FC = () => {
+  const gameClock = useRef<Gameclock>(null);
   const [gameContext, setGameContext] = useState<GameContext | null>(null);
 
   useEffect(() => {
+
+    Visibility.subscribe('statusChanged', x => {
+      gameClock.current?.simulateTicks(1 * 60 * 30);
+    });
+
     // We need this part to load the game data, before the UI elements are built.
     const dataLoader = new DataLoader();
     dataLoader.downloadAndRegisterPackage("assets/data/exo-data.json").then(() => {
@@ -19,9 +28,17 @@ const App: React.FC = () => {
 
       //TODO: Actually load player data based on chosen profile.
       context.loadData();
+      gameClock.current = new Gameclock(context);
+
+      // Start clock after load etc.
+      gameClock.current.start();
       setGameContext(context);
     })
 
+    return () => {
+      gameClock.current?.stop();
+      Visibility.unsubscribe('statusChanged');
+    }
   }, []);
 
   return (
@@ -32,8 +49,8 @@ const App: React.FC = () => {
             <Sidebar gameContext={gameContext} />
             <div className="main-content">
               <GameScreen gameContext={gameContext} />
-              <Ticker gameContext={gameContext} />
             </div>
+            <NotificationManager gameContext={gameContext} />
           </>
         ) : (
           <div className="loading-message">Loading Game...</div>

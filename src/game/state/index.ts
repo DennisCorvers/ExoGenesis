@@ -1,1 +1,1 @@
-export { MineralHarvestingState } from "./MineralHarvestingState"
+export { MiningState as MineralHarvestingState } from "./MiningState"
