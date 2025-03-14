@@ -66,19 +66,6 @@ const NotificationManager: React.FC<NotificationManagerProps> = ({ gameContext }
         };
     }, [gameContext]);
 
-    useEffect(() => {
-        const handleVisibilityChange = () => {
-            console.log('Visibility changed:', document.hidden ? 'inactive'  : 'active');
-            setIsActive(!document.hidden);
-        };
-
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-
-        return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-        };
-    }, []);
-
     return (
         <div className="notification-container">
             {notifications.map((notif) => (

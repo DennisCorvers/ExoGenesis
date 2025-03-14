@@ -1,6 +1,6 @@
 import { GameContext } from "@game/core/GameContext";
 import { DataLoader } from "@game/data/DataLoader";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 
 interface MainMenuProps {
@@ -8,23 +8,35 @@ interface MainMenuProps {
 }
 
 const MainMenu: React.FC<MainMenuProps> = ({ onStartGame }) => {
-    // Handle actual sign in and verification of user
-  const handleLoginAndCharacterSelect = async (characterId: string) => {
+  const [loading, setLoading] = useState<boolean>(true);
 
-    const dataLoader = new DataLoader();
-    await dataLoader.downloadAndRegisterPackage("assets/data/exo-data.json");
-    const context = dataLoader.createGameContext();
+  useEffect(() => {
+    const loadGame = async () => {
+      const dataLoader = new DataLoader();
+      await dataLoader.downloadAndRegisterPackage("assets/data/exo-data.json");
 
-    // Load user data based on userID.
-    context.loadData();
-    onStartGame(context);
-  };
+
+      const context = dataLoader.createGameContext();
+      context.loadData();
+
+      onStartGame(context);
+    };
+
+    loadGame().catch((error) => {
+      console.error("Error loading game data:", error);
+      setLoading(false);
+    });
+  }, [onStartGame]);
+
+
 
   return (
     <div className="main-menu">
-      <button onClick={() => handleLoginAndCharacterSelect("character1")}>
-        Start Game
-      </button>
+      {loading ? (
+        <h1>Loading game...</h1>
+      ) : (
+        <h1>Failed to load game. Please try again.</h1>
+      )}
     </div>
   );
 };

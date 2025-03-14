@@ -1,11 +1,10 @@
 import { GameContext } from "@game/core/GameContext";
-import { useEffect, useRef, useState } from "react";
-import { Gameclock } from "@game/core/Gameclock";
+import { useEffect, useRef } from "react";
 import { ActiveViewProvider } from "./common/ActiveViewProvider";
+import { GameManager } from "@game/core/GameManager";
 import Sidebar from "@components/Sidebar";
 import GameContent from "./GameContent";
 import NotificationManager from "@components/NotificationManager";
-import Visibility from '../utils/AppVisibility'
 import '../App.css'
 
 interface GameUIProps {
@@ -13,21 +12,15 @@ interface GameUIProps {
 }
 
 const GameUI: React.FC<GameUIProps> = ({ gameContext }) => {
-    const gameClock = useRef<Gameclock>(null);
+    const gameManager = useRef<GameManager>(null);
 
     useEffect(() => {
-
-        Visibility.subscribe('statusChanged', x => {
-
-        });
-
-
-        gameClock.current = new Gameclock(gameContext);
-        gameClock.current.start();
+        gameManager.current = new GameManager(gameContext);
+        gameManager.current.startGame();
 
         return () => {
-            gameClock.current?.stop();
-            Visibility.unsubscribe('statusChanged');
+            gameManager.current?.cleanup();
+            gameManager.current = null;
         }
     }, [gameContext]);
 
